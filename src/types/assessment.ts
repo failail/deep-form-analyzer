@@ -6,7 +6,8 @@ export type QuestionType =
   | 'date'
   | 'radio'
   | 'select'
-  | 'monthYear';
+  | 'monthYear'
+  | 'skip';
 
 export interface ValidationRule {
   type: 'required' | 'min' | 'max' | 'minLength' | 'maxLength' | 'pattern';
@@ -19,19 +20,31 @@ export interface QuestionOption {
   label: string;
 }
 
+export interface ConditionalLogic {
+  dependsOn: string;
+  values: string[];
+}
+
 export interface Question {
   id: string;
   title: string;
   type: QuestionType;
-  required: boolean;
+  required?: boolean;
   options?: QuestionOption[];
   validation?: ValidationRule[];
-  conditional?: {
-    dependsOn: string;
-    values: string[];
-  };
+  conditional?: ConditionalLogic;
   section: string;
   questionNumber: number;
+  groupId: string;
+}
+
+export interface QuestionGroup {
+  id: string;
+  name: string;
+  description: string;
+  conditional?: ConditionalLogic;
+  questions: Question[];
+  questionsPerPage: number;
 }
 
 export interface FormData {

@@ -8,33 +8,26 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form } from '@/components/ui/form';
 import { QuestionRenderer } from '@/components/assessment/QuestionRenderer';
-import { QUESTIONS } from '@/data/questions';
 import { Question, FormData } from '@/types/assessment';
+import { getQuestionsForPage, getTotalPages, getProgressInfo } from '@/utils/groupLogic';
 
 const Assessment = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [formData, setFormData] = useState<FormData>({});
   
-  // Filter questions based on conditional logic
-  const getVisibleQuestions = (): Question[] => {
-    return QUESTIONS.filter(question => {
-      if (!question.conditional) return true;
-      
-      const dependentValue = formData[question.conditional.dependsOn];
-      return question.conditional.values.includes(dependentValue);
-    });
-  };
-
-  const visibleQuestions = useMemo(() => getVisibleQuestions(), [formData]);
-  const questionsPerPage = 10;
-  const totalPages = Math.ceil(visibleQuestions.length / questionsPerPage);
-  const currentQuestions = useMemo(() =>
-    visibleQuestions.slice(
-      currentPage * questionsPerPage,
-      (currentPage + 1) * questionsPerPage
-    )
-  , [visibleQuestions, currentPage]);
+  // Get current page questions and progress info
+  const currentQuestions = useMemo(() => 
+    getQuestionsForPage(formData, currentPage), 
+    [formData, currentPage]
+  );
+  
+  const totalPages = useMemo(() => getTotalPages(formData), [formData]);
+  
+  const progressInfo = useMemo(() => 
+    getProgressInfo(formData, currentPage), 
+    [formData, currentPage]
+  );
 
   // Create dynamic schema based on current questions
   const createSchema = () => {
@@ -130,11 +123,9 @@ const Assessment = () => {
     form.reset(currentValues);
   }, [currentPage, formData, form]);
 
-  const progress = Math.round(((currentPage + 1) / totalPages) * 100);
-  const startQuestionNumber = useMemo(() => {
-    return visibleQuestions.slice(0, currentPage * questionsPerPage).length + 1;
-  }, [visibleQuestions, currentPage]);
-  const endQuestionNumber = startQuestionNumber + currentQuestions.length - 1;
+  const progress = progressInfo.progress;
+  const startQuestionNumber = progressInfo.startQuestionNumber;
+  const endQuestionNumber = progressInfo.endQuestionNumber;
 
   return (
     <div className="min-h-screen bg-background">
@@ -148,7 +139,7 @@ const Assessment = () => {
               <span className="text-foreground">Money</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {visibleQuestions.length}
+              Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {progressInfo.totalQuestions}
             </div>
           </div>
           
@@ -173,13 +164,13 @@ const Assessment = () => {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               {currentQuestions.map((question, index) => {
-                const globalIndex = visibleQuestions.findIndex(q => q.id === question.id);
+                const questionNumber = startQuestionNumber + index;
                 return (
                   <QuestionRenderer
                     key={question.id}
                     question={question}
                     form={form}
-                    questionIndex={globalIndex + 1}
+                    questionIndex={questionNumber}
                   />
                 );
               })}

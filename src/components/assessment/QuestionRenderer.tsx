@@ -20,6 +20,11 @@ interface QuestionRendererProps {
 }
 
 export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRendererProps) => {
+  // Skip rendering for 'skip' type questions
+  if (question.type === 'skip') {
+    return null;
+  }
+
   const renderFormField = () => {
     switch (question.type) {
       case 'text':
