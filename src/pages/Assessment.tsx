@@ -114,6 +114,14 @@ const Assessment = () => {
     }
   }, [form]);
 
+  // Clear saved data function
+  const clearSavedData = () => {
+    localStorage.removeItem('assessmentData');
+    setFormData({});
+    setCurrentPage(0);
+    form.reset({});
+  };
+
   // Update form when page changes
   useEffect(() => {
     const currentValues = currentQuestions.reduce((acc, question) => {
@@ -132,16 +140,26 @@ const Assessment = () => {
       {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-bold">
-              <span className="text-foreground">ManageMe</span>
-              <span className="text-primary text-2xl">.</span>
-              <span className="text-foreground">Money</span>
+            <div className="flex items-center justify-between">
+              <div className="text-xl font-bold">
+                <span className="text-foreground">ManageMe</span>
+                <span className="text-primary text-2xl">.</span>
+                <span className="text-foreground">Money</span>
+              </div>
+              <div className="flex items-center gap-4">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={clearSavedData}
+                  type="button"
+                >
+                  Start Over
+                </Button>
+                <div className="text-sm text-muted-foreground">
+                  Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {progressInfo.totalQuestions}
+                </div>
+              </div>
             </div>
-            <div className="text-sm text-muted-foreground">
-              Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {progressInfo.totalQuestions}
-            </div>
-          </div>
           
           <div className="mt-4">
             <Progress value={progress} className="w-full" />
