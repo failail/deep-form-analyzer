@@ -131,8 +131,10 @@ const Assessment = () => {
   }, [currentPage, formData, form]);
 
   const progress = Math.round(((currentPage + 1) / totalPages) * 100);
-  const currentQuestionNumber = currentPage * questionsPerPage + 1;
-  const endQuestionNumber = Math.min((currentPage + 1) * questionsPerPage, visibleQuestions.length);
+  const startQuestionNumber = useMemo(() => {
+    return visibleQuestions.slice(0, currentPage * questionsPerPage).length + 1;
+  }, [visibleQuestions, currentPage]);
+  const endQuestionNumber = startQuestionNumber + currentQuestions.length - 1;
 
   return (
     <div className="min-h-screen bg-background">
@@ -146,7 +148,7 @@ const Assessment = () => {
               <span className="text-foreground">Money</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              Question {currentQuestionNumber}{endQuestionNumber > currentQuestionNumber && `‑${endQuestionNumber}`} of {visibleQuestions.length}
+              Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {visibleQuestions.length}
             </div>
           </div>
           
@@ -170,14 +172,17 @@ const Assessment = () => {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                {currentQuestions.map((question, index) => (
-                <QuestionRenderer
-                  key={question.id}
-                  question={question}
-                  form={form}
-                  questionIndex={question.questionNumber}
-                />
-                ))}
+              {currentQuestions.map((question, index) => {
+                const globalIndex = visibleQuestions.findIndex(q => q.id === question.id);
+                return (
+                  <QuestionRenderer
+                    key={question.id}
+                    question={question}
+                    form={form}
+                    questionIndex={globalIndex + 1}
+                  />
+                );
+              })}
 
                 <div className="flex justify-between pt-6">
                   <Button
