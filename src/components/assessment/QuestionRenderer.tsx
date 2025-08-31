@@ -80,38 +80,56 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
                 <FormLabel className="text-lg font-medium">
                   {questionIndex}. {question.title}
                 </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
+                <div className="flex gap-2">
+                  <Select 
+                    onValueChange={(value) => {
+                      const [year, month] = (field.value || '').split('-');
+                      field.onChange(`${year || new Date().getFullYear()}-${value}-01`);
+                    }}
+                    value={(field.value || '').split('-')[1] || ''}
+                  >
                     <FormControl>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(new Date(field.value), "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
+                      <SelectTrigger className="flex-1 bg-popover z-50">
+                        <SelectValue placeholder="Month" />
+                      </SelectTrigger>
                     </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value ? new Date(field.value) : undefined}
-                      onSelect={(date) => field.onChange(date?.toISOString().split('T')[0])}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                      className="p-3 pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
+                    <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
+                      {Array.from({ length: 12 }, (_, i) => {
+                        const month = String(i + 1).padStart(2, '0');
+                        const monthName = new Date(2024, i, 1).toLocaleString('default', { month: 'long' });
+                        return (
+                          <SelectItem key={month} value={month}>
+                            {monthName}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  
+                  <Select 
+                    onValueChange={(value) => {
+                      const [, month] = (field.value || '').split('-');
+                      field.onChange(`${value}-${month || '01'}-01`);
+                    }}
+                    value={(field.value || '').split('-')[0] || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="flex-1 bg-popover z-50">
+                        <SelectValue placeholder="Year" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
+                      {Array.from({ length: 80 }, (_, i) => {
+                        const year = String(new Date().getFullYear() - i);
+                        return (
+                          <SelectItem key={year} value={year}>
+                            {year}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
