@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form } from '@/components/ui/form';
 import { QuestionRenderer } from '@/components/assessment/QuestionRenderer';
 import { QUESTIONS } from '@/data/questions';
 import { Question, FormData } from '@/types/assessment';
@@ -166,31 +167,33 @@ const Assessment = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              {currentQuestions.map((question, index) => (
-                <QuestionRenderer
-                  key={question.id}
-                  question={question}
-                  form={form}
-                  questionIndex={currentPage * questionsPerPage + index + 1}
-                />
-              ))}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                {currentQuestions.map((question, index) => (
+                  <QuestionRenderer
+                    key={question.id}
+                    question={question}
+                    form={form}
+                    questionIndex={currentPage * questionsPerPage + index + 1}
+                  />
+                ))}
 
-              <div className="flex justify-between pt-6">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handlePrevious}
-                  disabled={currentPage === 0}
-                >
-                  Previous
-                </Button>
+                <div className="flex justify-between pt-6">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handlePrevious}
+                    disabled={currentPage === 0}
+                  >
+                    Previous
+                  </Button>
 
-                <Button type="submit">
-                  {currentPage < totalPages - 1 ? 'Next' : 'Complete Assessment'}
-                </Button>
-              </div>
-            </form>
+                  <Button type="submit">
+                    {currentPage < totalPages - 1 ? 'Next' : 'Complete Assessment'}
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       </main>
