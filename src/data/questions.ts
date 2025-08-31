@@ -386,7 +386,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Monthly Living Expenses',
-    questionNumber: 50
+    questionNumber: 21
   },
   {
     id: 'monthlyClothesShoes',
@@ -398,7 +398,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Monthly Living Expenses',
-    questionNumber: 51
+    questionNumber: 22
   },
   {
     id: 'monthlyElectricity',
@@ -410,7 +410,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Monthly Living Expenses',
-    questionNumber: 52
+    questionNumber: 23
   },
   {
     id: 'monthlyMobile',
@@ -422,7 +422,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Monthly Living Expenses',
-    questionNumber: 53
+    questionNumber: 24
   },
   {
     id: 'monthlyDiningOut',
@@ -434,7 +434,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Monthly Living Expenses',
-    questionNumber: 54
+    questionNumber: 25
   },
 
   // Section 9: Assets & Income
@@ -448,7 +448,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Assets & Income',
-    questionNumber: 60
+    questionNumber: 26
   },
   {
     id: 'investmentValue',
@@ -460,7 +460,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Assets & Income',
-    questionNumber: 61
+    questionNumber: 27
   },
   {
     id: 'jobSalary',
@@ -472,7 +472,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Assets & Income',
-    questionNumber: 62
+    questionNumber: 28
   },
   {
     id: 'secondJobIncome',
@@ -484,7 +484,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Assets & Income',
-    questionNumber: 63
+    questionNumber: 29
   },
   {
     id: 'freelanceIncome',
@@ -496,7 +496,7 @@ export const QUESTIONS: Question[] = [
       { type: 'min', value: 0, message: 'Minimum value is 0' }
     ],
     section: 'Assets & Income',
-    questionNumber: 64
+    questionNumber: 30
   }
 
   // Note: This is a subset for the prototype. The full 200+ questions would be added in production.
