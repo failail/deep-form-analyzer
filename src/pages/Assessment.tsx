@@ -171,12 +171,12 @@ const Assessment = () => {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 {currentQuestions.map((question, index) => (
-                  <QuestionRenderer
-                    key={question.id}
-                    question={question}
-                    form={form}
-                    questionIndex={currentPage * questionsPerPage + index + 1}
-                  />
+                <QuestionRenderer
+                  key={question.id}
+                  question={question}
+                  form={form}
+                  questionIndex={question.questionNumber}
+                />
                 ))}
 
                 <div className="flex justify-between pt-6">
