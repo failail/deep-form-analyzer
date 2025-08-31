@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -26,13 +26,15 @@ const Assessment = () => {
     });
   };
 
-  const visibleQuestions = getVisibleQuestions();
+  const visibleQuestions = useMemo(() => getVisibleQuestions(), [formData]);
   const questionsPerPage = 10;
   const totalPages = Math.ceil(visibleQuestions.length / questionsPerPage);
-  const currentQuestions = visibleQuestions.slice(
-    currentPage * questionsPerPage,
-    (currentPage + 1) * questionsPerPage
-  );
+  const currentQuestions = useMemo(() =>
+    visibleQuestions.slice(
+      currentPage * questionsPerPage,
+      (currentPage + 1) * questionsPerPage
+    )
+  , [visibleQuestions, currentPage]);
 
   // Create dynamic schema based on current questions
   const createSchema = () => {
@@ -125,9 +127,8 @@ const Assessment = () => {
       acc[question.id] = formData[question.id] || '';
       return acc;
     }, {} as any);
-    
     form.reset(currentValues);
-  }, [currentPage, form, currentQuestions, formData]);
+  }, [currentPage, formData, form]);
 
   const progress = Math.round(((currentPage + 1) / totalPages) * 100);
   const currentQuestionNumber = currentPage * questionsPerPage + 1;

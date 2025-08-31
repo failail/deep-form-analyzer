@@ -168,11 +168,11 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
                 </FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-popover z-50">
                       <SelectValue placeholder="Please select an option" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="bg-card border border-border max-h-60 overflow-y-auto">
+                  <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
                     {question.options?.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
                         {option.label}
@@ -205,7 +205,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
                       }}
                       value={(field.value || '').split('-')[1] || ''}
                     >
-                      <SelectTrigger className="flex-1">
+                      <SelectTrigger className="flex-1 bg-popover z-50">
                         <SelectValue placeholder="Month" />
                       </SelectTrigger>
                       <SelectContent>
@@ -228,7 +228,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
                       }}
                       value={(field.value || '').split('-')[0] || ''}
                     >
-                      <SelectTrigger className="flex-1">
+                      <SelectTrigger className="flex-1 bg-popover z-50">
                         <SelectValue placeholder="Year" />
                       </SelectTrigger>
                       <SelectContent>
