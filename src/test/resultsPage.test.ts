@@ -94,8 +94,8 @@ describe('Results Page', () => {
       // Create test data with deliberately low emergency fund
       const testData = {
         ...getCompleteTestData(),
-        savingsAndDeposits: 10000, // Very low savings
-        monthlyGroceries: 20000 // High expenses
+        savingsAccountsFD: 10000, // Very low savings
+        monthlyGroceriesToiletries: 20000 // High expenses
       }
       
       const results = calculateAllRatios(testData)
@@ -124,8 +124,8 @@ describe('Results Page', () => {
       // Create test data that should score well
       const perfectData = {
         ...getCompleteTestData(),
-        savingsAndDeposits: 5000000, // High savings
-        monthlyGroceries: 5000, // Low expenses
+        savingsAccountsFD: 5000000, // High savings
+        monthlyGroceriesToiletries: 5000, // Low expenses
         jobSalary: 3000000 // High income
       }
       
@@ -144,7 +144,7 @@ describe('Results Page', () => {
       const incompleteData = {
         ...getCompleteTestData(),
         jobSalary: undefined,
-        monthlyGroceries: undefined
+        monthlyGroceriesToiletries: undefined
       }
       
       const results = calculateAllRatios(incompleteData as any)
@@ -158,7 +158,7 @@ describe('Results Page', () => {
       const extremeData = {
         ...getCompleteTestData(),
         jobSalary: 100000000, // Very high income
-        monthlyGroceries: 1000000 // Very high expenses
+        monthlyGroceriesToiletries: 1000000 // Very high expenses
       }
       
       const results = calculateAllRatios(extremeData)

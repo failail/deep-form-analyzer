@@ -54,12 +54,12 @@ describe('Financial Calculations', () => {
     test('total monthly expenses calculation is correct', () => {
       const testData: Partial<FormData> = {
         monthlyRent: 30000,
-        monthlyGroceries: 10000,
-        monthlyClothes: 2000,
+        monthlyGroceriesToiletries: 10000,
+        monthlyClothesShoes: 2000,
         monthlyElectricity: 3000,
         monthlyMobile: 1000,
         monthlyCommute: 5000,
-        monthlyEatingOut: 8000
+        monthlyDiningOut: 8000
       }
       
       const result = calculateTotalMonthlyExpenses(testData as FormData)
@@ -221,7 +221,7 @@ describe('Financial Calculations', () => {
     test('handles incomplete data gracefully', () => {
       const incompleteData: Partial<FormData> = {
         jobSalary: 1000000,
-        monthlyGroceries: 10000
+        monthlyGroceriesToiletries: 10000
         // Most fields missing
       }
       

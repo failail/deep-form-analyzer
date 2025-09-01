@@ -68,11 +68,11 @@ export const calculateTotalIncome = (formData: FormData): number => {
 
 export const calculateTotalMonthlyExpenses = (formData: FormData): number => {
   const monthlyFields = [
-    'monthlyRent', 'monthlyGroceries', 'monthlyClothes', 'monthlyMakeup',
-    'monthlyBeauty', 'monthlyHousehelp', 'monthlyCookingGas', 'monthlyElectricity',
+    'monthlyRent', 'monthlyGroceriesToiletries', 'monthlyClothesShoes', 'monthlyMakeupBeauty',
+    'monthlyHousehelpCleaningService', 'monthlyCookingGas', 'monthlyElectricity',
     'monthlyMobile', 'monthlyInternet', 'monthlyTV', 'monthlyAppSubscriptions',
     'monthlyCommute', 'monthlyPets', 'monthlyEntertainment', 'monthlyHobbies',
-    'monthlyEatingOut', 'monthlyAlcohol', 'monthlyCigarettes', 'monthlyMedication',
+    'monthlyDiningOut', 'monthlyAlcohol', 'monthlyCigarettes', 'monthlyMedication',
     'monthlyHealthExams'
   ]
   
@@ -115,7 +115,7 @@ export const getCompleteTestData = (): FormData => {
     currency: 'INR (Indian Rupees)',
     firstName: 'Test',
     
-    // Complete all required fields with test data
+    // Housing
     housingType: 'Own it',
     propertyPurchasePrice: 5000000,
     propertyCurrentValue: 6000000,
@@ -148,11 +148,10 @@ export const getCompleteTestData = (): FormData => {
     otherInsurance: 'No',
     
     // Monthly expenses
-    monthlyGroceries: 10000,
-    monthlyClothes: 2000,
-    monthlyMakeup: 1000,
-    monthlyBeauty: 1500,
-    monthlyHousehelp: 5000,
+    monthlyGroceriesToiletries: 10000,
+    monthlyClothesShoes: 2000,
+    monthlyMakeupBeauty: 1500,
+    monthlyHousehelpCleaningService: 5000,
     monthlyCookingGas: 1000,
     monthlyElectricity: 3500,
     monthlyMobile: 800,
@@ -163,7 +162,7 @@ export const getCompleteTestData = (): FormData => {
     monthlyPets: 0,
     monthlyEntertainment: 3000,
     monthlyHobbies: 2000,
-    monthlyEatingOut: 6000,
+    monthlyDiningOut: 6000,
     monthlyAlcohol: 1500,
     monthlyCigarettes: 0,
     monthlyMedication: 1000,
@@ -171,28 +170,28 @@ export const getCompleteTestData = (): FormData => {
     
     // Annual expenses
     annualEducation: 50000,
-    annualHomeDecor: 75000,
+    annualHomeDecorRenovation: 75000,
     annualGadgets: 50000,
     annualMobile: 30000,
     annualHomeTravelCost: 40000,
     annualHolidays: 150000,
     annualGifts: 40000,
     
-    // Investments
+    // Investments  
     annualRetirementSchemes: 200000,
     monthlyMutualFunds: 20000,
     monthlyTaxSaving: 8000,
     monthlySavingsDeposits: 15000,
     
     // Assets
-    savingsAndDeposits: 1000000,
+    savingsAccountsFD: 1000000,
     physicalCash: 25000,
-    stocksAndInvestments: 500000,
+    investmentValue: 500000,
     retirementSavings: 200000,
     jewelleryValue: 150000,
     collectiblesValue: 50000,
-    totalHomesValue: 6000000,
-    totalVehiclesValue: 500000,
+    homeCurrentValue: 6000000,
+    vehicleCurrentValue: 500000,
     
     // Income
     jobSalary: 2000000,
