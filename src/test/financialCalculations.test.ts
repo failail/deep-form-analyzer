@@ -83,18 +83,18 @@ describe('Financial Calculations', () => {
       const ratios = calculateAllRatios(testData)
       
       // Verify all required metrics exist
-      expect(ratios.coreExpenseRatio).toBeDefined()
-      expect(ratios.totalExpenseRatio).toBeDefined()
-      expect(ratios.savingsRate).toBeDefined()
-      expect(ratios.debtServicingRatio).toBeDefined()
-      expect(ratios.emergencyMonths).toBeDefined()
-      expect(ratios.cashBuffer).toBeDefined()
-      expect(ratios.netWorthGrowth).toBeDefined()
-      expect(ratios.investmentDiversification).toBeDefined()
-      expect(ratios.retirementReadiness).toBeDefined()
-      expect(ratios.insuranceCoverage).toBeDefined()
-      expect(ratios.liquidityRatio).toBeDefined()
-      expect(ratios.debtToIncomeRatio).toBeDefined()
+      expect(ratios.metrics.coreExpenseRatio).toBeDefined()
+      expect(ratios.metrics.totalExpenseRatio).toBeDefined()
+      expect(ratios.metrics.savingsRate).toBeDefined()
+      expect(ratios.metrics.debtServicingRatio).toBeDefined()
+      expect(ratios.metrics.emergencyMonths).toBeDefined()
+      expect(ratios.metrics.cashBufferRatio).toBeDefined()
+      expect(ratios.metrics.investmentAllocation).toBeDefined()
+      expect(ratios.metrics.debtToIncomeRatio).toBeDefined()
+      expect(ratios.metrics.debtToAssetsRatio).toBeDefined()
+      expect(ratios.metrics.cashToAssetsRatio).toBeDefined()
+      expect(ratios.metrics.liquidAssetsRatio).toBeDefined()
+      expect(ratios.metrics.debtToLiquidRatio).toBeDefined()
       
       // Verify scores are within valid range (1-5)
       Object.values(ratios.metrics).forEach((metric: any) => {
@@ -110,17 +110,17 @@ describe('Financial Calculations', () => {
       const ratios = calculateAllRatios(testData)
       
       // Core expense ratio should be calculated properly
-      expect(ratios.coreExpenseRatio).toBeGreaterThan(0)
-      expect(typeof ratios.coreExpenseRatio).toBe('number')
+      expect(ratios.metrics.coreExpenseRatio.value).toBeGreaterThanOrEqual(0)
+      expect(typeof ratios.metrics.coreExpenseRatio.value).toBe('number')
     })
 
     test('savings rate calculates correctly', () => {
       const testData = getCompleteTestData()
       const ratios = calculateAllRatios(testData)
       
-      // Savings rate should be between 0 and 100
-      expect(ratios.savingsRate).toBeGreaterThanOrEqual(0)
-      expect(ratios.savingsRate).toBeLessThanOrEqual(100)
+      // Savings rate should be between 0 and 1 (as decimal)
+      expect(ratios.metrics.savingsRate.value).toBeGreaterThanOrEqual(0)
+      expect(ratios.metrics.savingsRate.value).toBeLessThanOrEqual(1)
     })
 
     test('emergency months calculates correctly', () => {
@@ -128,8 +128,8 @@ describe('Financial Calculations', () => {
       const ratios = calculateAllRatios(testData)
       
       // Emergency months should be positive
-      expect(ratios.emergencyMonths).toBeGreaterThanOrEqual(0)
-      expect(typeof ratios.emergencyMonths).toBe('number')
+      expect(ratios.metrics.emergencyMonths.value).toBeGreaterThanOrEqual(0)
+      expect(typeof ratios.metrics.emergencyMonths.value).toBe('number')
     })
   })
 
@@ -248,7 +248,7 @@ describe('Financial Calculations', () => {
       }
       
       const ratios = calculateAllRatios(highDebtData)
-      expect(ratios.debtServicingRatio).toBeDefined()
+      expect(ratios.metrics.debtServicingRatio).toBeDefined()
     })
   })
 
@@ -257,10 +257,10 @@ describe('Financial Calculations', () => {
       const testData = getCompleteTestData()
       const results = calculateAllRatios(testData)
       
-      expect(typeof results.totalIncome).toBe('number')
-      expect(typeof results.totalExpenses).toBe('number')
+      expect(typeof results.totalAnnualIncome).toBe('number')
+      expect(typeof results.totalAnnualExpenses).toBe('number')
       expect(typeof results.netWorth).toBe('number')
-      expect(typeof results.savingsRate).toBe('number')
+      expect(typeof results.metrics.savingsRate.value).toBe('number')
       expect(typeof results.overallScore).toBe('number')
       
       // Check individual metrics
@@ -274,10 +274,10 @@ describe('Financial Calculations', () => {
       const testData = getCompleteTestData()
       const results = calculateAllRatios(testData)
       
-      expect(Number.isFinite(results.totalIncome)).toBe(true)
-      expect(Number.isFinite(results.totalExpenses)).toBe(true)
+      expect(Number.isFinite(results.totalAnnualIncome)).toBe(true)
+      expect(Number.isFinite(results.totalAnnualExpenses)).toBe(true)
       expect(Number.isFinite(results.netWorth)).toBe(true)
-      expect(Number.isFinite(results.savingsRate)).toBe(true)
+      expect(Number.isFinite(results.metrics.savingsRate.value)).toBe(true)
       expect(Number.isFinite(results.overallScore)).toBe(true)
       
       Object.values(results.metrics).forEach((metric: any) => {

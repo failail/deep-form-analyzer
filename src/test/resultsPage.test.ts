@@ -46,10 +46,10 @@ describe('Results Page', () => {
       const testData = getCompleteTestData()
       const results = calculateAllRatios(testData)
       
-      expect(results.totalIncome).toBeGreaterThan(0)
-      expect(results.totalExpenses).toBeGreaterThan(0)
+      expect(results.totalAnnualIncome).toBeGreaterThan(0)
+      expect(results.totalAnnualExpenses).toBeGreaterThan(0)
       expect(results.netWorth).toBeDefined()
-      expect(typeof results.savingsRate).toBe('number')
+      expect(typeof results.metrics.savingsRate.value).toBe('number')
     })
   })
 
@@ -175,8 +175,8 @@ describe('Results Page', () => {
       
       // Same input should produce same output
       expect(results1.overallScore).toBe(results2.overallScore)
-      expect(results1.totalIncome).toBe(results2.totalIncome)
-      expect(results1.savingsRate).toBe(results2.savingsRate)
+      expect(results1.totalAnnualIncome).toBe(results2.totalAnnualIncome)
+      expect(results1.metrics.savingsRate.value).toBe(results2.metrics.savingsRate.value)
     })
   })
 
@@ -185,10 +185,10 @@ describe('Results Page', () => {
       const testData = getCompleteTestData()
       const results = calculateAllRatios(testData)
       
-      expect(typeof results.totalIncome).toBe('number')
-      expect(typeof results.totalExpenses).toBe('number')
+      expect(typeof results.totalAnnualIncome).toBe('number')
+      expect(typeof results.totalAnnualExpenses).toBe('number')
       expect(typeof results.netWorth).toBe('number')
-      expect(typeof results.savingsRate).toBe('number')
+      expect(typeof results.metrics.savingsRate.value).toBe('number')
       expect(typeof results.overallScore).toBe('number')
       
       // Check individual metrics
@@ -202,10 +202,10 @@ describe('Results Page', () => {
       const testData = getCompleteTestData()
       const results = calculateAllRatios(testData)
       
-      expect(Number.isFinite(results.totalIncome)).toBe(true)
-      expect(Number.isFinite(results.totalExpenses)).toBe(true)
+      expect(Number.isFinite(results.totalAnnualIncome)).toBe(true)
+      expect(Number.isFinite(results.totalAnnualExpenses)).toBe(true)
       expect(Number.isFinite(results.netWorth)).toBe(true)
-      expect(Number.isFinite(results.savingsRate)).toBe(true)
+      expect(Number.isFinite(results.metrics.savingsRate.value)).toBe(true)
       expect(Number.isFinite(results.overallScore)).toBe(true)
       
       Object.values(results.metrics).forEach((metric: any) => {
