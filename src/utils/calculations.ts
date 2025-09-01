@@ -8,22 +8,54 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   };
 
   // Total Calculations
-  const totalAnnualIncome = getValue('jobSalary') + getValue('secondJobIncome') + getValue('freelanceIncome');
+  const totalAnnualIncome = getValue('jobSalary') + getValue('secondJobIncome') + getValue('freelanceIncome') + 
+    getValue('businessIncome') + getValue('realEstateIncome') + getValue('hobbyIncome') + 
+    getValue('dividends') + getValue('familyStipend') + getValue('otherIncome');
   
   const totalMonthlyExpenses = getValue('monthlyGroceriesToiletries') + 
     getValue('monthlyClothesShoes') + 
     getValue('monthlyElectricity') + 
     getValue('monthlyMobile') + 
     getValue('monthlyDiningOut') + 
+    getValue('monthlyCommute') +
+    getValue('monthlyEntertainment') +
+    getValue('monthlyHobbies') +
+    getValue('monthlyAppSubscriptions') +
+    getValue('monthlyInternet') +
+    getValue('monthlyTV') +
+    getValue('monthlyCookingGas') +
+    getValue('monthlyMakeupBeauty') +
+    getValue('monthlyHousehelpCleaningService') +
+    getValue('monthlyPets') +
+    getValue('monthlyAlcohol') +
+    getValue('monthlyCigarettes') +
+    getValue('monthlyMedication') +
+    getValue('monthlyHealthExams') +
     (getValue('monthlyRent') || 0);
   
   const totalAnnualExpenses = totalMonthlyExpenses * 12;
-  const totalAnnualLoanPayments = 0; // Will be calculated based on loans
-  const totalAssets = getValue('savingsAccountsFD') + getValue('investmentValue') + (getValue('homeCurrentValue') || 0);
-  const totalDebt = 0; // Will be calculated based on loan balances
+  
+  // Calculate debt payments
+  const propertyLoanPayment = (getValue('propertyLoanPayment') || 0) * 12;
+  const vehicleLoanPayments = Array.from({length: 4}, (_, i) => getValue(`vehicle${i+1}LoanPayment`) || 0).reduce((sum, payment) => sum + payment * 12, 0);
+  const personalLoanPayments = Array.from({length: 5}, (_, i) => getValue(`loan${i+1}MonthlyPayment`) || 0).reduce((sum, payment) => sum + payment * 12, 0);
+  const totalAnnualLoanPayments = propertyLoanPayment + vehicleLoanPayments + personalLoanPayments;
+  
+  // Calculate assets and debt
+  const propertyValue = getValue('homeCurrentValue') || getValue('propertyCurrentValue') || 0;
+  const vehiclesValue = Array.from({length: 4}, (_, i) => getValue(`vehicle${i+1}CurrentValue`) || 0).reduce((sum, value) => sum + value, 0);
+  const totalAssets = getValue('savingsAccountsFD') + getValue('investmentValue') + 
+    getValue('retirementSavings') + getValue('jewelleryValue') + getValue('collectiblesValue') +
+    propertyValue + vehiclesValue;
+  
+  const propertyDebt = getValue('propertyLoanAmount') || 0;
+  const vehicleDebt = Array.from({length: 4}, (_, i) => getValue(`vehicle${i+1}LoanAmount`) || 0).reduce((sum, debt) => sum + debt, 0);
+  const personalDebt = Array.from({length: 5}, (_, i) => getValue(`loan${i+1}OutstandingBalance`) || 0).reduce((sum, debt) => sum + debt, 0);
+  const totalDebt = propertyDebt + vehicleDebt + personalDebt;
+  
   const netWorth = totalAssets - totalDebt;
   const liquidAssets = getValue('savingsAccountsFD') + getValue('investmentValue');
-  const totalAnnualInvestments = 0; // Will be calculated based on investment inputs
+  const totalAnnualInvestments = (getValue('monthlyMutualFunds') + getValue('monthlyTaxSaving') + getValue('monthlySavingsDeposits')) * 12 + getValue('annualRetirementSchemes');
 
   // Calculate 12 Financial Health Ratios
   const calculateRatio = (ratio: number, type: 'coreExpense' | 'totalExpense' | 'debtServicing' | 'cashBuffer' | 'emergencyMonths' | 'savingsRate' | 'investmentAllocation' | 'debtToIncome' | 'debtToAssets' | 'cashToAssets' | 'liquidAssets' | 'debtToLiquid'): { value: number; score: number; description: string } => {
@@ -47,6 +79,15 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
         else if (totalExpenseRatio <= 80) { score = 3; description = "Your total expenses are reasonable but could be optimised."; }
         else if (totalExpenseRatio <= 95) { score = 2; description = "Expenses are too high relative to income. Consider lifestyle adjustments."; }
         else { score = 1; description = "Dangerous expense levels. Immediate action needed to avoid financial crisis."; }
+        break;
+
+      case 'debtServicing':
+        const debtServicingRatio = ratio * 100;
+        if (debtServicingRatio < 15) { score = 5; description = "Excellent debt management! Your debt payments are very manageable."; }
+        else if (debtServicingRatio <= 25) { score = 4; description = "Good debt control. Your debt payments are within reasonable limits."; }
+        else if (debtServicingRatio <= 35) { score = 3; description = "Moderate debt burden. Consider debt reduction strategies."; }
+        else if (debtServicingRatio <= 50) { score = 2; description = "High debt burden. Debt reduction should be a priority."; }
+        else { score = 1; description = "Critical debt levels. Immediate debt restructuring needed."; }
         break;
 
       case 'savingsRate':
@@ -75,6 +116,24 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
         else { score = 1; description = "No emergency protection. Any unexpected expense could devastate your finances."; }
         break;
 
+      case 'investmentAllocation':
+        const investmentRatio = ratio * 100;
+        if (investmentRatio > 20) { score = 5; description = "Excellent investment allocation! You're building long-term wealth effectively."; }
+        else if (investmentRatio >= 15) { score = 4; description = "Good investment discipline creating wealth for your future."; }
+        else if (investmentRatio >= 10) { score = 3; description = "Reasonable investment allocation, but consider increasing it."; }
+        else if (investmentRatio >= 5) { score = 2; description = "Low investment allocation. Your money isn't working hard enough for you."; }
+        else { score = 1; description = "No significant investments. You're missing out on wealth creation opportunities."; }
+        break;
+
+      case 'debtToIncome':
+        const debtToIncomeRatio = ratio * 100;
+        if (debtToIncomeRatio < 50) { score = 5; description = "Excellent debt-to-income ratio! Your debt levels are very manageable."; }
+        else if (debtToIncomeRatio <= 100) { score = 4; description = "Good debt levels relative to your income."; }
+        else if (debtToIncomeRatio <= 200) { score = 3; description = "Moderate debt burden that requires attention."; }
+        else if (debtToIncomeRatio <= 300) { score = 2; description = "High debt levels. Focus on debt reduction."; }
+        else { score = 1; description = "Critical debt burden. Immediate debt restructuring needed."; }
+        break;
+
       default:
         score = 3;
         description = "Analysis pending for this metric.";
@@ -93,16 +152,16 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   const metrics: FinancialMetrics = {
     coreExpenseRatio: calculateRatio(coreExpenseRatio, 'coreExpense'),
     totalExpenseRatio: calculateRatio(totalExpenseRatio, 'totalExpense'),
-    debtServicingRatio: calculateRatio(0, 'debtServicing'),
+    debtServicingRatio: calculateRatio(totalAnnualIncome > 0 ? totalAnnualLoanPayments / totalAnnualIncome : 0, 'debtServicing'),
     cashBufferRatio: calculateRatio(cashBufferRatio, 'cashBuffer'),
     emergencyMonths: calculateRatio(emergencyMonths, 'emergencyMonths'),
     savingsRate: calculateRatio(savingsRate, 'savingsRate'),
-    investmentAllocation: calculateRatio(0, 'investmentAllocation'),
-    debtToIncomeRatio: calculateRatio(0, 'debtToIncome'),
-    debtToAssetsRatio: calculateRatio(0, 'debtToAssets'),
-    cashToAssetsRatio: calculateRatio(0, 'cashToAssets'),
-    liquidAssetsRatio: calculateRatio(0, 'liquidAssets'),
-    debtToLiquidRatio: calculateRatio(0, 'debtToLiquid')
+    investmentAllocation: calculateRatio(totalAnnualIncome > 0 ? totalAnnualInvestments / totalAnnualIncome : 0, 'investmentAllocation'),
+    debtToIncomeRatio: calculateRatio(totalAnnualIncome > 0 ? totalDebt / totalAnnualIncome : 0, 'debtToIncome'),
+    debtToAssetsRatio: calculateRatio(totalAssets > 0 ? totalDebt / totalAssets : 0, 'debtToAssets'),
+    cashToAssetsRatio: calculateRatio(totalAssets > 0 ? liquidAssets / totalAssets : 0, 'cashToAssets'),
+    liquidAssetsRatio: calculateRatio(totalAssets > 0 ? liquidAssets / totalAssets : 0, 'liquidAssets'),
+    debtToLiquidRatio: calculateRatio(liquidAssets > 0 ? totalDebt / liquidAssets : 0, 'debtToLiquid')
   };
 
   // Calculate overall score (weighted average)
