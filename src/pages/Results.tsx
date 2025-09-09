@@ -8,6 +8,8 @@ import { Separator } from '@/components/ui/separator';
 import { FormData, CalculationResults } from '@/types/assessment';
 import { calculateFinancialHealth, formatCurrency } from '@/utils/calculations';
 import { Download, ArrowLeft, Award, TrendingUp, AlertTriangle } from 'lucide-react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const Results = () => {
   const location = useLocation();
@@ -16,7 +18,18 @@ const Results = () => {
   const [formData, setFormData] = useState<FormData | null>(null);
 
   useEffect(() => {
-    const data = location.state?.formData || JSON.parse(localStorage.getItem('assessmentData') || '{}');
+    let data = location.state?.formData;
+    
+    // Fallback to localStorage only if no state data is available
+    if (!data) {
+      try {
+        const savedData = localStorage.getItem('assessmentData');
+        data = savedData ? JSON.parse(savedData) : {};
+      } catch (error) {
+        console.error('Error reading localStorage:', error);
+        data = {};
+      }
+    }
     
     if (!data || Object.keys(data).length === 0) {
       navigate('/assessment');
@@ -27,6 +40,43 @@ const Results = () => {
     const calculatedResults = calculateFinancialHealth(data);
     setResults(calculatedResults);
   }, [location.state, navigate]);
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('results-content');
+    if (!element || !results || !formData) return;
+
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      
+      let position = 0;
+      
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      
+      pdf.save(`ManageMeMoney-Financial-Report-${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
 
   if (!results || !formData) {
     return (
@@ -72,9 +122,9 @@ const Results = () => {
       <header className="border-b border-border bg-card sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="text-xl font-bold">
+            <div className="text-xl font-bold font-manrope">
               <span className="text-foreground">ManageMe</span>
-              <span className="text-primary text-2xl">.</span>
+              <span className="text-primary" style={{ fontSize: '1.2em' }}>.</span>
               <span className="text-foreground">Money</span>
             </div>
             <div className="flex gap-2">
@@ -92,7 +142,7 @@ const Results = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl" id="results-content">
         {/* Executive Summary */}
         <Card className="mb-8">
           <CardHeader className="text-center">
@@ -257,12 +307,15 @@ const Results = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4">
+        <div className="flex justify-center gap-4 flex-wrap">
           <Button onClick={() => navigate('/')}>
             Return to Homepage
           </Button>
           <Button variant="outline" onClick={() => navigate('/assessment')}>
             Retake Assessment
+          </Button>
+          <Button onClick={handleDownloadPDF} className="bg-primary hover:bg-primary/90">
+            Download PDF Report
           </Button>
         </div>
       </main>

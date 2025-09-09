@@ -9,9 +9,9 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-6">
-          <div className="text-2xl font-bold">
+          <div className="text-2xl font-bold font-manrope">
             <span className="text-foreground">ManageMe</span>
-            <span className="text-primary text-3xl">.</span>
+            <span className="text-primary" style={{ fontSize: '1.2em' }}>.</span>
             <span className="text-foreground">Money</span>
           </div>
         </div>

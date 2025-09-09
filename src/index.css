@@ -109,6 +109,11 @@ All colors MUST be HSL.
     font-weight: 700; /* Bold for titles */
   }
 
+  .font-manrope {
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    font-weight: 700;
+  }
+
   .font-medium {
     font-weight: 500; /* Medium for subheadings */
   }
