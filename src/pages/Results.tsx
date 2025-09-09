@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { FormData, CalculationResults } from '@/types/assessment';
 import { calculateFinancialHealth } from '@/utils/calculations';
 import { getLocalizationConfig, formatNumber, formatPercentage, formatScore, LocalizationConfig } from '@/utils/localization';
-import { Download, ArrowLeft, Award, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Download, ArrowLeft, Award, TrendingUp, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -483,6 +483,9 @@ const Results = () => {
           </CardContent>
         </Card>
 
+        {/* Category Checklist with Redundancy Check */}
+        {renderCategoryChecklist(results, formData, localizationConfig, getScoreBadgeVariant)}
+
         {/* Priority Recommendations */}
         <Card className="mb-8">
           <CardHeader>
@@ -603,6 +606,212 @@ const getActionRecommendation = (metricName: string, score: number, results: Cal
   }
   
   return "Focus on improving this metric through consistent financial discipline and regular monitoring.";
+};
+
+interface ChecklistCategory {
+  name: string;
+  description: string;
+  isVisible: boolean;
+  score?: number;
+  status: 'good' | 'fair' | 'poor';
+}
+
+const renderCategoryChecklist = (
+  results: CalculationResults, 
+  formData: FormData, 
+  localizationConfig: LocalizationConfig,
+  getScoreBadgeVariant: (score: number) => "default" | "secondary" | "destructive" | "outline"
+) => {
+  // Define all possible checklist categories
+  const allCategories: ChecklistCategory[] = [
+    {
+      name: "Personal Finance Health",
+      description: "Overall financial wellness score",
+      isVisible: true, // This is always shown in the executive summary
+      score: results.overallScore,
+      status: results.overallScore >= 4 ? 'good' : results.overallScore >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "Insurance Check",
+      description: "Insurance coverage assessment",
+      isVisible: !!(formData.lifeInsuranceValue || formData.healthInsuranceValue),
+      score: calculateInsuranceScore(formData),
+      status: calculateInsuranceScore(formData) >= 4 ? 'good' : calculateInsuranceScore(formData) >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "Emergency Fund Status",
+      description: "Cash buffer for emergencies",
+      isVisible: true, // Already shown in ratios as "Emergency Months Covered"
+      score: results.metrics.emergencyMonths.score,
+      status: results.metrics.emergencyMonths.score >= 4 ? 'good' : results.metrics.emergencyMonths.score >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "Debt Health", 
+      description: "Debt management and servicing capacity",
+      isVisible: true, // Already shown in ratios as "Debt Servicing Ratio" and "Debt-to-Income Ratio"
+      score: Math.min(results.metrics.debtServicingRatio.score, results.metrics.debtToIncomeRatio.score),
+      status: Math.min(results.metrics.debtServicingRatio.score, results.metrics.debtToIncomeRatio.score) >= 4 ? 'good' : 
+              Math.min(results.metrics.debtServicingRatio.score, results.metrics.debtToIncomeRatio.score) >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "Investment Diversification",
+      description: "Portfolio allocation and investment spread",
+      isVisible: true, // Already shown in ratios as "Investment Allocation"
+      score: results.metrics.investmentAllocation.score,
+      status: results.metrics.investmentAllocation.score >= 4 ? 'good' : results.metrics.investmentAllocation.score >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "Retirement Prep",
+      description: "Retirement savings and planning readiness",
+      isVisible: !!(formData.retirementSavings || formData.annualRetirementInvestments),
+      score: calculateRetirementScore(formData, results),
+      status: calculateRetirementScore(formData, results) >= 4 ? 'good' : calculateRetirementScore(formData, results) >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "Financial Freedom Score",
+      description: "Path to financial independence assessment",
+      isVisible: results.annualIncome > results.annualExpenses,
+      score: calculateFinancialFreedomScore(results),
+      status: calculateFinancialFreedomScore(results) >= 4 ? 'good' : calculateFinancialFreedomScore(results) >= 3 ? 'fair' : 'poor'
+    },
+    {
+      name: "FIRE Plan Readiness",
+      description: "Financial Independence, Retire Early planning status",
+      isVisible: results.metrics.savingsRate.value > 0.15, // Only show if savings rate > 15%
+      score: calculateFIREScore(results),
+      status: calculateFIREScore(results) >= 4 ? 'good' : calculateFIREScore(results) >= 3 ? 'fair' : 'poor'
+    }
+  ];
+
+  // Apply redundancy check
+  const sectionsAlreadyShown = [
+    'Personal Finance Health', // Shown in executive summary
+    'Emergency Fund Status',   // Shown in ratios section
+    'Debt Health',            // Shown in ratios section  
+    'Investment Diversification' // Shown in ratios section
+  ];
+
+  // Filter out redundant categories
+  const nonRedundantCategories = allCategories.filter(category => {
+    // If category is not visible based on user data, exclude it
+    if (!category.isVisible) return false;
+    
+    // If category is already shown elsewhere in detail, exclude it
+    if (sectionsAlreadyShown.includes(category.name)) return false;
+    
+    return true;
+  });
+
+  // If no categories remain after filtering, don't show the section
+  if (nonRedundantCategories.length === 0) {
+    return null;
+  }
+
+  return (
+    <Card className="mb-8">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <CheckCircle2 className="w-6 h-6" />
+          Financial Health Category Checklist
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-4">
+          {nonRedundantCategories.map((category, index) => (
+            <div key={index} className="flex items-center justify-between p-4 border border-border rounded-lg">
+              <div className="flex items-center gap-3">
+                {category.status === 'good' ? (
+                  <CheckCircle2 className="w-5 h-5 text-success" />
+                ) : category.status === 'fair' ? (
+                  <CheckCircle2 className="w-5 h-5 text-accent" />
+                ) : (
+                  <XCircle className="w-5 h-5 text-destructive" />
+                )}
+                <div>
+                  <div className="font-medium text-foreground">{category.name}</div>
+                  <div className="text-sm text-muted-foreground">{category.description}</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {category.score && (
+                  <Badge variant={getScoreBadgeVariant(category.score)}>
+                    {formatScore(category.score)}/5
+                  </Badge>
+                )}
+                <Badge variant={category.status === 'good' ? 'default' : category.status === 'fair' ? 'secondary' : 'destructive'}>
+                  {category.status === 'good' ? 'Good' : category.status === 'fair' ? 'Fair' : 'Needs Work'}
+                </Badge>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+// Helper functions for calculating category scores
+const calculateInsuranceScore = (formData: FormData): number => {
+  const lifeInsurance = formData.lifeInsuranceValue || 0;
+  const healthInsurance = formData.healthInsuranceValue || 0;
+  const annualIncome = formData.jobSalary || 0;
+  
+  if (!lifeInsurance && !healthInsurance) return 1;
+  if (lifeInsurance >= annualIncome * 5 && healthInsurance > 0) return 5;
+  if (lifeInsurance >= annualIncome * 3 && healthInsurance > 0) return 4;
+  if (lifeInsurance >= annualIncome && healthInsurance > 0) return 3;
+  if (lifeInsurance > 0 || healthInsurance > 0) return 2;
+  return 1;
+};
+
+const calculateRetirementScore = (formData: FormData, results: CalculationResults): number => {
+  const retirementSavings = formData.retirementSavings || 0;
+  const annualRetirementInvestment = formData.annualRetirementInvestments || 0;
+  const annualIncome = results.annualIncome;
+  
+  if (!retirementSavings && !annualRetirementInvestment) return 1;
+  
+  const retirementSavingsRatio = retirementSavings / annualIncome;
+  const retirementInvestmentRatio = annualRetirementInvestment / annualIncome;
+  
+  if (retirementSavingsRatio >= 3 && retirementInvestmentRatio >= 0.15) return 5;
+  if (retirementSavingsRatio >= 2 && retirementInvestmentRatio >= 0.1) return 4;
+  if (retirementSavingsRatio >= 1 && retirementInvestmentRatio >= 0.05) return 3;
+  if (retirementSavingsRatio >= 0.5 || retirementInvestmentRatio >= 0.03) return 2;
+  return 1;
+};
+
+const calculateFinancialFreedomScore = (results: CalculationResults): number => {
+  const netWorth = results.estimatedNetWorth;
+  const annualExpenses = results.annualExpenses;
+  const savingsRate = results.metrics.savingsRate.value;
+  
+  if (netWorth <= 0 || annualExpenses <= 0) return 1;
+  
+  const yearsOfExpensesCovered = netWorth / annualExpenses;
+  
+  if (yearsOfExpensesCovered >= 25 && savingsRate >= 0.5) return 5;
+  if (yearsOfExpensesCovered >= 15 && savingsRate >= 0.3) return 4;
+  if (yearsOfExpensesCovered >= 10 && savingsRate >= 0.2) return 3;
+  if (yearsOfExpensesCovered >= 5 && savingsRate >= 0.1) return 2;
+  return 1;
+};
+
+const calculateFIREScore = (results: CalculationResults): number => {
+  const savingsRate = results.metrics.savingsRate.value;
+  const netWorth = results.estimatedNetWorth;
+  const annualExpenses = results.annualExpenses;
+  
+  if (savingsRate < 0.15) return 1; // Minimum threshold for FIRE consideration
+  
+  const yearsToFIRE = netWorth > 0 && annualExpenses > 0 ? 
+    Math.max(0, (25 * annualExpenses - netWorth) / (results.annualIncome * savingsRate)) : 999;
+  
+  if (yearsToFIRE <= 10 && savingsRate >= 0.5) return 5;
+  if (yearsToFIRE <= 15 && savingsRate >= 0.4) return 4;
+  if (yearsToFIRE <= 20 && savingsRate >= 0.3) return 3;
+  if (yearsToFIRE <= 30 && savingsRate >= 0.2) return 2;
+  return 1;
 };
 
 export default Results;
