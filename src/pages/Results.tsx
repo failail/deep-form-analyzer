@@ -505,7 +505,7 @@ const Results = () => {
                   </div>
                   <p className="text-muted-foreground mb-2">{recommendation.description}</p>
                   <p className="text-sm text-foreground">
-                    <strong>Action needed:</strong> {getActionRecommendation(recommendation.name, recommendation.score, results, currency)}
+                    <strong>Action needed:</strong> {getPrioritySpecificRecommendation(recommendation.name, recommendation.score, results, currency, index)}
                   </p>
                 </div>
               ))}
@@ -577,6 +577,95 @@ const Results = () => {
       </main>
     </div>
   );
+};
+
+const getPrioritySpecificRecommendation = (metricName: string, score: number, results: CalculationResults, currency: string, index: number): string => {
+  const lowerName = metricName.toLowerCase();
+  
+  // Core Expense Ratio - Focus on fixed/essential costs
+  if (lowerName.includes('core') && lowerName.includes('expense')) {
+    const coreExpenses = results.totalAnnualExpenses - results.totalAnnualLoanPayments;
+    const targetCore = results.totalAnnualIncome * 0.5;
+    const excessAmount = Math.max(0, coreExpenses - targetCore);
+    return `Reduce essential expenses by ${formatCurrency(excessAmount, currency)}. Focus on renegotiating rent, switching to cheaper utilities, refinancing loans at lower rates, or finding more affordable transport options.`;
+  }
+  
+  // Total Expense Ratio - Focus on discretionary/lifestyle costs
+  if (lowerName.includes('total') && lowerName.includes('expense')) {
+    const excessAmount = Math.max(0, results.totalAnnualExpenses - (results.totalAnnualIncome * 0.7));
+    return `Cut discretionary spending by ${formatCurrency(excessAmount, currency)}. Target dining out, entertainment, shopping, subscriptions, and lifestyle upgrades. Track every rupee for 3 months to identify waste.`;
+  }
+
+  // Debt Servicing Ratio
+  if (lowerName.includes('debt') && lowerName.includes('servicing')) {
+    const currentRatio = (results.totalAnnualLoanPayments / results.totalAnnualIncome * 100).toFixed(1);
+    return `Your EMIs consume ${currentRatio}% of income. Reduce by prepaying highest-interest loans or extending tenure of low-interest loans to free up monthly cash flow for other priorities.`;
+  }
+
+  // Cash Buffer - Different approaches based on priority level
+  if (lowerName.includes('cash') && lowerName.includes('buffer')) {
+    const targetAmount = results.totalMonthlyExpenses * 6;
+    const gap = Math.max(0, targetAmount - results.liquidAssets);
+    if (index === 0) {
+      return `URGENT: Build emergency fund by ${formatCurrency(gap, currency)}. Open a separate savings account and automate ${formatCurrency(gap / 12, currency)} monthly transfers immediately.`;
+    }
+    return `Strengthen emergency fund by ${formatCurrency(gap, currency)}. Consider liquid funds or high-yield savings accounts for better returns while maintaining accessibility.`;
+  }
+
+  // Emergency Months
+  if (lowerName.includes('emergency') && lowerName.includes('months')) {
+    const targetAmount = results.totalMonthlyExpenses * 6;
+    const gap = Math.max(0, targetAmount - results.liquidAssets);
+    return `Build ${formatCurrency(gap, currency)} emergency fund to cover 6 months expenses. Start with ${formatCurrency(gap / 12, currency)} monthly and increase by 10% every quarter until target reached.`;
+  }
+
+  // Savings Rate
+  if (lowerName.includes('savings') && lowerName.includes('rate')) {
+    const currentSavings = results.totalAnnualIncome - results.totalAnnualExpenses;
+    const targetSavings = results.totalAnnualIncome * 0.2;
+    const gap = Math.max(0, targetSavings - currentSavings);
+    return `Boost savings by ${formatCurrency(gap, currency)} annually. Set up automatic transfers on salary day and treat savings as a non-negotiable expense, not leftover money.`;
+  }
+
+  // Investment Allocation
+  if (lowerName.includes('investment') && lowerName.includes('allocation')) {
+    const targetInvestment = results.totalAnnualIncome * 0.15;
+    const gap = Math.max(0, targetInvestment - results.totalAnnualInvestments);
+    return `Start investing ${formatCurrency(gap, currency)} annually through SIPs. Begin with large-cap equity funds if new to investing, or diversified hybrid funds for lower risk.`;
+  }
+
+  // Debt to Income
+  if (lowerName.includes('debt') && lowerName.includes('income') && !lowerName.includes('servicing')) {
+    const debtRatio = (results.totalDebt / results.totalAnnualIncome * 100).toFixed(1);
+    return `Total debt is ${debtRatio}% of annual income. Create aggressive debt payoff plan: list all debts by interest rate, pay minimums on all, then attack highest-rate debt with every extra rupee.`;
+  }
+
+  // Debt to Assets
+  if (lowerName.includes('debt') && lowerName.includes('assets')) {
+    const debtAssetRatio = (results.totalDebt / results.totalAssets * 100).toFixed(1);
+    return `Debt represents ${debtAssetRatio}% of total assets. Balance debt reduction with asset building: allocate 70% of surplus to debt payments, 30% to wealth building to avoid stopping financial growth entirely.`;
+  }
+
+  // Cash to Assets
+  if (lowerName.includes('cash') && lowerName.includes('assets')) {
+    const liquidRatio = (results.liquidAssets / results.totalAssets * 100).toFixed(1);
+    return `Only ${liquidRatio}% of assets are liquid. Build cash reserves through liquid funds and high-yield savings while maintaining growth investments for better financial flexibility.`;
+  }
+
+  // Liquid Assets Ratio
+  if (lowerName.includes('liquid') && lowerName.includes('assets')) {
+    const liquidRatio = (results.liquidAssets / results.totalAssets * 100).toFixed(1);
+    return `${liquidRatio}% asset liquidity needs improvement. Gradually shift some fixed deposits to liquid funds and maintain 20-30% of portfolio in easily accessible investments for opportunities and emergencies.`;
+  }
+
+  // Debt to Liquid Assets
+  if (lowerName.includes('debt') && lowerName.includes('liquid')) {
+    const ratio = results.liquidAssets > 0 ? (results.totalDebt / results.liquidAssets).toFixed(1) : '∞';
+    return `Debt is ${ratio}x your liquid assets. Build liquid cushion first before aggressive debt payoff - you need cash buffer to avoid borrowing again during emergencies.`;
+  }
+
+  // Fallback to regular recommendation if no specific match
+  return getActionRecommendation(metricName, score, results, currency);
 };
 
 const getActionRecommendation = (metricName: string, score: number, results: CalculationResults, currency: string): string => {
