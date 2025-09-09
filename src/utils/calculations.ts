@@ -1,5 +1,84 @@
 import { FormData, CalculationResults, FinancialMetrics } from '@/types/assessment';
 
+const getMetricDescription = (type: string, score: number): string => {
+  switch (type) {
+    case 'coreExpense':
+      if (score <= 2) return "Core expenses are way too high—you're operating with very little buffer.";
+      if (score === 3) return "Core expenses are manageable but could be optimised for better financial stability.";
+      if (score === 4) return "Good control over core expenses, leaving room for savings and investments.";
+      return "Excellent core expense management! Your essential costs are well controlled.";
+
+    case 'totalExpense':
+      if (score <= 2) return "You're likely spending more than you earn. Risk of debt is high.";
+      if (score === 3) return "Total expenses are reasonable but there's scope for optimisation.";
+      if (score === 4) return "Good expense management with healthy room for savings.";
+      return "Excellent overall spending control! You're living well below your means.";
+
+    case 'debtServicing':
+      if (score <= 2) return "High debt burden. Debt reduction should be a priority.";
+      if (score === 3) return "Manageable debt, but needs to be watched.";
+      if (score === 4) return "Good debt control. Your debt payments are within reasonable limits.";
+      return "Excellent debt management! Your debt payments are very manageable.";
+
+    case 'cashBuffer':
+      if (score <= 2) return "You're very exposed to emergencies—no real cushion.";
+      if (score === 3) return "Decent cash buffer, but consider building it further.";
+      if (score === 4) return "Strong cash position providing excellent financial security.";
+      return "Outstanding cash reserves! You can handle major financial shocks.";
+
+    case 'emergencyMonths':
+      if (score <= 2) return "No emergency protection. Any unexpected expense could devastate your finances.";
+      if (score === 3) return "Basic emergency fund in place. Consider building to 6 months.";
+      if (score === 4) return "Strong emergency coverage providing good financial security.";
+      return "Perfect emergency fund! You can weather extended financial storms.";
+
+    case 'savingsRate':
+      if (score <= 2) return "Critical savings deficit. Your financial future is at risk without immediate changes.";
+      if (score === 3) return "Decent savings rate, but there's room for improvement.";
+      if (score === 4) return "Strong savings rate that will compound into significant wealth.";
+      return "Outstanding savings discipline! You're building wealth rapidly.";
+
+    case 'investmentAllocation':
+      if (score <= 2) return "No significant investments. You're missing out on wealth creation opportunities.";
+      if (score === 3) return "Reasonable investment allocation, but consider increasing it.";
+      if (score === 4) return "Good investment discipline creating wealth for your future.";
+      return "Excellent investment allocation! You're building long-term wealth effectively.";
+
+    case 'debtToIncome':
+      if (score <= 2) return "Critical debt burden. Immediate debt restructuring needed.";
+      if (score === 3) return "Moderate debt burden that requires attention.";
+      if (score === 4) return "Good debt levels relative to your income.";
+      return "Excellent debt-to-income ratio! Your debt levels are very manageable.";
+
+    case 'debtToAssets':
+      if (score <= 2) return "High debt levels. Focus on debt reduction.";
+      if (score === 3) return "Moderate debt burden that requires attention.";
+      if (score === 4) return "Good debt levels relative to your assets.";
+      return "Excellent debt-to-assets ratio! Your debt levels are very manageable.";
+
+    case 'cashToAssets':
+      if (score <= 2) return "Dangerously low cash. Any emergency could create serious problems.";
+      if (score === 3) return "Decent cash position, but consider building liquid reserves.";
+      if (score === 4) return "Good cash allocation providing financial flexibility.";
+      return "Excellent cash position! You have strong liquidity for opportunities and emergencies.";
+
+    case 'liquidAssets':
+      if (score <= 2) return "Very low liquid assets. You need better emergency preparedness.";
+      if (score === 3) return "Reasonable liquid asset allocation, but could be improved.";
+      if (score === 4) return "Good liquid asset balance providing financial flexibility.";
+      return "Excellent liquid asset allocation! Perfect balance of accessibility and growth.";
+
+    case 'debtToLiquid':
+      if (score <= 2) return "Critical debt-to-liquid ratio. Immediate action needed to build cash reserves.";
+      if (score === 3) return "High debt relative to liquid assets. Focus on building emergency funds.";
+      if (score === 4) return "Good debt-to-liquid ratio providing reasonable financial stability.";
+      return "Excellent debt-to-liquid ratio! You have strong liquidity relative to debt obligations.";
+
+    default:
+      return "Analysis pending for this metric.";
+  }
+};
+
 export const calculateFinancialHealth = (formData: FormData): CalculationResults => {
   // Helper function to get number value or 0
   const getValue = (key: string): number => {
@@ -351,7 +430,12 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
         staticDescription = "Additional analysis required for this metric.";
     }
 
-    return { value: ratio, score, description, staticDescription };
+    return { 
+      value: ratio, 
+      score, 
+      description: getMetricDescription(type, score),
+      staticDescription 
+    };
   };
 
   // Calculate the 12 exact financial ratios as specified

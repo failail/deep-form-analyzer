@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { FormData, CalculationResults } from '@/types/assessment';
 import { calculateFinancialHealth } from '@/utils/calculations';
-import { getLocalizationConfig, formatNumber, formatPercentage, formatScore, LocalizationConfig } from '@/utils/localization';
+import { getLocalizationConfig, formatNumber, formatPercentage, formatScore, formatCurrency, LocalizationConfig } from '@/utils/localization';
 import { Download, ArrowLeft, Award, TrendingUp, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -483,8 +483,6 @@ const Results = () => {
           </CardContent>
         </Card>
 
-        {/* Category Checklist with Redundancy Check */}
-        {renderCategoryChecklist(results, formData, localizationConfig, getScoreBadgeVariant)}
 
         {/* Priority Recommendations */}
         <Card className="mb-8">
@@ -507,7 +505,7 @@ const Results = () => {
                   </div>
                   <p className="text-muted-foreground mb-2">{recommendation.description}</p>
                   <p className="text-sm text-foreground">
-                    <strong>Action needed:</strong> {getActionRecommendation(recommendation.name, recommendation.score, results, localizationConfig)}
+                    <strong>Action needed:</strong> {getActionRecommendation(recommendation.name, recommendation.score, results, currency)}
                   </p>
                 </div>
               ))}
@@ -581,237 +579,118 @@ const Results = () => {
   );
 };
 
-const getActionRecommendation = (metricName: string, score: number, results: CalculationResults, localizationConfig: LocalizationConfig): string => {
-  if (metricName.toLowerCase().includes('expense')) {
+const getActionRecommendation = (metricName: string, score: number, results: CalculationResults, currency: string): string => {
+  const lowerName = metricName.toLowerCase();
+  
+  // Core Expense Ratio
+  if (lowerName.includes('core') && lowerName.includes('expense')) {
+    const currentValue = ((results.totalAnnualExpenses - results.totalAnnualLoanPayments) / results.totalAnnualIncome * 100).toFixed(1);
     if (score <= 2) {
-      const excessAmount = Math.max(0, results.totalAnnualExpenses - (results.totalAnnualIncome * 0.7));
-      return `Reduce your annual expenses by ${formatNumber(excessAmount, localizationConfig)} to achieve a healthier 70% expense ratio. Start with discretionary spending like dining out and entertainment.`;
+      const excessAmount = Math.max(0, (results.totalAnnualExpenses - results.totalAnnualLoanPayments) - (results.totalAnnualIncome * 0.6));
+      return `Reduce your annual expenses by ${formatCurrency(excessAmount, currency)} to achieve a healthier 60% expense ratio. Start with discretionary spending like dining out and entertainment.`;
     }
-    return "Review your monthly expenses and identify areas where you can cut back by 10-15%.";
+    return `This ratio shows how much of your income goes into unavoidable monthly spending—think rent, utilities, EMIs. Current Value: ${currentValue}%`;
   }
   
-  if (metricName.toLowerCase().includes('savings')) {
+  // Total Expense Ratio  
+  if (lowerName.includes('total') && lowerName.includes('expense')) {
+    const currentValue = (results.totalAnnualExpenses / results.totalAnnualIncome * 100).toFixed(1);
+    if (score <= 2) {
+      const excessAmount = Math.max(0, results.totalAnnualExpenses - (results.totalAnnualIncome * 0.75));
+      return `Reduce your annual expenses by ${formatCurrency(excessAmount, currency)} to achieve a healthier 75% expense ratio. Start with discretionary spending like dining out and entertainment.`;
+    }
+    return `This is the total of your essential and lifestyle expenses vs your monthly income. Higher the number, lower the savings and flexibility. Current Value: ${currentValue}%`;
+  }
+
+  // Debt Servicing Ratio
+  if (lowerName.includes('debt') && lowerName.includes('servicing')) {
+    const currentValue = (results.totalAnnualLoanPayments / results.totalAnnualIncome * 100).toFixed(1);
+    if (score <= 2) {
+      return `This tells you how much of your income is used for EMIs and other loan repayments. A higher number signals potential distress or low creditworthiness. Try to stay under 30%. Current Value: ${currentValue}%`;
+    }
+    return `This tells you how much of your income is used for EMIs and other loan repayments. Current Value: ${currentValue}%`;
+  }
+
+  // Cash Buffer Ratio
+  if (lowerName.includes('cash') && lowerName.includes('buffer')) {
+    const currentValue = results.totalAnnualExpenses > 0 ? (results.liquidAssets / results.totalAnnualExpenses * 100).toFixed(1) : '0';
+    const targetAmount = results.totalMonthlyExpenses * 6;
+    const gap = Math.max(0, targetAmount - results.liquidAssets);
+    if (score <= 2) {
+      return `Build your emergency fund by ${formatCurrency(gap, currency)} to cover 6 months of expenses. Save ${formatCurrency(gap / 12, currency)} monthly to reach this goal in a year.`;
+    }
+    return `This shows your ability to handle financial emergencies without borrowing. Current Value: ${currentValue}%`;
+  }
+
+  // Emergency Months
+  if (lowerName.includes('emergency')) {
+    const currentValue = results.totalMonthlyExpenses > 0 ? (results.liquidAssets / results.totalMonthlyExpenses).toFixed(1) : '0';
+    const targetAmount = results.totalMonthlyExpenses * 6;
+    const gap = Math.max(0, targetAmount - results.liquidAssets);
+    if (score <= 2) {
+      return `Build your emergency fund by ${formatCurrency(gap, currency)} to cover 6 months of expenses. Save ${formatCurrency(gap / 12, currency)} monthly to reach this goal in a year.`;
+    }
+    return `This tells you how many months of expenses you can cover with your liquid savings. Current Value: ${currentValue} months`;
+  }
+
+  // Savings Rate
+  if (lowerName.includes('savings')) {
+    const currentValue = ((results.totalAnnualIncome - results.totalAnnualExpenses) / results.totalAnnualIncome * 100).toFixed(1);
     if (score <= 2) {
       const targetSavings = results.totalAnnualIncome * 0.2 - (results.totalAnnualIncome - results.totalAnnualExpenses);
-      return `Increase your savings by ${formatNumber(targetSavings, localizationConfig)} annually to reach a healthy 20% savings rate. Consider automating this amount monthly.`;
+      return `Increase your savings by ${formatCurrency(targetSavings, currency)} annually to reach a healthy 20% savings rate. Consider automating this amount monthly.`;
     }
-    return "Set up automatic transfers to boost your savings rate to at least 20% of income.";
+    return `This measures how much of your income you're saving each month. Higher is better for wealth building. Current Value: ${currentValue}%`;
   }
-  
-  if (metricName.toLowerCase().includes('emergency') || metricName.toLowerCase().includes('cash')) {
-    const targetAmount = results.totalMonthlyExpenses * 6;
-    const currentAmount = results.liquidAssets;
-    const gap = Math.max(0, targetAmount - currentAmount);
-    return `Build your emergency fund by ${formatNumber(gap, localizationConfig)} to cover 6 months of expenses. Save ${formatNumber(gap / 12, localizationConfig)} monthly to reach this goal in a year.`;
+
+  // Investment Allocation
+  if (lowerName.includes('investment')) {
+    const currentValue = (results.totalAnnualInvestments / results.totalAnnualIncome * 100).toFixed(1);
+    if (score <= 2) {
+      const targetInvestment = results.totalAnnualIncome * 0.15;
+      const gap = Math.max(0, targetInvestment - results.totalAnnualInvestments);
+      return `Increase your annual investments by ${formatCurrency(gap, currency)} to reach a healthy 15% allocation. Start with SIPs in diversified mutual funds.`;
+    }
+    return `This shows what percentage of your income goes toward building long-term wealth through investments. Current Value: ${currentValue}%`;
+  }
+
+  // Debt to Income
+  if (lowerName.includes('debt') && lowerName.includes('income')) {
+    const currentValue = (results.totalDebt / results.totalAnnualIncome * 100).toFixed(1);
+    if (score <= 2) {
+      return `Create a debt reduction plan: list all debts by interest rate, pay minimums on all, then attack the highest rate debt aggressively. Current Value: ${currentValue}%`;
+    }
+    return `This compares your total outstanding debt to your annual income. Lower is better for financial stability. Current Value: ${currentValue}%`;
+  }
+
+  // Debt to Assets
+  if (lowerName.includes('debt') && lowerName.includes('assets')) {
+    const currentValue = (results.totalDebt / results.totalAssets * 100).toFixed(1);
+    if (score <= 2) {
+      return `Focus on both debt reduction and asset building: accelerate debt payments while continuing to build savings and investments. Current Value: ${currentValue}%`;
+    }
+    return `This shows what portion of your total wealth is actually debt. Lower percentages indicate stronger financial health. Current Value: ${currentValue}%`;
+  }
+
+  // Cash to Assets / Liquid Assets Ratio
+  if (lowerName.includes('liquid') || (lowerName.includes('cash') && lowerName.includes('assets'))) {
+    const currentValue = (results.liquidAssets / results.totalAssets * 100).toFixed(1);
+    if (score <= 2) {
+      return `Build up your cash and liquid investments for better financial flexibility and emergency preparedness. Current Value: ${currentValue}%`;
+    }
+    return `This tells you what percentage of your wealth is easily accessible in emergencies or opportunities. Current Value: ${currentValue}%`;
+  }
+
+  // Debt to Liquid Assets
+  if (lowerName.includes('debt') && lowerName.includes('liquid')) {
+    const currentValue = results.liquidAssets > 0 ? (results.totalDebt / results.liquidAssets).toFixed(1) : '∞';
+    if (score <= 2) {
+      return `Build emergency funds first, then accelerate debt payments to improve this ratio and financial stability. Current Value: ${currentValue}x`;
+    }
+    return `This compares your total debt to your liquid savings. Lower multiples indicate better debt management. Current Value: ${currentValue}x`;
   }
   
   return "Focus on improving this metric through consistent financial discipline and regular monitoring.";
-};
-
-interface ChecklistCategory {
-  name: string;
-  description: string;
-  isVisible: boolean;
-  score?: number;
-  status: 'good' | 'fair' | 'poor';
-}
-
-const renderCategoryChecklist = (
-  results: CalculationResults, 
-  formData: FormData, 
-  localizationConfig: LocalizationConfig,
-  getScoreBadgeVariant: (score: number) => "default" | "secondary" | "destructive" | "outline"
-) => {
-  // Define all possible checklist categories
-  const allCategories: ChecklistCategory[] = [
-    {
-      name: "Personal Finance Health",
-      description: "Overall financial wellness score",
-      isVisible: true, // This is always shown in the executive summary
-      score: results.overallScore,
-      status: results.overallScore >= 4 ? 'good' : results.overallScore >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "Insurance Check",
-      description: "Insurance coverage assessment",
-      isVisible: !!(formData.lifeInsuranceValue || formData.healthInsuranceValue),
-      score: calculateInsuranceScore(formData),
-      status: calculateInsuranceScore(formData) >= 4 ? 'good' : calculateInsuranceScore(formData) >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "Emergency Fund Status",
-      description: "Cash buffer for emergencies",
-      isVisible: true, // Already shown in ratios as "Emergency Months Covered"
-      score: results.metrics.emergencyMonths.score,
-      status: results.metrics.emergencyMonths.score >= 4 ? 'good' : results.metrics.emergencyMonths.score >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "Debt Health", 
-      description: "Debt management and servicing capacity",
-      isVisible: true, // Already shown in ratios as "Debt Servicing Ratio" and "Debt-to-Income Ratio"
-      score: Math.min(results.metrics.debtServicingRatio.score, results.metrics.debtToIncomeRatio.score),
-      status: Math.min(results.metrics.debtServicingRatio.score, results.metrics.debtToIncomeRatio.score) >= 4 ? 'good' : 
-              Math.min(results.metrics.debtServicingRatio.score, results.metrics.debtToIncomeRatio.score) >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "Investment Diversification",
-      description: "Portfolio allocation and investment spread",
-      isVisible: true, // Already shown in ratios as "Investment Allocation"
-      score: results.metrics.investmentAllocation.score,
-      status: results.metrics.investmentAllocation.score >= 4 ? 'good' : results.metrics.investmentAllocation.score >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "Retirement Prep",
-      description: "Retirement savings and planning readiness",
-      isVisible: !!(formData.retirementSavings || formData.annualRetirementInvestments),
-      score: calculateRetirementScore(formData, results),
-      status: calculateRetirementScore(formData, results) >= 4 ? 'good' : calculateRetirementScore(formData, results) >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "Financial Freedom Score",
-      description: "Path to financial independence assessment",
-      isVisible: results.annualIncome > results.annualExpenses,
-      score: calculateFinancialFreedomScore(results),
-      status: calculateFinancialFreedomScore(results) >= 4 ? 'good' : calculateFinancialFreedomScore(results) >= 3 ? 'fair' : 'poor'
-    },
-    {
-      name: "FIRE Plan Readiness",
-      description: "Financial Independence, Retire Early planning status",
-      isVisible: results.metrics.savingsRate.value > 0.15, // Only show if savings rate > 15%
-      score: calculateFIREScore(results),
-      status: calculateFIREScore(results) >= 4 ? 'good' : calculateFIREScore(results) >= 3 ? 'fair' : 'poor'
-    }
-  ];
-
-  // Apply redundancy check
-  const sectionsAlreadyShown = [
-    'Personal Finance Health', // Shown in executive summary
-    'Emergency Fund Status',   // Shown in ratios section
-    'Debt Health',            // Shown in ratios section  
-    'Investment Diversification' // Shown in ratios section
-  ];
-
-  // Filter out redundant categories
-  const nonRedundantCategories = allCategories.filter(category => {
-    // If category is not visible based on user data, exclude it
-    if (!category.isVisible) return false;
-    
-    // If category is already shown elsewhere in detail, exclude it
-    if (sectionsAlreadyShown.includes(category.name)) return false;
-    
-    return true;
-  });
-
-  // If no categories remain after filtering, don't show the section
-  if (nonRedundantCategories.length === 0) {
-    return null;
-  }
-
-  return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <CheckCircle2 className="w-6 h-6" />
-          Financial Health Category Checklist
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          {nonRedundantCategories.map((category, index) => (
-            <div key={index} className="flex items-center justify-between p-4 border border-border rounded-lg">
-              <div className="flex items-center gap-3">
-                {category.status === 'good' ? (
-                  <CheckCircle2 className="w-5 h-5 text-success" />
-                ) : category.status === 'fair' ? (
-                  <CheckCircle2 className="w-5 h-5 text-accent" />
-                ) : (
-                  <XCircle className="w-5 h-5 text-destructive" />
-                )}
-                <div>
-                  <div className="font-medium text-foreground">{category.name}</div>
-                  <div className="text-sm text-muted-foreground">{category.description}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                {category.score && (
-                  <Badge variant={getScoreBadgeVariant(category.score)}>
-                    {formatScore(category.score)}/5
-                  </Badge>
-                )}
-                <Badge variant={category.status === 'good' ? 'default' : category.status === 'fair' ? 'secondary' : 'destructive'}>
-                  {category.status === 'good' ? 'Good' : category.status === 'fair' ? 'Fair' : 'Needs Work'}
-                </Badge>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-// Helper functions for calculating category scores
-const calculateInsuranceScore = (formData: FormData): number => {
-  const lifeInsurance = formData.lifeInsuranceValue || 0;
-  const healthInsurance = formData.healthInsuranceValue || 0;
-  const annualIncome = formData.jobSalary || 0;
-  
-  if (!lifeInsurance && !healthInsurance) return 1;
-  if (lifeInsurance >= annualIncome * 5 && healthInsurance > 0) return 5;
-  if (lifeInsurance >= annualIncome * 3 && healthInsurance > 0) return 4;
-  if (lifeInsurance >= annualIncome && healthInsurance > 0) return 3;
-  if (lifeInsurance > 0 || healthInsurance > 0) return 2;
-  return 1;
-};
-
-const calculateRetirementScore = (formData: FormData, results: CalculationResults): number => {
-  const retirementSavings = formData.retirementSavings || 0;
-  const annualRetirementInvestment = formData.annualRetirementInvestments || 0;
-  const annualIncome = results.annualIncome;
-  
-  if (!retirementSavings && !annualRetirementInvestment) return 1;
-  
-  const retirementSavingsRatio = retirementSavings / annualIncome;
-  const retirementInvestmentRatio = annualRetirementInvestment / annualIncome;
-  
-  if (retirementSavingsRatio >= 3 && retirementInvestmentRatio >= 0.15) return 5;
-  if (retirementSavingsRatio >= 2 && retirementInvestmentRatio >= 0.1) return 4;
-  if (retirementSavingsRatio >= 1 && retirementInvestmentRatio >= 0.05) return 3;
-  if (retirementSavingsRatio >= 0.5 || retirementInvestmentRatio >= 0.03) return 2;
-  return 1;
-};
-
-const calculateFinancialFreedomScore = (results: CalculationResults): number => {
-  const netWorth = results.estimatedNetWorth;
-  const annualExpenses = results.annualExpenses;
-  const savingsRate = results.metrics.savingsRate.value;
-  
-  if (netWorth <= 0 || annualExpenses <= 0) return 1;
-  
-  const yearsOfExpensesCovered = netWorth / annualExpenses;
-  
-  if (yearsOfExpensesCovered >= 25 && savingsRate >= 0.5) return 5;
-  if (yearsOfExpensesCovered >= 15 && savingsRate >= 0.3) return 4;
-  if (yearsOfExpensesCovered >= 10 && savingsRate >= 0.2) return 3;
-  if (yearsOfExpensesCovered >= 5 && savingsRate >= 0.1) return 2;
-  return 1;
-};
-
-const calculateFIREScore = (results: CalculationResults): number => {
-  const savingsRate = results.metrics.savingsRate.value;
-  const netWorth = results.estimatedNetWorth;
-  const annualExpenses = results.annualExpenses;
-  
-  if (savingsRate < 0.15) return 1; // Minimum threshold for FIRE consideration
-  
-  const yearsToFIRE = netWorth > 0 && annualExpenses > 0 ? 
-    Math.max(0, (25 * annualExpenses - netWorth) / (results.annualIncome * savingsRate)) : 999;
-  
-  if (yearsToFIRE <= 10 && savingsRate >= 0.5) return 5;
-  if (yearsToFIRE <= 15 && savingsRate >= 0.4) return 4;
-  if (yearsToFIRE <= 20 && savingsRate >= 0.3) return 3;
-  if (yearsToFIRE <= 30 && savingsRate >= 0.2) return 2;
-  return 1;
 };
 
 export default Results;
