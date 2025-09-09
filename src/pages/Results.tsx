@@ -135,7 +135,7 @@ const Results = () => {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Assessment
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={handleDownloadPDF}>
                 <Download className="w-4 h-4 mr-2" />
                 Download PDF
               </Button>

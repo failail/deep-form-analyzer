@@ -7,75 +7,65 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
     return typeof value === 'number' ? value : (parseFloat(value) || 0);
   };
 
-  // NEW METRIC CALCULATIONS (per user requirements)
+  // NEW METRIC CALCULATIONS (exact field mapping as specified)
   
   // 1. Estimated Net Worth = Total Assets - Total Liabilities
-  const totalAssets = getValue('physicalCash') + getValue('savingsAccountsFD') + 
+  const totalAssets = getValue('savingsAccountsFD') + getValue('physicalCash') + 
     getValue('investmentValue') + getValue('retirementSavings') + getValue('jewelleryValue') + 
-    getValue('collectiblesValue') + getValue('currentHomesValue') + getValue('currentVehiclesValue') + 
-    getValue('homeCurrentValue');
+    getValue('collectiblesValue') + getValue('currentHomesValue') + getValue('currentVehiclesValue');
 
-  const totalLiabilities = getValue('homeOutstandingLoan') + getValue('vehicle1OutstandingLoan') + 
-    getValue('personalLoanOutstanding') + getValue('educationLoanOutstanding') + 
-    getValue('creditCardOutstanding') + getValue('otherLoanOutstanding');
+  const totalLiabilities = getValue('homeOutstandingLoan') + getValue('property1OutstandingLoan') + 
+    getValue('vehicle1OutstandingLoan') + getValue('loan1OutstandingBalance');
 
   const estimatedNetWorth = totalAssets - totalLiabilities;
 
-  // 2. Annual Income = Monthly income × 12
-  const monthlyIncome = getValue('jobSalary') / 12 + getValue('secondJobIncome') / 12 + 
-    getValue('freelanceIncome') / 12 + getValue('sideBusinessIncome') / 12 + 
-    getValue('realEstateIncome') / 12 + getValue('hobbyIncome') / 12 + 
-    getValue('dividendIncome') / 12 + getValue('familyStipend') / 12 + 
-    getValue('otherAnnualIncome') / 12;
-  const annualIncome = monthlyIncome * 12;
+  // 2. Annual Income = Sum of all income sources
+  const annualIncome = getValue('jobSalary') + getValue('secondJobIncome') + getValue('freelanceIncome') + 
+    getValue('sideBusinessIncome') + getValue('realEstateIncome') + getValue('hobbyIncome') + 
+    getValue('dividendIncome') + getValue('familyStipend') + getValue('otherAnnualIncome');
 
-  // 3. Annual Expenses = Monthly expenses × 12  
-  // Using existing monthly expense calculation
-  const totalMonthlyExpenses = getValue('monthlyGroceriesToiletries') + 
-    getValue('monthlyClothesShoes') + 
-    getValue('monthlyElectricity') + 
-    getValue('monthlyMobile') + 
-    getValue('monthlyDiningOut') + 
-    getValue('monthlyCommute') +
-    getValue('monthlyEntertainment') +
-    getValue('monthlyHobbies') +
-    getValue('monthlyAppSubscriptions') +
-    getValue('monthlyInternet') +
-    getValue('monthlyTV') +
-    getValue('monthlyCookingGas') +
-    getValue('monthlyMakeupBeauty') +
-    getValue('monthlyHousehelpCleaningService') +
-    getValue('monthlyPets') +
-    getValue('monthlyAlcohol') +
-    getValue('monthlyCigarettes') +
-    getValue('monthlyMedication') +
-    getValue('monthlyHealthExams') +
-    (getValue('monthlyRent') || 0);
-  const annualExpenses = totalMonthlyExpenses * 12;
+  // 3. Annual Expenses = (Monthly expenses × 12) + Annual expenses
+  // Calculate monthly expenses from all monthly expense groups
+  const monthlyExpensesTotal = getValue('monthlyGroceriesToiletries') + getValue('monthlyClothesShoes') + 
+    getValue('monthlyElectricity') + getValue('monthlyMobile') + getValue('monthlyDiningOut') + 
+    getValue('monthlyCommute') + getValue('monthlyEntertainment') + getValue('monthlyHobbies') + 
+    getValue('monthlyAppSubscriptions') + getValue('monthlyInternet') + getValue('monthlyTV') + 
+    getValue('monthlyCookingGas') + getValue('monthlyMakeupBeauty') + getValue('monthlyHousehelpCleaningService') + 
+    getValue('monthlyPets') + getValue('monthlyAlcohol') + getValue('monthlyCigarettes') + 
+    getValue('monthlyMedication') + getValue('monthlyHealthExams') + getValue('monthlyRent') + 
+    getValue('vehicle1FuelCost');
+  
+  // Add annual expenses directly
+  const annualExpensesFromAnnualGroup = getValue('annualVacationCost') + getValue('annualGiftingCost') + 
+    getValue('annualClothingCost') + getValue('annualInsurancePremiums') + getValue('annualSpecialExpenses');
+  
+  const annualExpenses = (monthlyExpensesTotal * 12) + annualExpensesFromAnnualGroup;
 
   // 4. Annual Expenses Minus Savings/Investments
-  const monthlySavings = getValue('monthlySavingsDeposits') || 0;
-  const monthlyInvestments = getValue('monthlyMutualFunds') + getValue('monthlyTaxSaving');
-  const annualExpensesMinusSavingsInvestments = (totalMonthlyExpenses - monthlySavings - monthlyInvestments) * 12;
+  const annualSavingsInvestments = getValue('annualRetirementInvestments') + 
+    (getValue('monthlyMutualFunds') * 12) + (getValue('monthlyTaxSaving') * 12) + 
+    (getValue('monthlySavingsDeposits') * 12);
+  const annualExpensesMinusSavingsInvestments = annualExpenses - annualSavingsInvestments;
 
-  // 5. Total Debt = Sum of all liabilities
-  const totalDebt = totalLiabilities;
+  // 5. Total Debt = Sum of all outstanding loan balances
+  const totalDebt = getValue('homeOutstandingLoan') + getValue('property1OutstandingLoan') + 
+    getValue('vehicle1OutstandingLoan') + getValue('loan1OutstandingBalance');
 
   // 6. Total Savings & Investments
   const totalSavingsInvestments = getValue('savingsAccountsFD') + getValue('investmentValue') + 
-    getValue('retirementSavings') + getValue('jewelleryValue') + getValue('collectiblesValue');
+    getValue('retirementSavings') + (getValue('monthlyMutualFunds') * 12) + 
+    (getValue('monthlyTaxSaving') * 12) + (getValue('monthlySavingsDeposits') * 12);
 
   // 7. Total Cash In Hand
-  const totalCashInHand = getValue('physicalCash') + getValue('savingsAccountsFD');
+  const totalCashInHand = getValue('physicalCash');
 
-  // 8. Monthly Debt Payments
-  const monthlyDebtPayments = getValue('homeMonthlyPayment') + getValue('vehicle1LoanPayment') + 
-    getValue('personalLoanPayment') + getValue('educationLoanPayment') + 
-    getValue('creditCardPayment') + getValue('otherLoanPayment');
+  // 8. Monthly Debt Payments = Sum of EMIs
+  const monthlyDebtPayments = getValue('homeMonthlyPayment') + getValue('property1MonthlyPayment') + 
+    getValue('vehicle1MonthlyPayment') + getValue('loan1MonthlyPayment');
 
-  // 9. Monthly Investments
+  // 9. Monthly Investments = Sum of recurring investment deposits
   const totalMonthlyInvestments = getValue('monthlyMutualFunds') + getValue('monthlyTaxSaving') + 
-    getValue('monthlySavingsDeposits') + getValue('monthlyRetirementInvestments');
+    getValue('monthlySavingsDeposits');
 
   // Legacy calculations for backward compatibility
   const totalAnnualIncome = annualIncome;
@@ -86,6 +76,7 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   const totalAnnualLoanPayments = monthlyDebtPayments * 12;
   const liquidAssets = totalCashInHand;
   const totalAnnualInvestments = totalMonthlyInvestments * 12;
+  const totalMonthlyExpenses = monthlyExpensesTotal;
 
   // Calculate 12 Financial Health Ratios
   const calculateRatio = (ratio: number, type: 'coreExpense' | 'totalExpense' | 'debtServicing' | 'cashBuffer' | 'emergencyMonths' | 'savingsRate' | 'investmentAllocation' | 'debtToIncome' | 'debtToAssets' | 'cashToAssets' | 'liquidAssets' | 'debtToLiquid'): { value: number; score: number; description: string } => {
