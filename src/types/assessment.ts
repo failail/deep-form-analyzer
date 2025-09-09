@@ -56,61 +56,73 @@ export interface FinancialMetrics {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
   };
   totalExpenseRatio: {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
   };
   debtServicingRatio: {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
   };
   cashBufferRatio: {
     value: number;
     score: number;
     description: string;
-  };
-  emergencyMonths: {
-    value: number;
-    score: number;
-    description: string;
-  };
-  savingsRate: {
-    value: number;
-    score: number;
-    description: string;
-  };
-  investmentAllocation: {
-    value: number;
-    score: number;
-    description: string;
-  };
-  debtToIncomeRatio: {
-    value: number;
-    score: number;
-    description: string;
+    staticDescription: string;
   };
   debtToAssetsRatio: {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
   };
   cashToAssetsRatio: {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
   };
   liquidAssetsRatio: {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
   };
   debtToLiquidRatio: {
     value: number;
     score: number;
     description: string;
+    staticDescription: string;
+  };
+  emergencyMonths: {
+    value: number;
+    score: number;
+    description: string;
+    staticDescription: string;
+  };
+  savingsRate: {
+    value: number;
+    score: number;
+    description: string;
+    staticDescription: string;
+  };
+  investmentAllocation: {
+    value: number;
+    score: number;
+    description: string;
+    staticDescription: string;
+  };
+  debtToIncomeRatio: {
+    value: number;
+    score: number;
+    description: string;
+    staticDescription: string;
   };
 }
 

@@ -230,40 +230,255 @@ const Results = () => {
           </CardContent>
         </Card>
 
-        {/* Financial Health Metrics */}
+        {/* 12 Financial Health Ratios */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-6 h-6" />
-              Financial Health Metrics
+              Financial Health Ratios
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {metricEntries.map((metric, index) => (
-                <div key={index}>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="font-medium text-foreground">{metric.name}</div>
-                    <Badge variant={getScoreBadgeVariant(metric.score)}>
-                      Score: {metric.score}/5
-                    </Badge>
-                  </div>
-                  <div className="mb-2">
-                    <Progress 
-                      value={(metric.score / 5) * 100} 
-                      className="h-2"
-                    />
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-2">{metric.description}</p>
-                   <p className="text-xs text-muted-foreground">
-                     Current Value: {typeof metric.value === 'number' ? 
-                       (metric.value > 1 ? formatScore(metric.value) + ' months' : formatPercentage(metric.value * 100)) : 
-                       metric.value
-                     }
-                   </p>
-                  {index < metricEntries.length - 1 && <Separator className="mt-4" />}
+            <div className="grid gap-8">
+              {/* 1. Core Expense Ratio */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">1. Core Expense Ratio</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.coreExpenseRatio.score)}>
+                    {results.metrics.coreExpenseRatio.score}/5
+                  </Badge>
                 </div>
-              ))}
+                <div className="mb-3">
+                  <Progress value={(results.metrics.coreExpenseRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.coreExpenseRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.coreExpenseRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.coreExpenseRatio.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 2. Total Expense Ratio */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">2. Total Expense Ratio</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.totalExpenseRatio.score)}>
+                    {results.metrics.totalExpenseRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.totalExpenseRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.totalExpenseRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.totalExpenseRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.totalExpenseRatio.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 3. Debt Servicing Ratio */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">3. Debt Servicing Ratio</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.debtServicingRatio.score)}>
+                    {results.metrics.debtServicingRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.debtServicingRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.debtServicingRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.debtServicingRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.debtServicingRatio.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 4. Cash Buffer Ratio */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">4. Cash Buffer Ratio</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.cashBufferRatio.score)}>
+                    {results.metrics.cashBufferRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.cashBufferRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.cashBufferRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.cashBufferRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatScore(results.metrics.cashBufferRatio.value)} months
+                  </p>
+                </div>
+              </div>
+
+              {/* 5. Total Debt / Total Assets */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">5. Total Debt / Total Assets</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.debtToAssetsRatio.score)}>
+                    {results.metrics.debtToAssetsRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.debtToAssetsRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.debtToAssetsRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.debtToAssetsRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.debtToAssetsRatio.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 6. Cash / Total Assets */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">6. Cash / Total Assets</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.cashToAssetsRatio.score)}>
+                    {results.metrics.cashToAssetsRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.cashToAssetsRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.cashToAssetsRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.cashToAssetsRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.cashToAssetsRatio.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 7. Liquid Assets / Total Assets */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">7. Liquid Assets / Total Assets</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.liquidAssetsRatio.score)}>
+                    {results.metrics.liquidAssetsRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.liquidAssetsRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.liquidAssetsRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.liquidAssetsRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.liquidAssetsRatio.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 8. Total Debt / Liquid Investments */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">8. Total Debt / Liquid Investments</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.debtToLiquidRatio.score)}>
+                    {results.metrics.debtToLiquidRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.debtToLiquidRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.debtToLiquidRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.debtToLiquidRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatScore(results.metrics.debtToLiquidRatio.value)}x
+                  </p>
+                </div>
+              </div>
+
+              {/* 9. Emergency Months Covered */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">9. Emergency Months Covered</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.emergencyMonths.score)}>
+                    {results.metrics.emergencyMonths.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.emergencyMonths.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.emergencyMonths.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.emergencyMonths.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatScore(results.metrics.emergencyMonths.value)} months
+                  </p>
+                </div>
+              </div>
+
+              {/* 10. Savings Rate */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">10. Savings Rate</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.savingsRate.score)}>
+                    {results.metrics.savingsRate.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.savingsRate.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.savingsRate.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.savingsRate.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.savingsRate.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 11. Investment Allocation */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">11. Investment Allocation</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.investmentAllocation.score)}>
+                    {results.metrics.investmentAllocation.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.investmentAllocation.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.investmentAllocation.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.investmentAllocation.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatPercentage(results.metrics.investmentAllocation.value * 100)}
+                  </p>
+                </div>
+              </div>
+
+              {/* 12. Debt-to-Income Ratio */}
+              <div className="border border-border rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold">12. Debt-to-Income Ratio</h3>
+                  <Badge variant={getScoreBadgeVariant(results.metrics.debtToIncomeRatio.score)}>
+                    {results.metrics.debtToIncomeRatio.score}/5
+                  </Badge>
+                </div>
+                <div className="mb-3">
+                  <Progress value={(results.metrics.debtToIncomeRatio.score / 5) * 100} className="h-2" />
+                </div>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-primary">{results.metrics.debtToIncomeRatio.description}</p>
+                  <p className="text-xs text-muted-foreground">{results.metrics.debtToIncomeRatio.staticDescription}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current Value: {formatScore(results.metrics.debtToIncomeRatio.value)}x
+                  </p>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>

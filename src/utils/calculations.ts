@@ -78,111 +78,339 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   const totalAnnualInvestments = totalMonthlyInvestments * 12;
   const totalMonthlyExpenses = monthlyExpensesTotal;
 
-  // Calculate 12 Financial Health Ratios
-  const calculateRatio = (ratio: number, type: 'coreExpense' | 'totalExpense' | 'debtServicing' | 'cashBuffer' | 'emergencyMonths' | 'savingsRate' | 'investmentAllocation' | 'debtToIncome' | 'debtToAssets' | 'cashToAssets' | 'liquidAssets' | 'debtToLiquid'): { value: number; score: number; description: string } => {
+  // Helper function for ratio calculations with dynamic and static copy
+  const calculateRatio = (ratio: number, type: 'coreExpense' | 'totalExpense' | 'debtServicing' | 'cashBuffer' | 'debtToAssets' | 'cashToAssets' | 'liquidAssets' | 'debtToLiquid' | 'emergencyMonths' | 'savingsRate' | 'investmentAllocation' | 'debtToIncome'): { value: number; score: number; description: string; staticDescription: string } => {
     let score = 1;
     let description = '';
+    let staticDescription = '';
 
     switch (type) {
       case 'coreExpense':
-        const coreExpenseRatio = ratio * 100;
-        if (coreExpenseRatio < 40) { score = 5; description = "Outstanding expense management! Your core living costs are well controlled."; }
-        else if (coreExpenseRatio <= 50) { score = 4; description = "Good expense discipline. Your essential expenses leave room for savings and investments."; }
-        else if (coreExpenseRatio <= 60) { score = 3; description = "Reasonable expense management, but there's scope for optimisation."; }
-        else if (coreExpenseRatio <= 75) { score = 2; description = "Your expenses are consuming too much income. Time to review and cut back."; }
-        else { score = 1; description = "Critical expense levels. Immediate expense reduction needed to avoid financial stress."; }
+        const coreExpensePercent = ratio * 100;
+        staticDescription = "This ratio shows how much of your income goes into unavoidable monthly spending—think rent, utilities, EMIs. If this is high, your ability to save, invest, or absorb a shock goes down. Try to bring this below 60% for long-term stability.";
+        
+        if (coreExpensePercent < 40) { 
+          score = 5; 
+          description = "You're in a great place—core expenses are under control."; 
+        }
+        else if (coreExpensePercent <= 65) { 
+          score = 4; 
+          description = "You're okay, but your essential costs are starting to limit flexibility."; 
+        }
+        else if (coreExpensePercent <= 85) { 
+          score = 3; 
+          description = "Your core expenses are eating into financial breathing room."; 
+        }
+        else { 
+          score = 2; 
+          description = "Core expenses are way too high—you're operating with very little buffer."; 
+        }
         break;
 
       case 'totalExpense':
-        const totalExpenseRatio = ratio * 100;
-        if (totalExpenseRatio < 60) { score = 5; description = "Excellent overall spending control! You're living well below your means."; }
-        else if (totalExpenseRatio <= 70) { score = 4; description = "Good expense management with healthy room for savings."; }
-        else if (totalExpenseRatio <= 80) { score = 3; description = "Your total expenses are reasonable but could be optimised."; }
-        else if (totalExpenseRatio <= 95) { score = 2; description = "Expenses are too high relative to income. Consider lifestyle adjustments."; }
-        else { score = 1; description = "Dangerous expense levels. Immediate action needed to avoid financial crisis."; }
+        const totalExpensePercent = ratio * 100;
+        staticDescription = "This is the total of your essential and lifestyle expenses vs your monthly income. Higher the number, lower the savings and flexibility. Aim to keep it below 75% for long-term financial health.";
+        
+        if (totalExpensePercent < 50) { 
+          score = 5; 
+          description = "Excellent. You're living well below your means."; 
+        }
+        else if (totalExpensePercent <= 75) { 
+          score = 4; 
+          description = "You're living within your means, but not by much."; 
+        }
+        else if (totalExpensePercent <= 90) { 
+          score = 3; 
+          description = "You're at risk of spending too much month to month."; 
+        }
+        else { 
+          score = 2; 
+          description = "You're likely spending more than you earn. Risk of debt is high."; 
+        }
         break;
 
       case 'debtServicing':
-        const debtServicingRatio = ratio * 100;
-        if (debtServicingRatio < 15) { score = 5; description = "Excellent debt management! Your debt payments are very manageable."; }
-        else if (debtServicingRatio <= 25) { score = 4; description = "Good debt control. Your debt payments are within reasonable limits."; }
-        else if (debtServicingRatio <= 35) { score = 3; description = "Moderate debt burden. Consider debt reduction strategies."; }
-        else if (debtServicingRatio <= 50) { score = 2; description = "High debt burden. Debt reduction should be a priority."; }
-        else { score = 1; description = "Critical debt levels. Immediate debt restructuring needed."; }
+        const debtServicingPercent = ratio * 100;
+        staticDescription = "This tells you how much of your income is used for EMIs and other loan repayments. A higher number signals potential distress or low creditworthiness. Try to stay under 30%.";
+        
+        if (debtServicingPercent < 10) { 
+          score = 5; 
+          description = "You're in a strong zone—debt is well under control."; 
+        }
+        else if (debtServicingPercent <= 30) { 
+          score = 4; 
+          description = "Manageable debt, but needs to be watched."; 
+        }
+        else if (debtServicingPercent <= 45) { 
+          score = 3; 
+          description = "Debt is putting stress on your income."; 
+        }
+        else { 
+          score = 2; 
+          description = "Too much income going to debt—financial risk is high."; 
+        }
+        break;
+
+      case 'cashBuffer':
+        staticDescription = "How many months you can survive your current lifestyle with the cash you already have. The higher this is, the more protected you are against sudden expenses or income loss.";
+        
+        if (ratio < 0.5) { 
+          score = 2; 
+          description = "You're very exposed to emergencies—no real cushion."; 
+        }
+        else if (ratio <= 1.5) { 
+          score = 3; 
+          description = "You have some buffer, but it won't last long."; 
+        }
+        else if (ratio <= 3) { 
+          score = 4; 
+          description = "You have a decent short-term buffer."; 
+        }
+        else { 
+          score = 5; 
+          description = "Strong cash buffer. You're well prepared for short-term emergencies."; 
+        }
+        break;
+
+      case 'debtToAssets':
+        const debtToAssetsPercent = ratio * 100;
+        staticDescription = "Shows how much of your assets are funded by debt. Lower is better. Try to keep this below 30% if possible, especially in volatile income situations.";
+        
+        if (debtToAssetsPercent < 20) { 
+          score = 5; 
+          description = "Healthy leverage. Your assets are comfortably larger than your debt."; 
+        }
+        else if (debtToAssetsPercent <= 40) { 
+          score = 4; 
+          description = "Acceptable leverage, but don't go higher."; 
+        }
+        else if (debtToAssetsPercent <= 60) { 
+          score = 3; 
+          description = "Debt is starting to weigh on your assets."; 
+        }
+        else { 
+          score = 2; 
+          description = "Debt is too high relative to your assets. Risk of distress."; 
+        }
+        break;
+
+      case 'cashToAssets':
+        const cashToAssetsPercent = ratio * 100;
+        staticDescription = "This ratio helps you understand how liquid your overall portfolio is. Having too much in cash means low returns. Too little and you may not survive a shock. Balance is key.";
+        
+        if (cashToAssetsPercent < 5) { 
+          score = 2; 
+          description = "Your liquidity is low—you might struggle in a crisis."; 
+        }
+        else if (cashToAssetsPercent <= 10) { 
+          score = 3; 
+          description = "You have basic liquidity, but not much more."; 
+        }
+        else if (cashToAssetsPercent <= 20) { 
+          score = 4; 
+          description = "Good liquidity balance—assets aren't all locked up."; 
+        }
+        else { 
+          score = 5; 
+          description = "Very high liquidity. That's safe, but unused cash might lose value."; 
+        }
+        break;
+
+      case 'liquidAssets':
+        const liquidAssetsPercent = ratio * 100;
+        staticDescription = "How easily your assets can be turned into cash. Good liquidity is critical if you face job loss, a health event, or need fast cash. Too much liquidity may indicate conservative investing.";
+        
+        if (liquidAssetsPercent < 15) { 
+          score = 2; 
+          description = "Too much of your money is tied up in illiquid assets."; 
+        }
+        else if (liquidAssetsPercent <= 35) { 
+          score = 3; 
+          description = "Not bad, but a little more liquidity wouldn't hurt."; 
+        }
+        else if (liquidAssetsPercent <= 60) { 
+          score = 4; 
+          description = "Nice balance—liquidity is healthy."; 
+        }
+        else { 
+          score = 5; 
+          description = "Very high liquidity. Consider deploying some of it for growth."; 
+        }
+        break;
+
+      case 'debtToLiquid':
+        staticDescription = "This ratio compares your debt to how much you can quickly liquidate to repay it. Useful if you want to assess how much financial strain you're under in a crisis.";
+        
+        if (ratio < 0.5) { 
+          score = 5; 
+          description = "You could clear debt easily if needed. Excellent."; 
+        }
+        else if (ratio <= 1) { 
+          score = 4; 
+          description = "Debt is manageable but don't let it rise."; 
+        }
+        else if (ratio <= 2) { 
+          score = 3; 
+          description = "Your debt is starting to outpace liquid investments."; 
+        }
+        else { 
+          score = 2; 
+          description = "Debt is far higher than what you could repay quickly. Risk is high."; 
+        }
+        break;
+
+      case 'emergencyMonths':
+        staticDescription = "A must-have for everyone—this is how many months you can survive without income. Health issues, job loss, or family events can hit anytime. Target 3–6 months at a minimum.";
+        
+        if (ratio < 1) { 
+          score = 2; 
+          description = "Emergency funds are dangerously low."; 
+        }
+        else if (ratio <= 3) { 
+          score = 3; 
+          description = "Okay for short-term issues, but risky."; 
+        }
+        else if (ratio <= 6) { 
+          score = 4; 
+          description = "Good buffer—gives you breathing room."; 
+        }
+        else { 
+          score = 5; 
+          description = "Excellent. You can weather long-term emergencies."; 
+        }
         break;
 
       case 'savingsRate':
         const savingsRatePercent = ratio * 100;
-        if (savingsRatePercent > 30) { score = 5; description = "Outstanding savings discipline! You're building wealth rapidly."; }
-        else if (savingsRatePercent >= 20) { score = 4; description = "Strong savings rate that will compound into significant wealth."; }
-        else if (savingsRatePercent >= 15) { score = 3; description = "Decent savings rate, but there's room for improvement."; }
-        else if (savingsRatePercent >= 10) { score = 2; description = "Low savings rate. Your future self needs more financial support."; }
-        else { score = 1; description = "Critical savings deficit. Your financial future is at risk without immediate changes."; }
-        break;
-
-      case 'cashBuffer':
-        const cashBufferRatio = ratio * 100;
-        if (cashBufferRatio > 100) { score = 5; description = "Outstanding cash reserves! You can handle major financial shocks."; }
-        else if (cashBufferRatio >= 75) { score = 4; description = "Strong cash position providing excellent financial security."; }
-        else if (cashBufferRatio >= 50) { score = 3; description = "Decent cash buffer, but consider building it further."; }
-        else if (cashBufferRatio >= 25) { score = 2; description = "Limited cash reserves. Build your emergency fund priority."; }
-        else { score = 1; description = "Dangerously low cash. Any emergency could create serious problems."; }
-        break;
-
-      case 'emergencyMonths':
-        if (ratio >= 6) { score = 5; description = "Perfect emergency fund! You can weather extended financial storms."; }
-        else if (ratio >= 4) { score = 4; description = "Strong emergency coverage providing good financial security."; }
-        else if (ratio >= 3) { score = 3; description = "Basic emergency fund in place. Consider building to 6 months."; }
-        else if (ratio >= 1) { score = 2; description = "Insufficient emergency coverage. Build this fund immediately."; }
-        else { score = 1; description = "No emergency protection. Any unexpected expense could devastate your finances."; }
+        staticDescription = "This is how much of your income you actually save. More savings = more freedom, more options. 25%+ is a great place to be.";
+        
+        if (savingsRatePercent < 10) { 
+          score = 2; 
+          description = "You're saving too little to build future wealth."; 
+        }
+        else if (savingsRatePercent <= 25) { 
+          score = 3; 
+          description = "You're saving, but could do more."; 
+        }
+        else if (savingsRatePercent <= 40) { 
+          score = 4; 
+          description = "Strong savings rate—well done."; 
+        }
+        else { 
+          score = 5; 
+          description = "Excellent. You're building a serious buffer."; 
+        }
         break;
 
       case 'investmentAllocation':
-        const investmentRatio = ratio * 100;
-        if (investmentRatio > 20) { score = 5; description = "Excellent investment allocation! You're building long-term wealth effectively."; }
-        else if (investmentRatio >= 15) { score = 4; description = "Good investment discipline creating wealth for your future."; }
-        else if (investmentRatio >= 10) { score = 3; description = "Reasonable investment allocation, but consider increasing it."; }
-        else if (investmentRatio >= 5) { score = 2; description = "Low investment allocation. Your money isn't working hard enough for you."; }
-        else { score = 1; description = "No significant investments. You're missing out on wealth creation opportunities."; }
+        const investmentPercent = ratio * 100;
+        staticDescription = "A good financial plan is long-term in nature. This metric shows how much of your investments are aimed at long-term goals like retirement, not just short-term liquidity.";
+        
+        if (investmentPercent < 25) { 
+          score = 2; 
+          description = "You may be too short-term focused. Risk of low growth."; 
+        }
+        else if (investmentPercent <= 50) { 
+          score = 3; 
+          description = "Balanced approach but review asset goals."; 
+        }
+        else if (investmentPercent <= 75) { 
+          score = 4; 
+          description = "You're prioritizing long-term wealth. Smart."; 
+        }
+        else { 
+          score = 5; 
+          description = "Excellent. You're investing for the future."; 
+        }
         break;
 
       case 'debtToIncome':
-        const debtToIncomeRatio = ratio * 100;
-        if (debtToIncomeRatio < 50) { score = 5; description = "Excellent debt-to-income ratio! Your debt levels are very manageable."; }
-        else if (debtToIncomeRatio <= 100) { score = 4; description = "Good debt levels relative to your income."; }
-        else if (debtToIncomeRatio <= 200) { score = 3; description = "Moderate debt burden that requires attention."; }
-        else if (debtToIncomeRatio <= 300) { score = 2; description = "High debt levels. Focus on debt reduction."; }
-        else { score = 1; description = "Critical debt burden. Immediate debt restructuring needed."; }
+        staticDescription = "This is the big picture: your total borrowings vs income. Lower is always better. If you're over 2x, it's time to actively reduce debt.";
+        
+        if (ratio < 1) { 
+          score = 5; 
+          description = "Debt is well within income limits. You're in a good place."; 
+        }
+        else if (ratio <= 2) { 
+          score = 4; 
+          description = "Debt is reasonable, but stay alert."; 
+        }
+        else if (ratio <= 4) { 
+          score = 3; 
+          description = "Debt is starting to overpower your income."; 
+        }
+        else { 
+          score = 2; 
+          description = "You're heavily leveraged. Time to cut back or restructure."; 
+        }
         break;
 
       default:
         score = 3;
         description = "Analysis pending for this metric.";
+        staticDescription = "Additional analysis required for this metric.";
     }
 
-    return { value: ratio, score, description };
+    return { value: ratio, score, description, staticDescription };
   };
 
-  // Calculate specific ratios
-  const coreExpenseRatio = totalAnnualIncome > 0 ? (totalAnnualExpenses - totalAnnualLoanPayments) / totalAnnualIncome : 0;
-  const totalExpenseRatio = totalAnnualIncome > 0 ? totalAnnualExpenses / totalAnnualIncome : 0;
-  const savingsRate = totalAnnualIncome > 0 ? (totalAnnualIncome - totalAnnualExpenses) / totalAnnualIncome : 0;
-  const cashBufferRatio = totalAnnualExpenses > 0 ? getValue('savingsAccountsFD') / totalAnnualExpenses : 0;
-  const emergencyMonths = totalMonthlyExpenses > 0 ? getValue('savingsAccountsFD') / totalMonthlyExpenses : 0;
+  // Calculate the 12 exact financial ratios as specified
+  const monthlyIncome = totalAnnualIncome / 12;
+  const coreMonthlyExpenses = (monthlyExpensesTotal - getValue('monthlyDiningOut') - getValue('monthlyEntertainment') - getValue('monthlyHobbies') - getValue('monthlyAppSubscriptions') - getValue('monthlyAlcohol') - getValue('monthlyCigarettes')) + monthlyDebtPayments;
+  const liquidInvestments = getValue('savingsAccountsFD') + getValue('investmentValue') + getValue('retirementSavings');
+  const longTermInvestments = getValue('investmentValue') + getValue('retirementSavings') + (getValue('monthlyMutualFunds') * 12);
+  
+  // 1. Core Expense Ratio = Monthly core expenses ÷ Monthly income
+  const coreExpenseRatio = monthlyIncome > 0 ? coreMonthlyExpenses / monthlyIncome : 0;
+  
+  // 2. Total Expense Ratio = (Core + Lifestyle expenses) ÷ Monthly income
+  const totalExpenseRatio = monthlyIncome > 0 ? monthlyExpensesTotal / monthlyIncome : 0;
+  
+  // 3. Debt Servicing Ratio = Monthly debt payments ÷ Monthly income
+  const debtServicingRatio = monthlyIncome > 0 ? monthlyDebtPayments / monthlyIncome : 0;
+  
+  // 4. Cash Buffer Ratio = Cash in hand ÷ Monthly expenses
+  const cashBufferRatio = monthlyExpensesTotal > 0 ? totalCashInHand / monthlyExpensesTotal : 0;
+  
+  // 5. Total Debt / Total Assets
+  const debtToAssetsRatio = totalAssets > 0 ? totalDebt / totalAssets : 0;
+  
+  // 6. Cash / Total Assets
+  const cashToAssetsRatio = totalAssets > 0 ? totalCashInHand / totalAssets : 0;
+  
+  // 7. Liquid Assets / Total Assets
+  const liquidAssetsRatio = totalAssets > 0 ? liquidInvestments / totalAssets : 0;
+  
+  // 8. Total Debt / Liquid Investments
+  const debtToLiquidRatio = liquidInvestments > 0 ? totalDebt / liquidInvestments : 0;
+  
+  // 9. Emergency Months Covered = Cash buffer ÷ Core monthly expenses
+  const emergencyMonths = coreMonthlyExpenses > 0 ? totalCashInHand / coreMonthlyExpenses : 0;
+  
+  // 10. Savings Rate = Monthly savings ÷ Monthly income
+  const monthlySavings = monthlyIncome - monthlyExpensesTotal;
+  const savingsRate = monthlyIncome > 0 ? monthlySavings / monthlyIncome : 0;
+  
+  // 11. Investment Allocation = Long-term investments ÷ Total investments
+  const totalInvestments = liquidInvestments + longTermInvestments;
+  const investmentAllocation = totalInvestments > 0 ? longTermInvestments / totalInvestments : 0;
+  
+  // 12. Debt-to-Income Ratio = Total outstanding debt ÷ Annual income
+  const debtToIncomeRatio = totalAnnualIncome > 0 ? totalDebt / totalAnnualIncome : 0;
 
   const metrics: FinancialMetrics = {
     coreExpenseRatio: calculateRatio(coreExpenseRatio, 'coreExpense'),
     totalExpenseRatio: calculateRatio(totalExpenseRatio, 'totalExpense'),
-    debtServicingRatio: calculateRatio(totalAnnualIncome > 0 ? totalAnnualLoanPayments / totalAnnualIncome : 0, 'debtServicing'),
+    debtServicingRatio: calculateRatio(debtServicingRatio, 'debtServicing'),
     cashBufferRatio: calculateRatio(cashBufferRatio, 'cashBuffer'),
+    debtToAssetsRatio: calculateRatio(debtToAssetsRatio, 'debtToAssets'),
+    cashToAssetsRatio: calculateRatio(cashToAssetsRatio, 'cashToAssets'),
+    liquidAssetsRatio: calculateRatio(liquidAssetsRatio, 'liquidAssets'),
+    debtToLiquidRatio: calculateRatio(debtToLiquidRatio, 'debtToLiquid'),
     emergencyMonths: calculateRatio(emergencyMonths, 'emergencyMonths'),
     savingsRate: calculateRatio(savingsRate, 'savingsRate'),
-    investmentAllocation: calculateRatio(totalAnnualIncome > 0 ? totalAnnualInvestments / totalAnnualIncome : 0, 'investmentAllocation'),
-    debtToIncomeRatio: calculateRatio(totalAnnualIncome > 0 ? totalDebt / totalAnnualIncome : 0, 'debtToIncome'),
-    debtToAssetsRatio: calculateRatio(totalAssets > 0 ? totalDebt / totalAssets : 0, 'debtToAssets'),
-    cashToAssetsRatio: calculateRatio(totalAssets > 0 ? liquidAssets / totalAssets : 0, 'cashToAssets'),
-    liquidAssetsRatio: calculateRatio(totalAssets > 0 ? liquidAssets / totalAssets : 0, 'liquidAssets'),
-    debtToLiquidRatio: calculateRatio(liquidAssets > 0 ? totalDebt / liquidAssets : 0, 'debtToLiquid')
+    investmentAllocation: calculateRatio(investmentAllocation, 'investmentAllocation'),
+    debtToIncomeRatio: calculateRatio(debtToIncomeRatio, 'debtToIncome')
   };
 
   // Calculate overall score (weighted average)
