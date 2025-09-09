@@ -203,6 +203,8 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   };
 };
 
+// Legacy formatCurrency function - kept for backward compatibility
+// New code should use formatNumber from localization.ts
 export const formatCurrency = (amount: number, currencyCode: string = 'INR'): string => {
   const currencySymbols: { [key: string]: string } = {
     'INR': '₹',
@@ -217,25 +219,9 @@ export const formatCurrency = (amount: number, currencyCode: string = 'INR'): st
 
   const symbol = currencySymbols[currencyCode] || '₹';
 
-  // Indian style formatting for INR
-  if (currencyCode === 'INR') {
-    if (amount >= 10000000) {
-      return `${symbol}${(amount / 10000000).toFixed(1)}Cr`;
-    } else if (amount >= 100000) {
-      return `${symbol}${(amount / 100000).toFixed(1)}L`;
-    } else if (amount >= 1000) {
-      return `${symbol}${(amount / 1000).toFixed(1)}K`;
-    } else {
-      return `${symbol}${amount.toLocaleString()}`;
-    }
-  }
-
-  // Standard formatting for other currencies
-  if (amount >= 1000000) {
-    return `${symbol}${(amount / 1000000).toFixed(1)}M`;
-  } else if (amount >= 1000) {
-    return `${symbol}${(amount / 1000).toFixed(1)}K`;
-  } else {
-    return `${symbol}${amount.toLocaleString()}`;
-  }
+  // Use proper localized formatting - import required functions
+  const { getLocalizationConfig, formatNumber } = require('./localization');
+  const country = currencyCode === 'INR' ? 'India' : 'United States';
+  const config = getLocalizationConfig(country, currencyCode);
+  return formatNumber(amount, config, true);
 };

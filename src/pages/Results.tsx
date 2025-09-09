@@ -6,7 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { FormData, CalculationResults } from '@/types/assessment';
-import { calculateFinancialHealth, formatCurrency } from '@/utils/calculations';
+import { calculateFinancialHealth } from '@/utils/calculations';
+import { getLocalizationConfig, formatNumber, formatPercentage, formatScore, LocalizationConfig } from '@/utils/localization';
 import { Download, ArrowLeft, Award, TrendingUp, AlertTriangle } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -89,8 +90,10 @@ const Results = () => {
     );
   }
 
+  const country = formData.country || 'India';
   const currency = formData.currency || 'INR';
   const firstName = formData.firstName || 'there';
+  const localizationConfig = getLocalizationConfig(country, currency);
 
   // Get priority recommendations (lowest scores first)
   const metricEntries = Object.entries(results.metrics).map(([key, metric]) => ({
@@ -154,7 +157,7 @@ const Results = () => {
           <CardContent className="space-y-6">
             <div className="text-center">
               <div className="text-6xl font-bold mb-2 text-primary">
-                {results.overallScore.toFixed(1)}/5.0
+                {formatScore(results.overallScore)}/5.0
               </div>
               <p className="text-xl text-muted-foreground mb-4">{results.overallDescription}</p>
             </div>
@@ -162,28 +165,28 @@ const Results = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="text-center p-4 border border-border rounded-lg">
                 <div className="text-2xl font-bold text-foreground">
-                  {formatCurrency(results.netWorth, currency)}
+                  {formatNumber(results.netWorth, localizationConfig)}
                 </div>
                 <div className="text-sm text-muted-foreground">Net Worth</div>
               </div>
               <div className="text-center p-4 border border-border rounded-lg">
                 <div className="text-2xl font-bold text-foreground">
-                  {formatCurrency(results.totalAnnualIncome, currency)}
+                  {formatNumber(results.totalAnnualIncome, localizationConfig)}
                 </div>
                 <div className="text-sm text-muted-foreground">Annual Income</div>
               </div>
               <div className="text-center p-4 border border-border rounded-lg">
                 <div className="text-2xl font-bold text-foreground">
-                  {formatCurrency(results.totalAnnualExpenses, currency)}
+                  {formatNumber(results.totalAnnualExpenses, localizationConfig)}
                 </div>
                 <div className="text-sm text-muted-foreground">Annual Expenses</div>
               </div>
               <div className="text-center p-4 border border-border rounded-lg">
                 <div className="text-2xl font-bold text-success">
-                  {formatCurrency(results.totalAnnualIncome - results.totalAnnualExpenses, currency)}
+                  {formatNumber(results.totalAnnualIncome - results.totalAnnualExpenses, localizationConfig)}
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  Annual Surplus ({((results.totalAnnualIncome - results.totalAnnualExpenses) / results.totalAnnualIncome * 100).toFixed(1)}% savings rate)
+                  Annual Surplus ({formatPercentage((results.totalAnnualIncome - results.totalAnnualExpenses) / results.totalAnnualIncome * 100)} savings rate)
                 </div>
               </div>
             </div>
@@ -215,12 +218,12 @@ const Results = () => {
                     />
                   </div>
                   <p className="text-sm text-muted-foreground mb-2">{metric.description}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Current Value: {typeof metric.value === 'number' ? 
-                      (metric.value > 1 ? metric.value.toFixed(1) + ' months' : (metric.value * 100).toFixed(1) + '%') : 
-                      metric.value
-                    }
-                  </p>
+                   <p className="text-xs text-muted-foreground">
+                     Current Value: {typeof metric.value === 'number' ? 
+                       (metric.value > 1 ? formatScore(metric.value) + ' months' : formatPercentage(metric.value * 100)) : 
+                       metric.value
+                     }
+                   </p>
                   {index < metricEntries.length - 1 && <Separator className="mt-4" />}
                 </div>
               ))}
@@ -249,7 +252,7 @@ const Results = () => {
                   </div>
                   <p className="text-muted-foreground mb-2">{recommendation.description}</p>
                   <p className="text-sm text-foreground">
-                    <strong>Action needed:</strong> {getActionRecommendation(recommendation.name, recommendation.score, results, currency)}
+                    <strong>Action needed:</strong> {getActionRecommendation(recommendation.name, recommendation.score, results, localizationConfig)}
                   </p>
                 </div>
               ))}
@@ -268,15 +271,15 @@ const Results = () => {
                 <div className="flex justify-between">
                   <span>Primary Salary</span>
                   <span className="font-medium">
-                    {formatCurrency(formData.jobSalary || 0, currency)} 
-                    ({((formData.jobSalary || 0) / results.totalAnnualIncome * 100).toFixed(1)}%)
+                    {formatNumber(formData.jobSalary || 0, localizationConfig)} 
+                    ({formatPercentage((formData.jobSalary || 0) / results.totalAnnualIncome * 100)})
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Secondary Income</span>
                   <span className="font-medium">
-                    {formatCurrency((formData.secondJobIncome || 0) + (formData.freelanceIncome || 0), currency)}
-                    ({(((formData.secondJobIncome || 0) + (formData.freelanceIncome || 0)) / results.totalAnnualIncome * 100).toFixed(1)}%)
+                    {formatNumber((formData.secondJobIncome || 0) + (formData.freelanceIncome || 0), localizationConfig)}
+                    ({formatPercentage(((formData.secondJobIncome || 0) + (formData.freelanceIncome || 0)) / results.totalAnnualIncome * 100)})
                   </span>
                 </div>
               </div>
@@ -290,16 +293,16 @@ const Results = () => {
             <CardContent>
               <div className="space-y-3">
                 <div>
-                  <strong>Total Assets: {formatCurrency(results.totalAssets, currency)}</strong>
+                  <strong>Total Assets: {formatNumber(results.totalAssets, localizationConfig)}</strong>
                   <div className="ml-4 text-sm text-muted-foreground">
-                    <div>Cash & FDs: {formatCurrency(formData.savingsAccountsFD || 0, currency)}</div>
-                    <div>Investments: {formatCurrency(formData.investmentValue || 0, currency)}</div>
-                    <div>Property: {formatCurrency(formData.homeCurrentValue || 0, currency)}</div>
+                    <div>Cash & FDs: {formatNumber(formData.savingsAccountsFD || 0, localizationConfig)}</div>
+                    <div>Investments: {formatNumber(formData.investmentValue || 0, localizationConfig)}</div>
+                    <div>Property: {formatNumber(formData.homeCurrentValue || 0, localizationConfig)}</div>
                   </div>
                 </div>
                 <Separator />
                 <div>
-                  <strong>Total Debt: {formatCurrency(results.totalDebt, currency)}</strong>
+                  <strong>Total Debt: {formatNumber(results.totalDebt, localizationConfig)}</strong>
                 </div>
               </div>
             </CardContent>
@@ -323,11 +326,11 @@ const Results = () => {
   );
 };
 
-const getActionRecommendation = (metricName: string, score: number, results: CalculationResults, currency: string): string => {
+const getActionRecommendation = (metricName: string, score: number, results: CalculationResults, localizationConfig: LocalizationConfig): string => {
   if (metricName.toLowerCase().includes('expense')) {
     if (score <= 2) {
       const excessAmount = Math.max(0, results.totalAnnualExpenses - (results.totalAnnualIncome * 0.7));
-      return `Reduce your annual expenses by ${formatCurrency(excessAmount, currency)} to achieve a healthier 70% expense ratio. Start with discretionary spending like dining out and entertainment.`;
+      return `Reduce your annual expenses by ${formatNumber(excessAmount, localizationConfig)} to achieve a healthier 70% expense ratio. Start with discretionary spending like dining out and entertainment.`;
     }
     return "Review your monthly expenses and identify areas where you can cut back by 10-15%.";
   }
@@ -335,7 +338,7 @@ const getActionRecommendation = (metricName: string, score: number, results: Cal
   if (metricName.toLowerCase().includes('savings')) {
     if (score <= 2) {
       const targetSavings = results.totalAnnualIncome * 0.2 - (results.totalAnnualIncome - results.totalAnnualExpenses);
-      return `Increase your savings by ${formatCurrency(targetSavings, currency)} annually to reach a healthy 20% savings rate. Consider automating this amount monthly.`;
+      return `Increase your savings by ${formatNumber(targetSavings, localizationConfig)} annually to reach a healthy 20% savings rate. Consider automating this amount monthly.`;
     }
     return "Set up automatic transfers to boost your savings rate to at least 20% of income.";
   }
@@ -344,7 +347,7 @@ const getActionRecommendation = (metricName: string, score: number, results: Cal
     const targetAmount = results.totalMonthlyExpenses * 6;
     const currentAmount = results.liquidAssets;
     const gap = Math.max(0, targetAmount - currentAmount);
-    return `Build your emergency fund by ${formatCurrency(gap, currency)} to cover 6 months of expenses. Save ${formatCurrency(gap / 12, currency)} monthly to reach this goal in a year.`;
+    return `Build your emergency fund by ${formatNumber(gap, localizationConfig)} to cover 6 months of expenses. Save ${formatNumber(gap / 12, localizationConfig)} monthly to reach this goal in a year.`;
   }
   
   return "Focus on improving this metric through consistent financial discipline and regular monitoring.";
