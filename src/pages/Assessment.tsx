@@ -10,11 +10,32 @@ import { Form } from '@/components/ui/form';
 import { QuestionRenderer } from '@/components/assessment/QuestionRenderer';
 import { Question, FormData } from '@/types/assessment';
 import { getQuestionsForPage, getTotalPages, getProgressInfo } from '@/utils/groupLogic';
+import { supabase } from '@/integrations/supabase/client';
 
 const Assessment = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [formData, setFormData] = useState<FormData>({});
+
+  const [sessionToken, setSessionToken] = useState<string>('');
+
+// Create or get session token
+useEffect(() => {
+  const getOrCreateSession = async () => {
+    let token = localStorage.getItem('assessmentSession');
+    if (!token) {
+      token = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('assessmentSession', token);
+      
+      // Create session in database
+      await supabase.from('assessment_sessions').insert({
+        session_token: token
+      });
+    }
+    setSessionToken(token);
+  };
+  getOrCreateSession();
+}, []);
   
   // Get current page questions and progress info
   const currentQuestions = useMemo(() => 
@@ -73,7 +94,17 @@ const Assessment = () => {
         }
       }
     });
-
+const saveProgress = async (data: FormData) => {
+  if (!sessionToken) return;
+  
+  await supabase.from('assessment_responses').upsert({
+    session_id: (await supabase.from('assessment_sessions')
+      .select('id')
+      .eq('session_token', sessionToken)
+      .single()).data?.id,
+    form_data: data
+  });
+};
     return z.object(schemaFields);
   };
 
