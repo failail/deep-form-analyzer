@@ -162,32 +162,69 @@ const Results = () => {
               <p className="text-xl text-muted-foreground mb-4">{results.overallDescription}</p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="text-center p-4 border border-border rounded-lg">
-                <div className="text-2xl font-bold text-foreground">
-                  {formatNumber(results.netWorth, localizationConfig)}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.estimatedNetWorth, localizationConfig)}
                 </div>
-                <div className="text-sm text-muted-foreground">Net Worth</div>
+                <div className="text-sm text-muted-foreground font-medium">Estimated Net Worth</div>
+                <div className="text-xs text-muted-foreground mt-1">Total Assets - Total Liabilities</div>
               </div>
-              <div className="text-center p-4 border border-border rounded-lg">
-                <div className="text-2xl font-bold text-foreground">
-                  {formatNumber(results.totalAnnualIncome, localizationConfig)}
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.annualIncome, localizationConfig)}
                 </div>
-                <div className="text-sm text-muted-foreground">Annual Income</div>
+                <div className="text-sm text-muted-foreground font-medium">Annual Income</div>
+                <div className="text-xs text-muted-foreground mt-1">Monthly income × 12</div>
               </div>
-              <div className="text-center p-4 border border-border rounded-lg">
-                <div className="text-2xl font-bold text-foreground">
-                  {formatNumber(results.totalAnnualExpenses, localizationConfig)}
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.annualExpenses, localizationConfig)}
                 </div>
-                <div className="text-sm text-muted-foreground">Annual Expenses</div>
+                <div className="text-sm text-muted-foreground font-medium">Annual Expenses</div>
+                <div className="text-xs text-muted-foreground mt-1">Monthly expenses × 12</div>
               </div>
-              <div className="text-center p-4 border border-border rounded-lg">
-                <div className="text-2xl font-bold text-success">
-                  {formatNumber(results.totalAnnualIncome - results.totalAnnualExpenses, localizationConfig)}
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.annualExpensesMinusSavingsInvestments, localizationConfig)}
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  Annual Surplus ({formatPercentage((results.totalAnnualIncome - results.totalAnnualExpenses) / results.totalAnnualIncome * 100)} savings rate)
+                <div className="text-sm text-muted-foreground font-medium">Annual Expenses Minus Savings/Investments</div>
+                <div className="text-xs text-muted-foreground mt-1">Expenses after deducting savings & investments</div>
+              </div>
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.totalDebt, localizationConfig)}
                 </div>
+                <div className="text-sm text-muted-foreground font-medium">Total Debt</div>
+                <div className="text-xs text-muted-foreground mt-1">Sum of all liabilities</div>
+              </div>
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.totalSavingsInvestments, localizationConfig)}
+                </div>
+                <div className="text-sm text-muted-foreground font-medium">Total Savings & Investments</div>
+                <div className="text-xs text-muted-foreground mt-1">Long-term savings and investment instruments</div>
+              </div>
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.totalCashInHand, localizationConfig)}
+                </div>
+                <div className="text-sm text-muted-foreground font-medium">Total Cash In Hand</div>
+                <div className="text-xs text-muted-foreground mt-1">Liquid cash components</div>
+              </div>
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.monthlyDebtPayments, localizationConfig)}
+                </div>
+                <div className="text-sm text-muted-foreground font-medium">Monthly Debt Payments</div>
+                <div className="text-xs text-muted-foreground mt-1">Monthly debt outflows</div>
+              </div>
+              <div className="text-center p-6 border border-border rounded-lg">
+                <div className="text-3xl font-bold text-foreground mb-2">
+                  {formatNumber(results.totalMonthlyInvestments, localizationConfig)}
+                </div>
+                <div className="text-sm text-muted-foreground font-medium">Monthly Investments</div>
+                <div className="text-xs text-muted-foreground mt-1">Recurring investment outflows</div>
               </div>
             </div>
           </CardContent>

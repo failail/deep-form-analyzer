@@ -127,6 +127,15 @@ export interface CalculationResults {
   metrics: FinancialMetrics;
   overallScore: number;
   overallDescription: string;
+  // NEW METRICS FOR SUMMARY DISPLAY
+  estimatedNetWorth: number;
+  annualIncome: number;
+  annualExpenses: number;
+  annualExpensesMinusSavingsInvestments: number;
+  totalSavingsInvestments: number;
+  totalCashInHand: number;
+  monthlyDebtPayments: number;
+  totalMonthlyInvestments: number;
 }
 
 export interface Currency {

@@ -7,11 +7,30 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
     return typeof value === 'number' ? value : (parseFloat(value) || 0);
   };
 
-  // Total Calculations
-  const totalAnnualIncome = getValue('jobSalary') + getValue('secondJobIncome') + getValue('freelanceIncome') + 
-    getValue('businessIncome') + getValue('realEstateIncome') + getValue('hobbyIncome') + 
-    getValue('dividends') + getValue('familyStipend') + getValue('otherIncome');
+  // NEW METRIC CALCULATIONS (per user requirements)
   
+  // 1. Estimated Net Worth = Total Assets - Total Liabilities
+  const totalAssets = getValue('physicalCash') + getValue('savingsAccountsFD') + 
+    getValue('investmentValue') + getValue('retirementSavings') + getValue('jewelleryValue') + 
+    getValue('collectiblesValue') + getValue('currentHomesValue') + getValue('currentVehiclesValue') + 
+    getValue('homeCurrentValue');
+
+  const totalLiabilities = getValue('homeOutstandingLoan') + getValue('vehicle1OutstandingLoan') + 
+    getValue('personalLoanOutstanding') + getValue('educationLoanOutstanding') + 
+    getValue('creditCardOutstanding') + getValue('otherLoanOutstanding');
+
+  const estimatedNetWorth = totalAssets - totalLiabilities;
+
+  // 2. Annual Income = Monthly income × 12
+  const monthlyIncome = getValue('jobSalary') / 12 + getValue('secondJobIncome') / 12 + 
+    getValue('freelanceIncome') / 12 + getValue('sideBusinessIncome') / 12 + 
+    getValue('realEstateIncome') / 12 + getValue('hobbyIncome') / 12 + 
+    getValue('dividendIncome') / 12 + getValue('familyStipend') / 12 + 
+    getValue('otherAnnualIncome') / 12;
+  const annualIncome = monthlyIncome * 12;
+
+  // 3. Annual Expenses = Monthly expenses × 12  
+  // Using existing monthly expense calculation
   const totalMonthlyExpenses = getValue('monthlyGroceriesToiletries') + 
     getValue('monthlyClothesShoes') + 
     getValue('monthlyElectricity') + 
@@ -32,30 +51,41 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
     getValue('monthlyMedication') +
     getValue('monthlyHealthExams') +
     (getValue('monthlyRent') || 0);
+  const annualExpenses = totalMonthlyExpenses * 12;
+
+  // 4. Annual Expenses Minus Savings/Investments
+  const monthlySavings = getValue('monthlySavingsDeposits') || 0;
+  const monthlyInvestments = getValue('monthlyMutualFunds') + getValue('monthlyTaxSaving');
+  const annualExpensesMinusSavingsInvestments = (totalMonthlyExpenses - monthlySavings - monthlyInvestments) * 12;
+
+  // 5. Total Debt = Sum of all liabilities
+  const totalDebt = totalLiabilities;
+
+  // 6. Total Savings & Investments
+  const totalSavingsInvestments = getValue('savingsAccountsFD') + getValue('investmentValue') + 
+    getValue('retirementSavings') + getValue('jewelleryValue') + getValue('collectiblesValue');
+
+  // 7. Total Cash In Hand
+  const totalCashInHand = getValue('physicalCash') + getValue('savingsAccountsFD');
+
+  // 8. Monthly Debt Payments
+  const monthlyDebtPayments = getValue('homeMonthlyPayment') + getValue('vehicle1LoanPayment') + 
+    getValue('personalLoanPayment') + getValue('educationLoanPayment') + 
+    getValue('creditCardPayment') + getValue('otherLoanPayment');
+
+  // 9. Monthly Investments
+  const totalMonthlyInvestments = getValue('monthlyMutualFunds') + getValue('monthlyTaxSaving') + 
+    getValue('monthlySavingsDeposits') + getValue('monthlyRetirementInvestments');
+
+  // Legacy calculations for backward compatibility
+  const totalAnnualIncome = annualIncome;
+  const totalAnnualExpenses = annualExpenses;
+  const netWorth = estimatedNetWorth;
   
-  const totalAnnualExpenses = totalMonthlyExpenses * 12;
-  
-  // Calculate debt payments
-  const propertyLoanPayment = (getValue('propertyLoanPayment') || 0) * 12;
-  const vehicleLoanPayments = Array.from({length: 4}, (_, i) => getValue(`vehicle${i+1}LoanPayment`) || 0).reduce((sum, payment) => sum + payment * 12, 0);
-  const personalLoanPayments = Array.from({length: 5}, (_, i) => getValue(`loan${i+1}MonthlyPayment`) || 0).reduce((sum, payment) => sum + payment * 12, 0);
-  const totalAnnualLoanPayments = propertyLoanPayment + vehicleLoanPayments + personalLoanPayments;
-  
-  // Calculate assets and debt
-  const propertyValue = getValue('homeCurrentValue') || getValue('propertyCurrentValue') || 0;
-  const vehiclesValue = Array.from({length: 4}, (_, i) => getValue(`vehicle${i+1}CurrentValue`) || 0).reduce((sum, value) => sum + value, 0);
-  const totalAssets = getValue('savingsAccountsFD') + getValue('investmentValue') + 
-    getValue('retirementSavings') + getValue('jewelleryValue') + getValue('collectiblesValue') +
-    propertyValue + vehiclesValue;
-  
-  const propertyDebt = getValue('propertyLoanAmount') || 0;
-  const vehicleDebt = Array.from({length: 4}, (_, i) => getValue(`vehicle${i+1}LoanAmount`) || 0).reduce((sum, debt) => sum + debt, 0);
-  const personalDebt = Array.from({length: 5}, (_, i) => getValue(`loan${i+1}OutstandingBalance`) || 0).reduce((sum, debt) => sum + debt, 0);
-  const totalDebt = propertyDebt + vehicleDebt + personalDebt;
-  
-  const netWorth = totalAssets - totalDebt;
-  const liquidAssets = getValue('savingsAccountsFD') + getValue('investmentValue');
-  const totalAnnualInvestments = (getValue('monthlyMutualFunds') + getValue('monthlyTaxSaving') + getValue('monthlySavingsDeposits')) * 12 + getValue('annualRetirementSchemes');
+  // Legacy calculations for compatibility
+  const totalAnnualLoanPayments = monthlyDebtPayments * 12;
+  const liquidAssets = totalCashInHand;
+  const totalAnnualInvestments = totalMonthlyInvestments * 12;
 
   // Calculate 12 Financial Health Ratios
   const calculateRatio = (ratio: number, type: 'coreExpense' | 'totalExpense' | 'debtServicing' | 'cashBuffer' | 'emergencyMonths' | 'savingsRate' | 'investmentAllocation' | 'debtToIncome' | 'debtToAssets' | 'cashToAssets' | 'liquidAssets' | 'debtToLiquid'): { value: number; score: number; description: string } => {
@@ -199,7 +229,16 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
     totalAnnualInvestments,
     metrics,
     overallScore,
-    overallDescription
+    overallDescription,
+    // NEW METRICS FOR SUMMARY DISPLAY
+    estimatedNetWorth,
+    annualIncome,
+    annualExpenses,
+    annualExpensesMinusSavingsInvestments,
+    totalSavingsInvestments,
+    totalCashInHand,
+    monthlyDebtPayments,
+    totalMonthlyInvestments
   };
 };
 
