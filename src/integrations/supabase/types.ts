@@ -95,6 +95,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      clear_assessment_data: {
+        Args: { token: string }
+        Returns: undefined
+      }
+      create_session: {
+        Args: { token: string }
+        Returns: string
+      }
+      get_assessment_response: {
+        Args: { token: string }
+        Returns: Json
+      }
+      upsert_assessment_response: {
+        Args: { form_data: Json; token: string }
+        Returns: undefined
+      }
+      upsert_assessment_results: {
+        Args: { results_data: Json; token: string }
+        Returns: undefined
+      }
       validate_session_token: {
         Args: { token: string }
         Returns: boolean

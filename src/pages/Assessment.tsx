@@ -26,24 +26,11 @@ const Assessment = () => {
     if (!sessionToken) return;
     
     try {
-      // Get session from database
-      const { data: session } = await supabase
-        .from('assessment_sessions')
-        .select('id')
-        .eq('session_token', sessionToken)
-        .single();
-
-      if (session) {
-        // Upsert assessment response
-        await supabase
-          .from('assessment_responses')
-          .upsert({
-            session_id: session.id,
-            form_data: data
-          }, {
-            onConflict: 'session_id'
-          });
-      }
+      await supabase
+        .rpc('upsert_assessment_response', {
+          token: sessionToken,
+          form_data: data
+        });
     } catch (error) {
       console.error('Error saving progress:', error);
     }
@@ -54,14 +41,14 @@ useEffect(() => {
   const getOrCreateSession = async () => {
     let token = localStorage.getItem('assessmentSession');
     if (!token) {
-      token = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      // Use crypto.randomUUID for better security
+      token = `session_${Date.now()}_${crypto.randomUUID()}`;
       localStorage.setItem('assessmentSession', token);
       
       // Create session in database
       try {
         await supabase
-          .from('assessment_sessions')
-          .insert({ session_token: token });
+          .rpc('create_session', { token });
       } catch (error) {
         console.error('Error creating session:', error);
       }
@@ -152,22 +139,11 @@ useEffect(() => {
     } else {
       // Save final results to database
       try {
-        const { data: session } = await supabase
-          .from('assessment_sessions')
-          .select('id')
-          .eq('session_token', sessionToken)
-          .single();
-
-        if (session) {
-          await supabase
-            .from('assessment_results')
-            .upsert({
-              session_id: session.id,
-              results_data: updatedFormData
-            }, {
-              onConflict: 'session_id'
-            });
-        }
+        await supabase
+          .rpc('upsert_assessment_results', {
+            token: sessionToken,
+            results_data: updatedFormData
+          });
         
         toast({
           title: "Assessment Complete!",
@@ -200,25 +176,13 @@ useEffect(() => {
       
       try {
         // Try to load from Supabase first
-        const { data: session } = await supabase
-          .from('assessment_sessions')
-          .select('id')
-          .eq('session_token', sessionToken)
-          .single();
+        const { data: savedData } = await supabase
+          .rpc('get_assessment_response', { token: sessionToken });
 
-        if (session) {
-          const { data: response } = await supabase
-            .from('assessment_responses')
-            .select('form_data')
-            .eq('session_id', session.id)
-            .single();
-
-          if (response) {
-            const savedData = response.form_data as FormData;
-            setFormData(savedData);
-            form.reset(savedData);
-            return;
-          }
+        if (savedData) {
+          setFormData(savedData as FormData);
+          form.reset(savedData as FormData);
+          return;
         }
       } catch (error) {
         console.log('No saved data in database, checking localStorage');
@@ -244,23 +208,8 @@ useEffect(() => {
     // Clear from database if session exists
     if (sessionToken) {
       try {
-        const { data: session } = await supabase
-          .from('assessment_sessions')
-          .select('id')
-          .eq('session_token', sessionToken)
-          .single();
-
-        if (session) {
-          await supabase
-            .from('assessment_responses')
-            .delete()
-            .eq('session_id', session.id);
-          
-          await supabase
-            .from('assessment_results')
-            .delete()
-            .eq('session_id', session.id);
-        }
+        await supabase
+          .rpc('clear_assessment_data', { token: sessionToken });
       } catch (error) {
         console.error('Error clearing database data:', error);
       }
@@ -271,14 +220,13 @@ useEffect(() => {
     form.reset({});
     
     // Create new session
-    const newToken = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newToken = `session_${Date.now()}_${crypto.randomUUID()}`;
     localStorage.setItem('assessmentSession', newToken);
     setSessionToken(newToken);
     
     try {
       await supabase
-        .from('assessment_sessions')
-        .insert({ session_token: newToken });
+        .rpc('create_session', { token: newToken });
     } catch (error) {
       console.error('Error creating new session:', error);
     }
