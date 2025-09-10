@@ -10,14 +10,44 @@ import { Form } from '@/components/ui/form';
 import { QuestionRenderer } from '@/components/assessment/QuestionRenderer';
 import { Question, FormData } from '@/types/assessment';
 import { getQuestionsForPage, getTotalPages, getProgressInfo } from '@/utils/groupLogic';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 
 const Assessment = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [formData, setFormData] = useState<FormData>({});
-
   const [sessionToken, setSessionToken] = useState<string>('');
+  const { toast } = useToast();
+
+  // Save progress function
+  const saveProgress = async (data: FormData) => {
+    if (!sessionToken) return;
+    
+    try {
+      // Get session from database
+      const { data: session } = await supabase
+        .from('assessment_sessions')
+        .select('id')
+        .eq('session_token', sessionToken)
+        .single();
+
+      if (session) {
+        // Upsert assessment response
+        await supabase
+          .from('assessment_responses')
+          .upsert({
+            session_id: session.id,
+            form_data: data
+          }, {
+            onConflict: 'session_id'
+          });
+      }
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
+  };
 
 // Create or get session token
 useEffect(() => {
@@ -26,6 +56,15 @@ useEffect(() => {
     if (!token) {
       token = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       localStorage.setItem('assessmentSession', token);
+      
+      // Create session in database
+      try {
+        await supabase
+          .from('assessment_sessions')
+          .insert({ session_token: token });
+      } catch (error) {
+        console.error('Error creating session:', error);
+      }
     }
     setSessionToken(token);
   };
@@ -89,12 +128,6 @@ useEffect(() => {
         }
       }
     });
-// Save progress function (Supabase integration required)
-const saveProgress = async (data: FormData) => {
-  if (!sessionToken) return;
-  // Database saving will be available after connecting Supabase
-  console.log('Progress saved to localStorage:', data);
-};
     return z.object(schemaFields);
   };
 
@@ -103,19 +136,54 @@ const saveProgress = async (data: FormData) => {
     defaultValues: formData
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     // Merge current page data with existing form data
     const updatedFormData = { ...formData, ...data };
     setFormData(updatedFormData);
 
-    // Auto-save (in a real app, this would save to localStorage or API)
+    // Save to localStorage as backup
     localStorage.setItem('assessmentData', JSON.stringify(updatedFormData));
+
+    // Save to Supabase
+    await saveProgress(updatedFormData);
 
     if (currentPage < totalPages - 1) {
       setCurrentPage(prev => prev + 1);
     } else {
+      // Save final results to database
+      try {
+        const { data: session } = await supabase
+          .from('assessment_sessions')
+          .select('id')
+          .eq('session_token', sessionToken)
+          .single();
+
+        if (session) {
+          await supabase
+            .from('assessment_results')
+            .upsert({
+              session_id: session.id,
+              results_data: updatedFormData
+            }, {
+              onConflict: 'session_id'
+            });
+        }
+        
+        toast({
+          title: "Assessment Complete!",
+          description: "Your responses have been saved successfully.",
+        });
+      } catch (error) {
+        console.error('Error saving final results:', error);
+        toast({
+          title: "Assessment Complete!",
+          description: "Assessment completed (saved locally as backup).",
+          variant: "destructive"
+        });
+      }
+      
       // Navigate to results page
-      navigate('/results', { state: { formData: updatedFormData } });
+      navigate('/results', { state: { formData: updatedFormData, sessionToken } });
     }
   };
 
@@ -127,20 +195,93 @@ const saveProgress = async (data: FormData) => {
 
   // Load saved data on component mount
   useEffect(() => {
-    const savedData = localStorage.getItem('assessmentData');
-    if (savedData) {
-      const parsed = JSON.parse(savedData);
-      setFormData(parsed);
-      form.reset(parsed);
-    }
-  }, [form]);
+    const loadSavedData = async () => {
+      if (!sessionToken) return;
+      
+      try {
+        // Try to load from Supabase first
+        const { data: session } = await supabase
+          .from('assessment_sessions')
+          .select('id')
+          .eq('session_token', sessionToken)
+          .single();
+
+        if (session) {
+          const { data: response } = await supabase
+            .from('assessment_responses')
+            .select('form_data')
+            .eq('session_id', session.id)
+            .single();
+
+          if (response) {
+            const savedData = response.form_data as FormData;
+            setFormData(savedData);
+            form.reset(savedData);
+            return;
+          }
+        }
+      } catch (error) {
+        console.log('No saved data in database, checking localStorage');
+      }
+      
+      // Fallback to localStorage
+      const savedData = localStorage.getItem('assessmentData');
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        setFormData(parsed);
+        form.reset(parsed);
+      }
+    };
+
+    loadSavedData();
+  }, [form, sessionToken]);
 
   // Clear saved data function
-  const clearSavedData = () => {
+  const clearSavedData = async () => {
     localStorage.removeItem('assessmentData');
+    localStorage.removeItem('assessmentSession');
+    
+    // Clear from database if session exists
+    if (sessionToken) {
+      try {
+        const { data: session } = await supabase
+          .from('assessment_sessions')
+          .select('id')
+          .eq('session_token', sessionToken)
+          .single();
+
+        if (session) {
+          await supabase
+            .from('assessment_responses')
+            .delete()
+            .eq('session_id', session.id);
+          
+          await supabase
+            .from('assessment_results')
+            .delete()
+            .eq('session_id', session.id);
+        }
+      } catch (error) {
+        console.error('Error clearing database data:', error);
+      }
+    }
+    
     setFormData({});
     setCurrentPage(0);
     form.reset({});
+    
+    // Create new session
+    const newToken = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('assessmentSession', newToken);
+    setSessionToken(newToken);
+    
+    try {
+      await supabase
+        .from('assessment_sessions')
+        .insert({ session_token: newToken });
+    } catch (error) {
+      console.error('Error creating new session:', error);
+    }
   };
 
   // Update form when page changes

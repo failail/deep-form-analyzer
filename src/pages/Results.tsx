@@ -11,6 +11,7 @@ import { getLocalizationConfig, formatNumber, formatPercentage, formatScore, for
 import { Download, ArrowLeft, Award, TrendingUp, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { supabase } from '@/integrations/supabase/client';
 
 const Results = () => {
   const location = useLocation();
@@ -19,27 +20,80 @@ const Results = () => {
   const [formData, setFormData] = useState<FormData | null>(null);
 
   useEffect(() => {
-    let data = location.state?.formData;
-    
-    // Fallback to localStorage only if no state data is available
-    if (!data) {
-      try {
-        const savedData = localStorage.getItem('assessmentData');
-        data = savedData ? JSON.parse(savedData) : {};
-      } catch (error) {
-        console.error('Error reading localStorage:', error);
-        data = {};
-      }
-    }
-    
-    if (!data || Object.keys(data).length === 0) {
-      navigate('/assessment');
-      return;
-    }
+    const loadResults = async () => {
+      let data = location.state?.formData;
+      const sessionToken = location.state?.sessionToken || localStorage.getItem('assessmentSession');
+      
+      // Try to load from Supabase first if we have a session token
+      if (!data && sessionToken) {
+        try {
+          const { data: session } = await supabase
+            .from('assessment_sessions')
+            .select('id')
+            .eq('session_token', sessionToken)
+            .single();
 
-    setFormData(data);
-    const calculatedResults = calculateFinancialHealth(data);
-    setResults(calculatedResults);
+          if (session) {
+            const { data: results } = await supabase
+              .from('assessment_results')
+              .select('results_data')
+              .eq('session_id', session.id)
+              .single();
+
+            if (results) {
+              data = results.results_data as FormData;
+            }
+          }
+        } catch (error) {
+          console.log('No results in database, checking responses...');
+          
+          // Try to load from responses table
+          try {
+            const { data: session } = await supabase
+              .from('assessment_sessions')
+              .select('id')
+              .eq('session_token', sessionToken)
+              .single();
+
+            if (session) {
+              const { data: response } = await supabase
+                .from('assessment_responses')
+                .select('form_data')
+                .eq('session_id', session.id)
+                .single();
+
+              if (response) {
+                data = response.form_data as FormData;
+              }
+            }
+          } catch (error) {
+            console.log('No data in database');
+          }
+        }
+      }
+      
+      // Fallback to localStorage only if no other data is available
+      if (!data) {
+        try {
+          const savedData = localStorage.getItem('assessmentData');
+          data = savedData ? JSON.parse(savedData) : {};
+        } catch (error) {
+          console.error('Error reading localStorage:', error);
+          data = {};
+        }
+      }
+      
+      if (!data || Object.keys(data).length === 0) {
+        navigate('/assessment');
+        return;
+      }
+
+      setFormData(data);
+      const calculatedResults = calculateFinancialHealth(data);
+      setResults(calculatedResults);
+    };
+
+    loadResults();
   }, [location.state, navigate]);
 
   const handleDownloadPDF = async () => {
