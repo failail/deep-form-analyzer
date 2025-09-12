@@ -241,6 +241,11 @@ useEffect(() => {
     form.reset(currentValues);
   }, [currentPage, formData, form]);
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   const progress = progressInfo.progress;
   const startQuestionNumber = progressInfo.startQuestionNumber;
   const endQuestionNumber = progressInfo.endQuestionNumber;
