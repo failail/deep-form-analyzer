@@ -270,8 +270,9 @@ useEffect(() => {
                 >
                   Start Over
                 </Button>
-                <div className="text-sm text-muted-foreground">
-                  Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {progressInfo.totalQuestions}
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>Page {currentPage + 1} of {totalPages}</div>
+                  <div>Question {startQuestionNumber}{endQuestionNumber > startQuestionNumber && `‑${endQuestionNumber}`} of {progressInfo.totalQuestions}</div>
                 </div>
               </div>
             </div>
