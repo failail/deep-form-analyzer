@@ -279,7 +279,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
   };
 
   return (
-    <div className="space-y-4 p-6 border border-border rounded-lg bg-card">
+    <div className="space-y-4 p-6 border border-border rounded-lg bg-card animate-fade-in">
       {renderFormField()}
     </div>
   );

@@ -246,6 +246,32 @@ useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
 
+  // Auto-scroll to new conditional fields when they appear
+  useEffect(() => {
+    const scrollToNewFields = () => {
+      // Small delay to allow DOM to update
+      setTimeout(() => {
+        const formElement = document.querySelector('form');
+        if (formElement) {
+          const newFields = formElement.querySelectorAll('.animate-fade-in');
+          if (newFields.length > 0) {
+            const lastField = newFields[newFields.length - 1];
+            lastField.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center',
+              inline: 'nearest'
+            });
+          }
+        }
+      }, 100);
+    };
+
+    // Only scroll to new fields if we're not changing pages
+    if (currentQuestions.length > 0) {
+      scrollToNewFields();
+    }
+  }, [currentQuestions.length]);
+
   const progress = progressInfo.progress;
   const startQuestionNumber = progressInfo.startQuestionNumber;
   const endQuestionNumber = progressInfo.endQuestionNumber;
