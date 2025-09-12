@@ -33,8 +33,8 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             control={form.control}
             name={question.id}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-medium">
+              <FormItem className="space-y-3">
+                <FormLabel className="text-lg font-medium leading-tight">
                   {questionIndex}. {question.title}
                 </FormLabel>
                 <FormControl>
@@ -42,6 +42,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
                     placeholder="Enter your answer"
                     {...field}
                     value={field.value || ''}
+                    className="w-full"
                   />
                 </FormControl>
                 <FormMessage />
@@ -56,8 +57,8 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             control={form.control}
             name={question.id}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-medium">
+              <FormItem className="space-y-3">
+                <FormLabel className="text-lg font-medium leading-tight">
                   {questionIndex}. {question.title}
                 </FormLabel>
                 <FormControl>
@@ -67,6 +68,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
                     {...field}
                     value={field.value || ''}
                     onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : '')}
+                    className="w-full"
                   />
                 </FormControl>
                 <FormMessage />
@@ -81,60 +83,58 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             control={form.control}
             name={question.id}
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel className="text-lg font-medium">
+              <FormItem className="space-y-3">
+                <FormLabel className="text-lg font-medium leading-tight">
                   {questionIndex}. {question.title}
                 </FormLabel>
-                <div className="flex gap-2">
-                  <Select 
-                    onValueChange={(value) => {
-                      const [year, month] = (field.value || '').split('-');
-                      field.onChange(`${year || new Date().getFullYear()}-${value}-01`);
-                    }}
-                    value={(field.value || '').split('-')[1] || ''}
-                  >
-                    <FormControl>
+                <FormControl>
+                  <div className="flex gap-3 w-full">
+                    <Select 
+                      onValueChange={(value) => {
+                        const [year, month] = (field.value || '').split('-');
+                        field.onChange(`${year || new Date().getFullYear()}-${value}-01`);
+                      }}
+                      value={(field.value || '').split('-')[1] || ''}
+                    >
                       <SelectTrigger className="flex-1 bg-popover z-50">
                         <SelectValue placeholder="Month" />
                       </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
-                      {Array.from({ length: 12 }, (_, i) => {
-                        const month = String(i + 1).padStart(2, '0');
-                        const monthName = new Date(2024, i, 1).toLocaleString('default', { month: 'long' });
-                        return (
-                          <SelectItem key={month} value={month}>
-                            {monthName}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  
-                  <Select 
-                    onValueChange={(value) => {
-                      const [, month] = (field.value || '').split('-');
-                      field.onChange(`${value}-${month || '01'}-01`);
-                    }}
-                    value={(field.value || '').split('-')[0] || ''}
-                  >
-                    <FormControl>
+                      <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
+                        {Array.from({ length: 12 }, (_, i) => {
+                          const month = String(i + 1).padStart(2, '0');
+                          const monthName = new Date(2024, i, 1).toLocaleString('default', { month: 'long' });
+                          return (
+                            <SelectItem key={month} value={month}>
+                              {monthName}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                    
+                    <Select 
+                      onValueChange={(value) => {
+                        const [, month] = (field.value || '').split('-');
+                        field.onChange(`${value}-${month || '01'}-01`);
+                      }}
+                      value={(field.value || '').split('-')[0] || ''}
+                    >
                       <SelectTrigger className="flex-1 bg-popover z-50">
                         <SelectValue placeholder="Year" />
                       </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
-                      {Array.from({ length: 80 }, (_, i) => {
-                        const year = String(new Date().getFullYear() - i);
-                        return (
-                          <SelectItem key={year} value={year}>
-                            {year}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </div>
+                      <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
+                        {Array.from({ length: 80 }, (_, i) => {
+                          const year = String(new Date().getFullYear() - i);
+                          return (
+                            <SelectItem key={year} value={year}>
+                              {year}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -147,25 +147,25 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             control={form.control}
             name={question.id}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-medium">
+              <FormItem className="space-y-3">
+                <FormLabel className="text-lg font-medium leading-tight">
                   {questionIndex}. {question.title}
                 </FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
                     value={field.value}
-                    className="flex flex-col space-y-3 mt-4"
+                    className="flex flex-col space-y-3"
                   >
                     {question.options?.map((option) => (
-                      <div key={option.value} className="flex items-center space-x-2">
+                      <div key={option.value} className="flex items-center space-x-3">
                         <RadioGroupItem 
                           value={option.value} 
                           id={`${question.id}-${option.value}`}
                         />
                         <Label 
                           htmlFor={`${question.id}-${option.value}`}
-                          className="font-normal cursor-pointer"
+                          className="font-normal cursor-pointer leading-tight"
                         >
                           {option.label}
                         </Label>
@@ -185,24 +185,24 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             control={form.control}
             name={question.id}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-medium">
+              <FormItem className="space-y-3">
+                <FormLabel className="text-lg font-medium leading-tight">
                   {questionIndex}. {question.title}
                 </FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="bg-popover z-50">
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full bg-popover z-50">
                       <SelectValue placeholder="Please select an option" />
                     </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
-                    {question.options?.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                    <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
+                      {question.options?.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -215,12 +215,12 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             control={form.control}
             name={question.id}
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg font-medium">
+              <FormItem className="space-y-3">
+                <FormLabel className="text-lg font-medium leading-tight">
                   {questionIndex}. {question.title}
                 </FormLabel>
                 <FormControl>
-                  <div className="flex gap-4">
+                  <div className="flex gap-3 w-full">
                     <Select 
                       onValueChange={(value) => {
                         const [year, month] = (field.value || '').split('-');
