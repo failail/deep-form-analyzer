@@ -1,8 +1,7 @@
 // Updated questionGroups.ts to fix conditional logic, eliminate circular dependencies, and add a Screening group
-// Replace your existing QUESTION_GROUPS array with this
 
 import { QuestionGroup } from "../types";
-import { QUESTIONS } from "./questions";
+import { flattenGroups } from "../utils/flattenGroups";
 
 export const QUESTION_GROUPS: QuestionGroup[] = [
   {
@@ -161,6 +160,5 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
     ]
   }
 ];
-import { flattenGroups } from "../utils"; // or wherever flattenGroups is defined
 
 export const QUESTIONS = flattenGroups(QUESTION_GROUPS);
