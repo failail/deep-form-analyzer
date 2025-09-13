@@ -40,8 +40,11 @@ export interface Question {
 
 export interface QuestionGroup {
   name: string;
-  condition?: { question: string; equals: any };
   questions: string[];
+  condition?: {
+    question: string;
+    equals: any;
+  };
 }
 
 export interface FormData {
