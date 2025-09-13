@@ -39,12 +39,10 @@ export interface Question {
 }
 
 export interface QuestionGroup {
-  id: string;
   name: string;
-  description: string;
-  conditional?: ConditionalLogic;
-  questions: Question[];
-  questionsPerPage: number;
+  condition?: { question: string; equals: any };
+  questions: string[];
+}
 }
 
 export interface FormData {
