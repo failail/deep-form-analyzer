@@ -1,8 +1,8 @@
-import { FormData } from '@/types/assessment'
+import { FormData, Question } from '@/types/assessment'
 import { getVisibleQuestions, getVisibleGroups, getTotalPages } from '@/utils/groupLogic'
 import { calculateFinancialHealth } from '@/utils/calculations'
 
-export const generateQuestionsForScenario = (formData: FormData) => {
+export const generateQuestionsForScenario = (formData: FormData): Question[] => {
   return getVisibleQuestions(formData)
 }
 
