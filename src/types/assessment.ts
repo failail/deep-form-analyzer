@@ -165,4 +165,4 @@ export const CURRENCY_OPTIONS: Currency[] = [
   { code: 'AUD', symbol: 'A$', name: 'AUD (Australian Dollars)' },
   { code: 'SGD', symbol: 'S$', name: 'SGD (Singapore Dollars)' },
   { code: 'AED', symbol: 'د.إ', name: 'AED (UAE Dirhams)' },
-];
+];export type { QuestionGroup };
