@@ -1,6 +1,6 @@
 // Updated questionGroups.ts to fix conditional logic, eliminate circular dependencies, and add a Screening group
 
-import { QuestionGroup } from "../types/questionTypes";
+import { QuestionGroup } from "../types/assessment";
 import { flattenGroups } from "../utils/flattenGroups";
 
 export const QUESTION_GROUPS: QuestionGroup[] = [
