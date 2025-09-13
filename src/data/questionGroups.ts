@@ -272,18 +272,84 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         section: 'Personal Information',
         questionNumber: 14,
         groupId: 'personal-basics'
-      },
-      // Fill remaining slots with skip questions
-      { id: 'skip15', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 15, groupId: 'personal-basics' },
-      { id: 'skip16', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 16, groupId: 'personal-basics' },
-      { id: 'skip17', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 17, groupId: 'personal-basics' },
-      { id: 'skip18', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 18, groupId: 'personal-basics' },
-      { id: 'skip19', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 19, groupId: 'personal-basics' },
-      { id: 'skip20', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 20, groupId: 'personal-basics' }
+      }
     ]
   },
 
-  // GROUP 2: HOUSING
+  // GROUP 2: SCREENING QUESTIONS (NEW - Contains primary gateway questions)
+  {
+    id: 'screening',
+    name: 'Screening',
+    description: 'Gateway questions to determine applicable sections',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'hasVehicles',
+        title: 'Do you own any vehicles for personal/family use?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Personal Information',
+        questionNumber: 15,
+        groupId: 'screening'
+      },
+      {
+        id: 'hasChildren',
+        title: 'Do you have kids?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Personal Information',
+        questionNumber: 16,
+        groupId: 'screening'
+      },
+      {
+        id: 'hasFinancialDependents',
+        title: 'Do you have any other financial dependents?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Personal Information',
+        questionNumber: 17,
+        groupId: 'screening'
+      },
+      {
+        id: 'hasPersonalLoans',
+        title: 'Do you have any personal loans apart from home and vehicle loans?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Personal Information',
+        questionNumber: 18,
+        groupId: 'screening'
+      },
+      // Fill remaining slots
+      { id: 'skip19', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 19, groupId: 'screening' },
+      { id: 'skip20', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 20, groupId: 'screening' },
+      { id: 'skip21', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 21, groupId: 'screening' },
+      { id: 'skip22', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 22, groupId: 'screening' },
+      { id: 'skip23', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 23, groupId: 'screening' },
+      { id: 'skip24', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 24, groupId: 'screening' }
+    ]
+  },
+
+  // GROUP 3: HOUSING
   {
     id: 'housing',
     name: 'Housing',
@@ -301,7 +367,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Housing & Real Estate',
-        questionNumber: 15,
+        questionNumber: 25,
         groupId: 'housing'
       },
       {
@@ -318,7 +384,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Rent it']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 16,
+        questionNumber: 26,
         groupId: 'housing'
       },
       {
@@ -335,7 +401,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Rent it']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 17,
+        questionNumber: 27,
         groupId: 'housing'
       },
       {
@@ -352,7 +418,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Own it']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 18,
+        questionNumber: 28,
         groupId: 'housing'
       },
       {
@@ -369,7 +435,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Own it']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 19,
+        questionNumber: 29,
         groupId: 'housing'
       },
       {
@@ -387,7 +453,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Own it']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 20,
+        questionNumber: 30,
         groupId: 'housing'
       },
       {
@@ -404,7 +470,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 21,
+        questionNumber: 31,
         groupId: 'housing'
       },
       {
@@ -421,7 +487,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 22,
+        questionNumber: 32,
         groupId: 'housing'
       },
       {
@@ -438,7 +504,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Own it']
         },
         section: 'Housing & Real Estate',
-        questionNumber: 23,
+        questionNumber: 33,
         groupId: 'housing'
       },
       {
@@ -452,13 +518,13 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Housing & Real Estate',
-        questionNumber: 24,
+        questionNumber: 34,
         groupId: 'housing'
       }
     ]
   },
 
-  // GROUP 3: ADDITIONAL PROPERTIES
+  // GROUP 4: ADDITIONAL PROPERTIES
   {
     id: 'additional-properties',
     name: 'Additional Properties',
@@ -481,7 +547,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Additional Properties',
-        questionNumber: 25,
+        questionNumber: 35,
         groupId: 'additional-properties'
       },
       {
@@ -494,7 +560,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 500000, message: 'Minimum value is 500,000' }
         ],
         section: 'Additional Properties',
-        questionNumber: 26,
+        questionNumber: 36,
         groupId: 'additional-properties'
       },
       {
@@ -507,7 +573,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 500000, message: 'Minimum value is 500,000' }
         ],
         section: 'Additional Properties',
-        questionNumber: 27,
+        questionNumber: 37,
         groupId: 'additional-properties'
       },
       {
@@ -521,7 +587,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Additional Properties',
-        questionNumber: 28,
+        questionNumber: 38,
         groupId: 'additional-properties'
       },
       {
@@ -534,7 +600,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Additional Properties',
-        questionNumber: 29,
+        questionNumber: 39,
         groupId: 'additional-properties'
       },
       {
@@ -547,7 +613,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Additional Properties',
-        questionNumber: 30,
+        questionNumber: 40,
         groupId: 'additional-properties'
       },
       {
@@ -561,7 +627,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Additional Properties',
-        questionNumber: 31,
+        questionNumber: 41,
         groupId: 'additional-properties'
       },
       {
@@ -574,7 +640,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Additional Properties',
-        questionNumber: 32,
+        questionNumber: 42,
         groupId: 'additional-properties'
       },
       {
@@ -588,7 +654,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Additional Properties',
-        questionNumber: 33,
+        questionNumber: 43,
         groupId: 'additional-properties'
       },
       {
@@ -601,13 +667,13 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Additional Properties',
-        questionNumber: 34,
+        questionNumber: 44,
         groupId: 'additional-properties'
       }
     ]
   },
 
-  // GROUP 4: VEHICLES
+  // GROUP 5: VEHICLES
   {
     id: 'vehicles',
     name: 'Vehicles',
@@ -618,20 +684,6 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
       values: ['Yes']
     },
     questions: [
-      {
-        id: 'hasVehicles',
-        title: 'Do you own any vehicles for personal/family use?',
-        type: 'radio',
-        required: true,
-        options: [
-          { value: 'Yes', label: 'Yes' },
-          { value: 'No', label: 'No' }
-        ],
-        validation: [{ type: 'required', message: 'This field is required' }],
-        section: 'Vehicles',
-        questionNumber: 35,
-        groupId: 'vehicles'
-      },
       {
         id: 'numberOfVehicles',
         title: 'How many vehicles do you own?',
@@ -644,12 +696,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { value: '4', label: '4' }
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 36,
+        questionNumber: 45,
         groupId: 'vehicles'
       },
       {
@@ -661,12 +709,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 50000, message: 'Minimum value is 50,000' }
         ],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 37,
+        questionNumber: 46,
         groupId: 'vehicles'
       },
       {
@@ -678,12 +722,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 10000, message: 'Minimum value is 10,000' }
         ],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 38,
+        questionNumber: 47,
         groupId: 'vehicles'
       },
       {
@@ -696,12 +736,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { value: 'No', label: 'No' }
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 39,
+        questionNumber: 48,
         groupId: 'vehicles'
       },
       {
@@ -714,7 +750,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Vehicles',
-        questionNumber: 40,
+        questionNumber: 49,
         groupId: 'vehicles'
       },
       {
@@ -727,7 +763,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Vehicles',
-        questionNumber: 41,
+        questionNumber: 50,
         groupId: 'vehicles'
       },
       {
@@ -739,12 +775,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 42,
+        questionNumber: 51,
         groupId: 'vehicles'
       },
       {
@@ -756,12 +788,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 5000, message: 'Minimum value is 5,000' }
         ],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 43,
+        questionNumber: 52,
         groupId: 'vehicles'
       },
       {
@@ -773,18 +801,15 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasVehicles',
-          values: ['Yes']
-        },
         section: 'Vehicles',
-        questionNumber: 44,
+        questionNumber: 53,
         groupId: 'vehicles'
-      }
+      },
+      { id: 'skip54', title: 'Skip', type: 'skip', section: 'Vehicles', questionNumber: 54, groupId: 'vehicles' }
     ]
   },
 
-  // GROUP 5: CHILDREN
+  // GROUP 6: CHILDREN
   {
     id: 'children',
     name: 'Children',
@@ -796,20 +821,6 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
     },
     questions: [
       {
-        id: 'hasChildren',
-        title: 'Do you have kids?',
-        type: 'radio',
-        required: true,
-        options: [
-          { value: 'Yes', label: 'Yes' },
-          { value: 'No', label: 'No' }
-        ],
-        validation: [{ type: 'required', message: 'This field is required' }],
-        section: 'Children & Dependents',
-        questionNumber: 45,
-        groupId: 'children'
-      },
-      {
         id: 'numberOfChildren',
         title: 'How many kids do you have?',
         type: 'number',
@@ -819,12 +830,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 1, message: 'Minimum value is 1' },
           { type: 'max', value: 10, message: 'Maximum value is 10' }
         ],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 46,
+        questionNumber: 55,
         groupId: 'children'
       },
       {
@@ -840,12 +847,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { value: '19+ years dependent', label: '19+ years dependent' }
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 47,
+        questionNumber: 56,
         groupId: 'children'
       },
       {
@@ -858,7 +861,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['0-2 years']
         },
         section: 'Children & Dependents',
-        questionNumber: 48,
+        questionNumber: 57,
         groupId: 'children'
       },
       {
@@ -870,12 +873,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 500, message: 'Minimum value is 500' }
         ],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 49,
+        questionNumber: 58,
         groupId: 'children'
       },
       {
@@ -887,12 +886,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 50,
+        questionNumber: 59,
         groupId: 'children'
       },
       {
@@ -904,12 +899,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 51,
+        questionNumber: 60,
         groupId: 'children'
       },
       {
@@ -921,12 +912,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 52,
+        questionNumber: 61,
         groupId: 'children'
       },
       {
@@ -938,12 +925,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 53,
+        questionNumber: 62,
         groupId: 'children'
       },
       {
@@ -956,18 +939,15 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { value: 'No', label: 'No' }
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
-        conditional: {
-          dependsOn: 'hasChildren',
-          values: ['Yes']
-        },
         section: 'Children & Dependents',
-        questionNumber: 54,
+        questionNumber: 63,
         groupId: 'children'
-      }
+      },
+      { id: 'skip64', title: 'Skip', type: 'skip', section: 'Children & Dependents', questionNumber: 64, groupId: 'children' }
     ]
   },
 
-  // GROUP 6: FINANCIAL DEPENDENTS
+  // GROUP 7: FINANCIAL DEPENDENTS
   {
     id: 'financial-dependents',
     name: 'Financial Dependents',
@@ -979,20 +959,6 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
     },
     questions: [
       {
-        id: 'hasFinancialDependents',
-        title: 'Do you have any other financial dependents?',
-        type: 'radio',
-        required: true,
-        options: [
-          { value: 'Yes', label: 'Yes' },
-          { value: 'No', label: 'No' }
-        ],
-        validation: [{ type: 'required', message: 'This field is required' }],
-        section: 'Financial Dependents',
-        questionNumber: 55,
-        groupId: 'financial-dependents'
-      },
-      {
         id: 'numberOfDependents',
         title: 'How many financial dependents do you have?',
         type: 'number',
@@ -1002,12 +968,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 1, message: 'Minimum value is 1' },
           { type: 'max', value: 5, message: 'Maximum value is 5' }
         ],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 56,
+        questionNumber: 65,
         groupId: 'financial-dependents'
       },
       {
@@ -1019,12 +981,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 57,
+        questionNumber: 66,
         groupId: 'financial-dependents'
       },
       {
@@ -1036,12 +994,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 2000, message: 'Minimum value is 2,000' }
         ],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 58,
+        questionNumber: 67,
         groupId: 'financial-dependents'
       },
       {
@@ -1053,12 +1007,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 59,
+        questionNumber: 68,
         groupId: 'financial-dependents'
       },
       {
@@ -1070,12 +1020,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 60,
+        questionNumber: 69,
         groupId: 'financial-dependents'
       },
       {
@@ -1087,12 +1033,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 61,
+        questionNumber: 70,
         groupId: 'financial-dependents'
       },
       {
@@ -1105,12 +1047,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { value: 'No', label: 'No' }
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
-        conditional: {
-          dependsOn: 'hasFinancialDependents',
-          values: ['Yes']
-        },
         section: 'Financial Dependents',
-        questionNumber: 62,
+        questionNumber: 71,
         groupId: 'financial-dependents'
       },
       {
@@ -1123,7 +1061,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Financial Dependents',
-        questionNumber: 63,
+        questionNumber: 72,
         groupId: 'financial-dependents'
       },
       {
@@ -1136,13 +1074,14 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Financial Dependents',
-        questionNumber: 64,
+        questionNumber: 73,
         groupId: 'financial-dependents'
-      }
+      },
+      { id: 'skip74', title: 'Skip', type: 'skip', section: 'Financial Dependents', questionNumber: 74, groupId: 'financial-dependents' }
     ]
   },
 
-  // GROUP 7: PERSONAL LOANS
+  // GROUP 8: PERSONAL LOANS
   {
     id: 'personal-loans',
     name: 'Personal Loans',
@@ -1154,20 +1093,6 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
     },
     questions: [
       {
-        id: 'hasPersonalLoans',
-        title: 'Do you have any personal loans apart from home and vehicle loans?',
-        type: 'radio',
-        required: true,
-        options: [
-          { value: 'Yes', label: 'Yes' },
-          { value: 'No', label: 'No' }
-        ],
-        validation: [{ type: 'required', message: 'This field is required' }],
-        section: 'Personal Loans',
-        questionNumber: 65,
-        groupId: 'personal-loans'
-      },
-      {
         id: 'numberOfPersonalLoans',
         title: 'How many personal loans do you have?',
         type: 'number',
@@ -1177,12 +1102,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 1, message: 'Minimum value is 1' },
           { type: 'max', value: 5, message: 'Maximum value is 5' }
         ],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 66,
+        questionNumber: 75,
         groupId: 'personal-loans'
       },
       {
@@ -1202,12 +1123,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { value: 'Other', label: 'Other' }
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 67,
+        questionNumber: 76,
         groupId: 'personal-loans'
       },
       {
@@ -1219,12 +1136,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 25000, message: 'Minimum value is 25,000' }
         ],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 68,
+        questionNumber: 77,
         groupId: 'personal-loans'
       },
       {
@@ -1236,12 +1149,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 1000, message: 'Minimum value is 1,000' }
         ],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 69,
+        questionNumber: 78,
         groupId: 'personal-loans'
       },
       {
@@ -1254,12 +1163,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 10, message: 'Minimum value is 10' },
           { type: 'max', value: 36, message: 'Maximum value is 36' }
         ],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 70,
+        questionNumber: 79,
         groupId: 'personal-loans'
       },
       {
@@ -1272,12 +1177,8 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 1, message: 'Minimum value is 1' },
           { type: 'max', value: 600, message: 'Maximum value is 600' }
         ],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 71,
+        questionNumber: 80,
         groupId: 'personal-loans'
       },
       {
@@ -1289,20 +1190,17 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'required', message: 'This field is required' },
           { type: 'min', value: 1000, message: 'Minimum value is 1,000' }
         ],
-        conditional: {
-          dependsOn: 'hasPersonalLoans',
-          values: ['Yes']
-        },
         section: 'Personal Loans',
-        questionNumber: 72,
+        questionNumber: 81,
         groupId: 'personal-loans'
       },
-      { id: 'skip73', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 73, groupId: 'personal-loans' },
-      { id: 'skip74', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 74, groupId: 'personal-loans' }
+      { id: 'skip82', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 82, groupId: 'personal-loans' },
+      { id: 'skip83', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 83, groupId: 'personal-loans' },
+      { id: 'skip84', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 84, groupId: 'personal-loans' }
     ]
   },
 
-  // GROUP 8: INSURANCE
+  // GROUP 9: INSURANCE
   {
     id: 'insurance',
     name: 'Insurance',
@@ -1320,7 +1218,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Insurance',
-        questionNumber: 75,
+        questionNumber: 85,
         groupId: 'insurance'
       },
       {
@@ -1337,7 +1235,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Insurance',
-        questionNumber: 76,
+        questionNumber: 86,
         groupId: 'insurance'
       },
       {
@@ -1354,7 +1252,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Insurance',
-        questionNumber: 77,
+        questionNumber: 87,
         groupId: 'insurance'
       },
       {
@@ -1368,7 +1266,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Insurance',
-        questionNumber: 78,
+        questionNumber: 88,
         groupId: 'insurance'
       },
       {
@@ -1381,7 +1279,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Insurance',
-        questionNumber: 79,
+        questionNumber: 89,
         groupId: 'insurance'
       },
       {
@@ -1394,7 +1292,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Insurance',
-        questionNumber: 80,
+        questionNumber: 90,
         groupId: 'insurance'
       },
       {
@@ -1408,7 +1306,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Insurance',
-        questionNumber: 81,
+        questionNumber: 91,
         groupId: 'insurance'
       },
       {
@@ -1421,7 +1319,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Insurance',
-        questionNumber: 82,
+        questionNumber: 92,
         groupId: 'insurance'
       },
       {
@@ -1434,7 +1332,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           values: ['Yes']
         },
         section: 'Insurance',
-        questionNumber: 83,
+        questionNumber: 93,
         groupId: 'insurance'
       },
       {
@@ -1448,13 +1346,13 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         ],
         validation: [{ type: 'required', message: 'This field is required' }],
         section: 'Insurance',
-        questionNumber: 84,
+        questionNumber: 94,
         groupId: 'insurance'
       }
     ]
   },
 
-  // GROUP 9: MONTHLY EXPENSES 1
+  // GROUP 10: MONTHLY EXPENSES 1
   {
     id: 'monthly-expenses-1',
     name: 'Monthly Expenses 1',
@@ -1471,160 +1369,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 85,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyClothesShoes',
-        title: 'Clothes and shoes monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 86,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyMakeupJewellery',
-        title: 'Makeup and jewellery monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 87,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyBeautyTreatments',
-        title: 'Haircuts, salon and beauty treatments monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 88,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyHouseHelp',
-        title: 'Maid/cook/househelp/nanny monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 89,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyCookingGas',
-        title: 'Cooking gas monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 90,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyElectricity',
-        title: 'Electricity monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 91,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyMobile',
-        title: 'Mobile monthly plan cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 92,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyInternet',
-        title: 'Broadband/internet monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 93,
-        groupId: 'monthly-expenses-1'
-      },
-      {
-        id: 'monthlyTVOTT',
-        title: 'TV/OTT/cable bills monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 94,
-        groupId: 'monthly-expenses-1'
-      }
-    ]
-  },
-
-  // GROUP 10: MONTHLY EXPENSES 2
-  {
-    id: 'monthly-expenses-2',
-    name: 'Monthly Expenses 2',
-    description: 'Additional monthly expenses',
-    questionsPerPage: 10,
-    questions: [
-      {
-        id: 'monthlyAppSubscriptions',
-        title: 'Other app subscriptions monthly cost',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 95,
-        groupId: 'monthly-expenses-2'
-      },
-      {
-        id: 'monthlyCommuting',
-        title: 'Cost of commuting monthly',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Monthly Living Expenses',
-        questionNumber: 96,
+        questionNumber: 106,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1637,7 +1382,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 97,
+        questionNumber: 107,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1650,7 +1395,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 98,
+        questionNumber: 108,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1663,7 +1408,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 99,
+        questionNumber: 109,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1676,7 +1421,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 100,
+        questionNumber: 110,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1689,7 +1434,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 101,
+        questionNumber: 111,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1702,7 +1447,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 102,
+        questionNumber: 112,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1715,7 +1460,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 103,
+        questionNumber: 113,
         groupId: 'monthly-expenses-2'
       },
       {
@@ -1728,13 +1473,13 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Monthly Living Expenses',
-        questionNumber: 104,
+        questionNumber: 114,
         groupId: 'monthly-expenses-2'
       }
     ]
   },
 
-  // GROUP 11: ANNUAL EXPENSES
+  // GROUP 12: ANNUAL EXPENSES
   {
     id: 'annual-expenses',
     name: 'Annual Expenses',
@@ -1751,7 +1496,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 105,
+        questionNumber: 115,
         groupId: 'annual-expenses'
       },
       {
@@ -1764,7 +1509,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 106,
+        questionNumber: 116,
         groupId: 'annual-expenses'
       },
       {
@@ -1777,7 +1522,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 107,
+        questionNumber: 117,
         groupId: 'annual-expenses'
       },
       {
@@ -1790,7 +1535,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 108,
+        questionNumber: 118,
         groupId: 'annual-expenses'
       },
       {
@@ -1803,7 +1548,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 109,
+        questionNumber: 119,
         groupId: 'annual-expenses'
       },
       {
@@ -1816,7 +1561,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 110,
+        questionNumber: 120,
         groupId: 'annual-expenses'
       },
       {
@@ -1829,16 +1574,16 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Annual Expenses',
-        questionNumber: 111,
+        questionNumber: 121,
         groupId: 'annual-expenses'
       },
-      { id: 'skip112', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 112, groupId: 'annual-expenses' },
-      { id: 'skip113', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 113, groupId: 'annual-expenses' },
-      { id: 'skip114', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 114, groupId: 'annual-expenses' }
+      { id: 'skip122', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 122, groupId: 'annual-expenses' },
+      { id: 'skip123', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 123, groupId: 'annual-expenses' },
+      { id: 'skip124', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 124, groupId: 'annual-expenses' }
     ]
   },
 
-  // GROUP 12: INVESTMENTS
+  // GROUP 13: INVESTMENTS
   {
     id: 'investments',
     name: 'Investments',
@@ -1855,7 +1600,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Investments & Savings',
-        questionNumber: 115,
+        questionNumber: 125,
         groupId: 'investments'
       },
       {
@@ -1868,7 +1613,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Investments & Savings',
-        questionNumber: 116,
+        questionNumber: 126,
         groupId: 'investments'
       },
       {
@@ -1881,7 +1626,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Investments & Savings',
-        questionNumber: 117,
+        questionNumber: 127,
         groupId: 'investments'
       },
       {
@@ -1894,19 +1639,19 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Investments & Savings',
-        questionNumber: 118,
+        questionNumber: 128,
         groupId: 'investments'
       },
-      { id: 'skip119', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 119, groupId: 'investments' },
-      { id: 'skip120', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 120, groupId: 'investments' },
-      { id: 'skip121', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 121, groupId: 'investments' },
-      { id: 'skip122', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 122, groupId: 'investments' },
-      { id: 'skip123', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 123, groupId: 'investments' },
-      { id: 'skip124', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 124, groupId: 'investments' }
+      { id: 'skip129', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 129, groupId: 'investments' },
+      { id: 'skip130', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 130, groupId: 'investments' },
+      { id: 'skip131', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 131, groupId: 'investments' },
+      { id: 'skip132', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 132, groupId: 'investments' },
+      { id: 'skip133', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 133, groupId: 'investments' },
+      { id: 'skip134', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 134, groupId: 'investments' }
     ]
   },
 
-  // GROUP 13: ASSETS
+  // GROUP 14: ASSETS
   {
     id: 'assets',
     name: 'Assets',
@@ -1923,7 +1668,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 125,
+        questionNumber: 135,
         groupId: 'assets'
       },
       {
@@ -1936,7 +1681,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 126,
+        questionNumber: 136,
         groupId: 'assets'
       },
       {
@@ -1949,7 +1694,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 127,
+        questionNumber: 137,
         groupId: 'assets'
       },
       {
@@ -1962,7 +1707,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 128,
+        questionNumber: 138,
         groupId: 'assets'
       },
       {
@@ -1975,7 +1720,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 129,
+        questionNumber: 139,
         groupId: 'assets'
       },
       {
@@ -1988,7 +1733,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 130,
+        questionNumber: 140,
         groupId: 'assets'
       },
       {
@@ -2001,7 +1746,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 131,
+        questionNumber: 141,
         groupId: 'assets'
       },
       {
@@ -2014,15 +1759,15 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 132,
+        questionNumber: 142,
         groupId: 'assets'
       },
-      { id: 'skip133', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 133, groupId: 'assets' },
-      { id: 'skip134', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 134, groupId: 'assets' }
+      { id: 'skip143', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 143, groupId: 'assets' },
+      { id: 'skip144', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 144, groupId: 'assets' }
     ]
   },
 
-  // GROUP 14: INCOME
+  // GROUP 15: INCOME
   {
     id: 'income',
     name: 'Income',
@@ -2039,7 +1784,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 135,
+        questionNumber: 145,
         groupId: 'income'
       },
       {
@@ -2052,7 +1797,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 136,
+        questionNumber: 146,
         groupId: 'income'
       },
       {
@@ -2065,7 +1810,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 137,
+        questionNumber: 147,
         groupId: 'income'
       },
       {
@@ -2078,7 +1823,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 138,
+        questionNumber: 148,
         groupId: 'income'
       },
       {
@@ -2091,7 +1836,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 139,
+        questionNumber: 149,
         groupId: 'income'
       },
       {
@@ -2104,7 +1849,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 140,
+        questionNumber: 150,
         groupId: 'income'
       },
       {
@@ -2117,7 +1862,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 141,
+        questionNumber: 151,
         groupId: 'income'
       },
       {
@@ -2130,7 +1875,7 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 142,
+        questionNumber: 152,
         groupId: 'income'
       },
       {
@@ -2143,136 +1888,173 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
           { type: 'min', value: 0, message: 'Minimum value is 0' }
         ],
         section: 'Assets & Income',
-        questionNumber: 143,
+        questionNumber: 153,
         groupId: 'income'
       },
       {
-        id: 'skip144',
+        id: 'skip154',
         title: 'Skip',
         type: 'skip',
         section: 'Assets & Income',
-        questionNumber: 144,
+        questionNumber: 154,
         groupId: 'income'
       }
-    ]
-  },
-
-  // GROUP 13: ASSETS
-  {
-    id: 'assets',
-    name: 'Assets',
-    description: 'Current assets and investments',
-    questionsPerPage: 10,
-    questions: [
-      {
-        id: 'savingsAccountsFD',
-        title: 'Value of all savings accounts and fixed deposits',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 125,
-        groupId: 'assets'
-      },
-      {
-        id: 'physicalCash',
-        title: 'Physical cash at hand',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 126,
-        groupId: 'assets'
-      },
-      {
-        id: 'investmentValue',
-        title: 'Value of stocks, mutual funds, investments',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 127,
-        groupId: 'assets'
-      },
-      {
-        id: 'retirementSavings',
-        title: 'Retirement savings from employer contributions',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 128,
-        groupId: 'assets'
-      },
-      {
-        id: 'jewelleryValue',
-        title: 'Total value of all jewellery',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 129,
-        groupId: 'assets'
-      },
-      {
-        id: 'collectiblesValue',
-        title: 'Total value of collectibles, art, valuables',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 130,
-        groupId: 'assets'
-      },
-      {
-        id: 'currentHomesValue',
-        title: 'Current value of all homes',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 131,
-        groupId: 'assets'
-      },
-      {
-        id: 'currentVehiclesValue',
-        title: 'Current value of all vehicles',
-        type: 'number',
-        required: true,
-        validation: [
-          { type: 'required', message: 'This field is required' },
-          { type: 'min', value: 0, message: 'Minimum value is 0' }
-        ],
-        section: 'Assets & Income',
-        questionNumber: 132,
-        groupId: 'assets'
-      },
-      { id: 'skip133', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 133, groupId: 'assets' },
-      { id: 'skip134', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 134, groupId: 'assets' }
     ]
   }
 ];
 
 // Create a flattened array of all questions for backward compatibility
-export const QUESTIONS = QUESTION_GROUPS.flatMap(group => group.questions);
+export const QUESTIONS = QUESTION_GROUPS.flatMap(group => group.questions); 95,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyClothesShoes',
+        title: 'Clothes and shoes monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 96,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyMakeupJewellery',
+        title: 'Makeup and jewellery monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 97,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyBeautyTreatments',
+        title: 'Haircuts, salon and beauty treatments monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 98,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyHouseHelp',
+        title: 'Maid/cook/househelp/nanny monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 99,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyCookingGas',
+        title: 'Cooking gas monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 100,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyElectricity',
+        title: 'Electricity monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 101,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyMobile',
+        title: 'Mobile monthly plan cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 102,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyInternet',
+        title: 'Broadband/internet monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 103,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyTVOTT',
+        title: 'TV/OTT/cable bills monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 104,
+        groupId: 'monthly-expenses-1'
+      }
+    ]
+  },
+
+  // GROUP 11: MONTHLY EXPENSES 2
+  {
+    id: 'monthly-expenses-2',
+    name: 'Monthly Expenses 2',
+    description: 'Additional monthly expenses',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'monthlyAppSubscriptions',
+        title: 'Other app subscriptions monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 105,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyCommuting',
+        title: 'Cost of commuting monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber:
