@@ -1,72 +1,54 @@
-import { QuestionGroup, FormData, Question } from '@/types/assessment';
-import { QUESTION_GROUPS } from '@/data/questionGroups';
+import { QUESTION_GROUPS } from "../data/questionGroups";
+import { QuestionGroup } from "../types";
 
-export const getVisibleGroups = (formData: FormData): QuestionGroup[] => {
-  return QUESTION_GROUPS.filter(group => {
-    if (!group.conditional) return true;
-    
-    const dependentValue = formData[group.conditional.dependsOn];
-    return group.conditional.values.includes(dependentValue);
-  });
-};
+export function getGroupWithQuestion(questionId: string): { group: QuestionGroup; index: number } | undefined {
+  for (const group of QUESTION_GROUPS) {
+    const index = group.questions.findIndex((q) => q.id === questionId);
+    if (index !== -1) {
+      return { group, index };
+    }
+  }
+  return undefined;
+}
 
-export const getVisibleQuestions = (formData: FormData): Question[] => {
-  const visibleGroups = getVisibleGroups(formData);
-  
-  return visibleGroups.flatMap(group => 
-    group.questions.filter(question => {
-      if (question.type === 'skip') return false;
-      if (!question.conditional) return true;
-      
-      const dependentValue = formData[question.conditional.dependsOn];
-      return question.conditional.values.includes(dependentValue);
-    })
-  );
-};
+export function getPreviousQuestionId(questionId: string): string | null {
+  const result = getGroupWithQuestion(questionId);
+  if (!result) return null;
 
-export const getQuestionsForPage = (formData: FormData, pageIndex: number): Question[] => {
-  const visibleGroups = getVisibleGroups(formData);
-  const questionsPerPage = 10;
-  
-  // Get all questions with proper filtering
-  const allQuestions = visibleGroups.flatMap(group => 
-    group.questions.filter(question => {
-      if (question.type === 'skip') return false;
-      if (!question.conditional) return true;
-      
-      const dependentValue = formData[question.conditional.dependsOn];
-      return question.conditional.values.includes(dependentValue);
-    })
-  );
-  
-  const startIndex = pageIndex * questionsPerPage;
-  const endIndex = startIndex + questionsPerPage;
-  
-  return allQuestions.slice(startIndex, endIndex);
-};
+  const { group, index } = result;
 
-export const getTotalPages = (formData: FormData): number => {
-  const visibleQuestions = getVisibleQuestions(formData);
-  return Math.ceil(visibleQuestions.length / 10);
-};
+  // If there's a previous question in the same group, return it
+  if (index > 0) {
+    return group.questions[index - 1].id;
+  }
 
-export const getProgressInfo = (formData: FormData, currentPage: number) => {
-  const visibleQuestions = getVisibleQuestions(formData);
-  const questionsPerPage = 10;
-  
-  const totalQuestions = visibleQuestions.length;
-  const completedQuestions = Math.min(currentPage * questionsPerPage, totalQuestions);
-  const progress = Math.round((completedQuestions / totalQuestions) * 100);
-  
-  const currentPageQuestions = getQuestionsForPage(formData, currentPage);
-  const startQuestionNumber = completedQuestions + 1;
-  const endQuestionNumber = completedQuestions + currentPageQuestions.length;
-  
-  return {
-    progress,
-    startQuestionNumber,
-    endQuestionNumber,
-    totalQuestions,
-    currentPageQuestions
-  };
-};
+  // Otherwise, find the last question of the previous group
+  const groupIndex = QUESTION_GROUPS.findIndex((g) => g.id === group.id);
+  if (groupIndex > 0) {
+    const previousGroup = QUESTION_GROUPS[groupIndex - 1];
+    return previousGroup.questions[previousGroup.questions.length - 1].id;
+  }
+
+  return null;
+}
+
+export function getNextQuestionId(questionId: string): string | null {
+  const result = getGroupWithQuestion(questionId);
+  if (!result) return null;
+
+  const { group, index } = result;
+
+  // If there's a next question in the same group, return it
+  if (index < group.questions.length - 1) {
+    return group.questions[index + 1].id;
+  }
+
+  // Otherwise, find the first question of the next group
+  const groupIndex = QUESTION_GROUPS.findIndex((g) => g.id === group.id);
+  if (groupIndex < QUESTION_GROUPS.length - 1) {
+    const nextGroup = QUESTION_GROUPS[groupIndex + 1];
+    return nextGroup.questions[0].id;
+  }
+
+  return null;
+}
