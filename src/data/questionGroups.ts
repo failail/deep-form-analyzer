@@ -161,3 +161,6 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
     ]
   }
 ];
+import { flattenGroups } from "../utils"; // or wherever flattenGroups is defined
+
+export const QUESTIONS = flattenGroups(QUESTION_GROUPS);
