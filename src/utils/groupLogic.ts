@@ -1,11 +1,11 @@
-import { questionGroups } from "../data/questionGroups";
+import { QUESTION_GROUPS } from "../data/questionGroups";
 import { questions } from "../data/questions";
 import { QuestionGroup, Question, FormData } from "../types/assessment";
 
 const QUESTIONS_PER_PAGE = 10;
 
 export function getVisibleGroups(formData: FormData): QuestionGroup[] {
-  return questionGroups.filter(group => {
+  return QUESTION_GROUPS.filter(group => {
     // If no conditional, group is always visible
     if (!group.conditional) return true;
     
@@ -72,7 +72,7 @@ export function getProgressInfo(formData: FormData, currentPage: number) {
 }
 
 export function getGroupWithQuestion(questionId: string): { group: QuestionGroup; index: number } | undefined {
-  for (const group of questionGroups) {
+  for (const group of QUESTION_GROUPS) {
     const index = group.questions.findIndex((q) => q.id === questionId);
     if (index !== -1) {
       return { group, index };
@@ -93,9 +93,9 @@ export function getPreviousQuestionId(questionId: string): string | null {
   }
 
   // Otherwise, find the last question of the previous group
-  const groupIndex = questionGroups.findIndex((g) => g.id === group.id);
+  const groupIndex = QUESTION_GROUPS.findIndex((g) => g.id === group.id);
   if (groupIndex > 0) {
-    const previousGroup = questionGroups[groupIndex - 1];
+    const previousGroup = QUESTION_GROUPS[groupIndex - 1];
     return previousGroup.questions[previousGroup.questions.length - 1].id;
   }
 
@@ -114,9 +114,9 @@ export function getNextQuestionId(questionId: string): string | null {
   }
 
   // Otherwise, find the first question of the next group
-  const groupIndex = questionGroups.findIndex((g) => g.id === group.id);
-  if (groupIndex < questionGroups.length - 1) {
-    const nextGroup = questionGroups[groupIndex + 1];
+  const groupIndex = QUESTION_GROUPS.findIndex((g) => g.id === group.id);
+  if (groupIndex < QUESTION_GROUPS.length - 1) {
+    const nextGroup = QUESTION_GROUPS[groupIndex + 1];
     return nextGroup.questions[0].id;
   }
 
