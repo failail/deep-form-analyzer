@@ -1,4 +1,1249 @@
-import { QuestionGroup } from '@/types/assessment';
+{ id: 'skip60', title: 'Skip', type: 'skip', section: 'Vehicles', questionNumber: 60, groupId: 'vehicles' }
+    ]
+  },
+
+  // GROUP 7: CHILDREN
+  {
+    id: 'children',
+    name: 'Children',
+    description: 'Information about children and their expenses',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasChildren',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfChildren',
+        title: 'How many kids do you have?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 10, message: 'Maximum value is 10' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 61,
+        groupId: 'children'
+      },
+      {
+        id: 'child1AgeGroup',
+        title: 'Child 1: Please share the age band for this child',
+        type: 'select',
+        required: true,
+        options: [
+          { value: '0-2 years', label: '0-2 years' },
+          { value: '3-5 years', label: '3-5 years' },
+          { value: '6-12 years', label: '6-12 years' },
+          { value: '13-18 years', label: '13-18 years' },
+          { value: '19+ years dependent', label: '19+ years dependent' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Children & Dependents',
+        questionNumber: 62,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Diapers',
+        title: 'Child 1: Monthly expenses for diapers',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'child1AgeGroup',
+          values: ['0-2 years']
+        },
+        section: 'Children & Dependents',
+        questionNumber: 63,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Clothing',
+        title: 'Child 1: Monthly expenses for clothing, shoes',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 500, message: 'Minimum value is 500' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 64,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Toys',
+        title: 'Child 1: Monthly expenses for toys and games',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 65,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Activities',
+        title: 'Child 1: Monthly expense for hobbies, sports, activities',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 66,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Education',
+        title: 'Child 1: Monthly expense for school/college fees',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 67,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Medical',
+        title: 'Child 1: Monthly expenses for medical, treatments, medicines',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 68,
+        groupId: 'children'
+      },
+      {
+        id: 'child1HealthInsurance',
+        title: 'Child 1: Do you have health insurance that covers this child?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Children & Dependents',
+        questionNumber: 69,
+        groupId: 'children'
+      },
+      { id: 'skip70', title: 'Skip', type: 'skip', section: 'Children & Dependents', questionNumber: 70, groupId: 'children' }
+    ]
+  },
+
+  // GROUP 8: FINANCIAL DEPENDENTS
+  {
+    id: 'financial-dependents',
+    name: 'Financial Dependents',
+    description: 'Information about other financial dependents',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasFinancialDependents',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfDependents',
+        title: 'How many financial dependents do you have?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 5, message: 'Maximum value is 5' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 71,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Health',
+        title: 'Dependent 1: Health related monthly expenses not covered by insurance',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 72,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Living',
+        title: 'Dependent 1: Rent, grocery, utilities expenses monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 2000, message: 'Minimum value is 2,000' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 73,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Travel',
+        title: 'Dependent 1: Travel and commute monthly expenses',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 74,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Entertainment',
+        title: 'Dependent 1: Entertainment, leisure, hobby monthly expenses',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 75,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Miscellaneous',
+        title: 'Dependent 1: Other miscellaneous expenses monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 76,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1HasInsurance',
+        title: 'Dependent 1: Do you have health insurance to cover this dependent?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Financial Dependents',
+        questionNumber: 77,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1InsuranceValue',
+        title: 'Dependent 1: What is the value of the insurance cover?',
+        type: 'number',
+        validation: [{ type: 'min', value: 100000, message: 'Minimum value is 100,000' }],
+        conditional: {
+          dependsOn: 'dependent1HasInsurance',
+          values: ['Yes']
+        },
+        section: 'Financial Dependents',
+        questionNumber: 78,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1InsurancePremium',
+        title: 'Dependent 1: What is the annual premium?',
+        type: 'number',
+        validation: [{ type: 'min', value: 5000, message: 'Minimum value is 5,000' }],
+        conditional: {
+          dependsOn: 'dependent1HasInsurance',
+          values: ['Yes']
+        },
+        section: 'Financial Dependents',
+        questionNumber: 79,
+        groupId: 'financial-dependents'
+      },
+      { id: 'skip80', title: 'Skip', type: 'skip', section: 'Financial Dependents', questionNumber: 80, groupId: 'financial-dependents' }
+    ]
+  },
+
+  // GROUP 9: PERSONAL LOANS
+  {
+    id: 'personal-loans',
+    name: 'Personal Loans',
+    description: 'Information about personal loans',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasPersonalLoans',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfPersonalLoans',
+        title: 'How many personal loans do you have?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 5, message: 'Maximum value is 5' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 81,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1Reason',
+        title: 'Loan 1: What was the reason for the loan?',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'Personal', label: 'Personal' },
+          { value: 'Education', label: 'Education' },
+          { value: 'Wedding', label: 'Wedding' },
+          { value: 'Holiday', label: 'Holiday' },
+          { value: 'Medical expenses', label: 'Medical expenses' },
+          { value: 'Business', label: 'Business' },
+          { value: 'Emergency', label: 'Emergency' },
+          { value: 'Vehicle purchase', label: 'Vehicle purchase' },
+          { value: 'Other', label: 'Other' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Personal Loans',
+        questionNumber: 82,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1OriginalAmount',
+        title: 'Loan 1: What is the original loan amount?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 25000, message: 'Minimum value is 25,000' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 83,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1OutstandingBalance',
+        title: 'Loan 1: What is the current outstanding balance?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1000, message: 'Minimum value is 1,000' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 84,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1InterestRate',
+        title: 'Loan 1: What is the interest rate on this loan?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 10, message: 'Minimum value is 10' },
+          { type: 'max', value: 36, message: 'Maximum value is 36' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 85,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1PayoffMonths',
+        title: 'Loan 1: How many months would you need to pay it off at current EMI?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 600, message: 'Maximum value is 600' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 86,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1MonthlyPayment',
+        title: 'Loan 1: What is the monthly payment towards this loan?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1000, message: 'Minimum value is 1,000' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 87,
+        groupId: 'personal-loans'
+      },
+      { id: 'skip88', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 88, groupId: 'personal-loans' },
+      { id: 'skip89', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 89, groupId: 'personal-loans' },
+      { id: 'skip90', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 90, groupId: 'personal-loans' }
+    ]
+  },
+
+  // GROUP 10: INSURANCE
+  {
+    id: 'insurance',
+    name: 'Insurance',
+    description: 'Insurance coverage information',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'hasHealthInsurance',
+        title: 'Do you have health insurance?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Insurance',
+        questionNumber: 91,
+        groupId: 'insurance'
+      },
+      {
+        id: 'healthInsuranceCover',
+        title: 'What is your health insurance cover?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 100000, message: 'Minimum value is 100,000' }
+        ],
+        conditional: {
+          dependsOn: 'hasHealthInsurance',
+          values: ['Yes']
+        },
+        section: 'Insurance',
+        questionNumber: 92,
+        groupId: 'insurance'
+      },
+      {
+        id: 'healthInsurancePremium',
+        title: 'What is your annual health insurance premium?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 5000, message: 'Minimum value is 5,000' }
+        ],
+        conditional: {
+          dependsOn: 'hasHealthInsurance',
+          values: ['Yes']
+        },
+        section: 'Insurance',
+        questionNumber: 93,
+        groupId: 'insurance'
+      },
+      {
+        id: 'hasAccidentInsurance',
+        title: 'Do you have accident insurance?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Insurance',
+        questionNumber: 94,
+        groupId: 'insurance'
+      },
+      {
+        id: 'accidentInsuranceCover',
+        title: 'What is your accident insurance cover?',
+        type: 'number',
+        validation: [{ type: 'min', value: 100000, message: 'Minimum value is 100,000' }],
+        conditional: {
+          dependsOn: 'hasAccidentInsurance',
+          values: ['Yes']
+        },
+        section: 'Insurance',
+        questionNumber: 95,
+        groupId: 'insurance'
+      },
+      {
+        id: 'accidentInsurancePremium',
+        title: 'What is your annual accident insurance premium?',
+        type: 'number',
+        validation: [{ type: 'min', value: 5000, message: 'Minimum value is 5,000' }],
+        conditional: {
+          dependsOn: 'hasAccidentInsurance',
+          values: ['Yes']
+        },
+        section: 'Insurance',
+        questionNumber: 96,
+        groupId: 'insurance'
+      },
+      {
+        id: 'hasLifeInsurance',
+        title: 'Do you have life insurance?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Insurance',
+        questionNumber: 97,
+        groupId: 'insurance'
+      },
+      {
+        id: 'lifeInsuranceCover',
+        title: 'What is your life insurance cover?',
+        type: 'number',
+        validation: [{ type: 'min', value: 500000, message: 'Minimum value is 500,000' }],
+        conditional: {
+          dependsOn: 'hasLifeInsurance',
+          values: ['Yes']
+        },
+        section: 'Insurance',
+        questionNumber: 98,
+        groupId: 'insurance'
+      },
+      {
+        id: 'lifeInsurancePremium',
+        title: 'What is your annual life insurance premium?',
+        type: 'number',
+        validation: [{ type: 'min', value: 10000, message: 'Minimum value is 10,000' }],
+        conditional: {
+          dependsOn: 'hasLifeInsurance',
+          values: ['Yes']
+        },
+        section: 'Insurance',
+        questionNumber: 99,
+        groupId: 'insurance'
+      },
+      {
+        id: 'hasOtherInsurance',
+        title: 'Collectively are you paying insurance for anything else?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Insurance',
+        questionNumber: 100,
+        groupId: 'insurance'
+      }
+    ]
+  },
+
+  // GROUP 11: MONTHLY EXPENSES 1
+  {
+    id: 'monthly-expenses-1',
+    name: 'Monthly Expenses 1',
+    description: 'Monthly living expenses',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'monthlyGroceriesToiletries',
+        title: 'Groceries and toiletries monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 101,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyClothesShoes',
+        title: 'Clothes and shoes monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 102,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyMakeupJewellery',
+        title: 'Makeup and jewellery monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 103,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyBeautyTreatments',
+        title: 'Haircuts, salon and beauty treatments monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 104,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyHouseHelp',
+        title: 'Maid/cook/househelp/nanny monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 105,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyCookingGas',
+        title: 'Cooking gas monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 106,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyElectricity',
+        title: 'Electricity monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 107,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyMobile',
+        title: 'Mobile monthly plan cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 108,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyInternet',
+        title: 'Broadband/internet monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 109,
+        groupId: 'monthly-expenses-1'
+      },
+      {
+        id: 'monthlyTVOTT',
+        title: 'TV/OTT/cable bills monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 110,
+        groupId: 'monthly-expenses-1'
+      }
+    ]
+  },
+
+  // GROUP 12: MONTHLY EXPENSES 2
+  {
+    id: 'monthly-expenses-2',
+    name: 'Monthly Expenses 2',
+    description: 'Additional monthly expenses',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'monthlyAppSubscriptions',
+        title: 'Other app subscriptions monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 111,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyCommuting',
+        title: 'Cost of commuting monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 112,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyPetCosts',
+        title: 'Pet related costs monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 113,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyEntertainment',
+        title: 'Movies, concerts, shows monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 114,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyHobbies',
+        title: 'Hobbies monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 115,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyEatingOut',
+        title: 'Eating out, ordering food monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 116,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyAlcohol',
+        title: 'Alcohol ordered at home monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 117,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyCigarettes',
+        title: 'Cigarettes, vaping monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 118,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyMedication',
+        title: 'Medication, treatments monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 119,
+        groupId: 'monthly-expenses-2'
+      },
+      {
+        id: 'monthlyHealthExams',
+        title: 'Health exams, dental, eyeglasses monthly cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Monthly Living Expenses',
+        questionNumber: 120,
+        groupId: 'monthly-expenses-2'
+      }
+    ]
+  },
+
+  // GROUP 13: ANNUAL EXPENSES
+  {
+    id: 'annual-expenses',
+    name: 'Annual Expenses',
+    description: 'Annual expense categories',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'annualEducationFees',
+        title: 'College/course fees annual cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 121,
+        groupId: 'annual-expenses'
+      },
+      {
+        id: 'annualHomeDecor',
+        title: 'Home decor, furniture annual cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 122,
+        groupId: 'annual-expenses'
+      },
+      {
+        id: 'annualGadgets',
+        title: 'Gadgets, electronics annual cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 123,
+        groupId: 'annual-expenses'
+      },
+      {
+        id: 'annualMobileHandset',
+        title: 'New mobile handset annual cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 124,
+        groupId: 'annual-expenses'
+      },
+      {
+        id: 'annualVisitingHome',
+        title: 'Visiting home annual cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 125,
+        groupId: 'annual-expenses'
+      },
+      {
+        id: 'annualVacations',
+        title: 'Holidays, vacations annual cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 126,
+        groupId: 'annual-expenses'
+      },
+      {
+        id: 'annualGifts',
+        title: 'Gifts annual estimated cost',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Annual Expenses',
+        questionNumber: 127,
+        groupId: 'annual-expenses'
+      },
+      { id: 'skip128', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 128, groupId: 'annual-expenses' },
+      { id: 'skip129', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 129, groupId: 'annual-expenses' },
+      { id: 'skip130', title: 'Skip', type: 'skip', section: 'Annual Expenses', questionNumber: 130, groupId: 'annual-expenses' }
+    ]
+  },
+
+  // GROUP 14: INVESTMENTS
+  {
+    id: 'investments',
+    name: 'Investments',
+    description: 'Investment and savings information',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'annualRetirementInvestments',
+        title: 'Annual investments in retirement schemes',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Investments & Savings',
+        questionNumber: 131,
+        groupId: 'investments'
+      },
+      {
+        id: 'monthlyMutualFunds',
+        title: 'Monthly investments in mutual funds, ETFs',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Investments & Savings',
+        questionNumber: 132,
+        groupId: 'investments'
+      },
+      {
+        id: 'monthlyTaxSaving',
+        title: 'Monthly investments in tax saving schemes',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Investments & Savings',
+        questionNumber: 133,
+        groupId: 'investments'
+      },
+      {
+        id: 'monthlySavingsDeposits',
+        title: 'Monthly deposits in savings account',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Investments & Savings',
+        questionNumber: 134,
+        groupId: 'investments'
+      },
+      { id: 'skip135', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 135, groupId: 'investments' },
+      { id: 'skip136', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 136, groupId: 'investments' },
+      { id: 'skip137', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 137, groupId: 'investments' },
+      { id: 'skip138', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 138, groupId: 'investments' },
+      { id: 'skip139', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 139, groupId: 'investments' },
+      { id: 'skip140', title: 'Skip', type: 'skip', section: 'Investments & Savings', questionNumber: 140, groupId: 'investments' }
+    ]
+  },
+
+  // GROUP 15: ASSETS & INCOME
+  {
+    id: 'assets-income',
+    name: 'Assets & Income',
+    description: 'Assets and income information',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'savingsAccountsFD',
+        title: 'Value of all savings accounts and fixed deposits',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 141,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'physicalCash',
+        title: 'Physical cash at hand',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 142,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'investmentValue',
+        title: 'Value of stocks, mutual funds, investments',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 143,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'retirementSavings',
+        title: 'Retirement savings from employer contributions',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 144,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'jewelleryValue',
+        title: 'Total value of all jewellery',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 145,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'collectiblesValue',
+        title: 'Total value of collectibles, art, valuables',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 146,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'currentHomesValue',
+        title: 'Current value of all homes',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 147,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'currentVehiclesValue',
+        title: 'Current value of all vehicles',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 148,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'jobSalary',
+        title: 'Job salary annual in hand',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 149,
+        groupId: 'assets-income'
+      },
+      {
+        id: 'secondJobIncome',
+        title: 'Second job in hand',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 150,
+        groupId: 'assets-income'
+      }
+    ]
+  },
+
+  // GROUP 16: ADDITIONAL INCOME
+  {
+    id: 'additional-income',
+    name: 'Additional Income',
+    description: 'Additional income sources',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'freelanceIncome',
+        title: 'Freelance in hand',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 151,
+        groupId: 'additional-income'
+      },
+      {
+        id: 'sideBusinessIncome',
+        title: 'Side business/partnership',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 152,
+        groupId: 'additional-income'
+      },
+      {
+        id: 'realEstateIncome',
+        title: 'Income from real estate',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 153,
+        groupId: 'additional-income'
+      },
+      {
+        id: 'hobbyIncome',
+        title: 'Income from hobby',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 154,
+        groupId: 'additional-income'
+      },
+      {
+        id: 'dividendIncome',
+        title: 'Dividends',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 155,
+        groupId: 'additional-income'
+      },
+      {
+        id: 'familyStipend',
+        title: 'Stipend from family',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 156,
+        groupId: 'additional-income'
+      },
+      {
+        id: 'otherAnnualIncome',
+        title: 'Other annual income',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Assets & Income',
+        questionNumber: 157,
+        groupId: 'additional-income'
+      },
+      { id: 'skip158', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 158, groupId: 'additional-income' },
+      { id: 'skip159', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 159, groupId: 'additional-income' },
+      { id: 'skip160', title: 'Skip', type: 'skip', section: 'Assets & Income', questionNumber: 160, groupId: 'additional-income' }
+    ]
+  }
+];
+
+// Create a flattened array of all questions for backward compatibility
+export const QUESTIONS = QUESTION_GROUPS.flatMap(group => group.questions);import { QuestionGroup } from '@/types/assessment';
 
 export const QUESTION_GROUPS: QuestionGroup[] = [
   // GROUP 1: PERSONAL BASICS
