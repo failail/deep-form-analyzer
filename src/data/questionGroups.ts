@@ -519,6 +519,291 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
         groupId: 'housing'
       }
     ]
+  },
+
+  // GROUP 4: ADDITIONAL PROPERTIES
+  {
+    id: 'additional-properties',
+    name: 'Additional Properties',
+    description: 'Information about additional properties owned',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasAdditionalProperties',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfAdditionalProperties',
+        title: 'How many additional properties do you own?',
+        type: 'select',
+        required: true,
+        options: [
+          { value: '1', label: '1' },
+          { value: '2', label: '2' },
+          { value: '3', label: '3' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Additional Properties',
+        questionNumber: 35,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1PurchasePrice',
+        title: 'Property 1: What was the purchase price?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 500000, message: 'Minimum value is 500,000' }
+        ],
+        section: 'Additional Properties',
+        questionNumber: 36,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1CurrentValue',
+        title: 'Property 1: What is the current estimated value?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 500000, message: 'Minimum value is 500,000' }
+        ],
+        section: 'Additional Properties',
+        questionNumber: 37,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1HasLoan',
+        title: 'Property 1: Do you have a loan on this property?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Additional Properties',
+        questionNumber: 38,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1OutstandingLoan',
+        title: 'Property 1: What is the outstanding loan amount?',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'property1HasLoan',
+          values: ['Yes']
+        },
+        section: 'Additional Properties',
+        questionNumber: 39,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1MonthlyPayment',
+        title: 'Property 1: What is your monthly payment towards this loan?',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'property1HasLoan',
+          values: ['Yes']
+        },
+        section: 'Additional Properties',
+        questionNumber: 40,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1RentalIncome',
+        title: 'Property 1: Do you earn rental income from this property?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Additional Properties',
+        questionNumber: 41,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1MonthlyRental',
+        title: 'Property 1: What is the monthly rental income?',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'property1RentalIncome',
+          values: ['Yes']
+        },
+        section: 'Additional Properties',
+        questionNumber: 42,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1Insurance',
+        title: 'Property 1: Is this property insured?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Additional Properties',
+        questionNumber: 43,
+        groupId: 'additional-properties'
+      },
+      {
+        id: 'property1InsurancePremium',
+        title: 'Property 1: What is the annual premium for insurance?',
+        type: 'number',
+        validation: [{ type: 'min', value: 5000, message: 'Minimum value is 5,000' }],
+        conditional: {
+          dependsOn: 'property1Insurance',
+          values: ['Yes']
+        },
+        section: 'Additional Properties',
+        questionNumber: 44,
+        groupId: 'additional-properties'
+      }
+    ]
+  },
+
+  // GROUP 5: VEHICLES
+  {
+    id: 'vehicles',
+    name: 'Vehicles',
+    description: 'Information about owned vehicles',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasVehicles',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfVehicles',
+        title: 'How many vehicles do you own?',
+        type: 'select',
+        required: true,
+        options: [
+          { value: '1', label: '1' },
+          { value: '2', label: '2' },
+          { value: '3', label: '3' },
+          { value: '4', label: '4' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Vehicles',
+        questionNumber: 45,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1PurchasePrice',
+        title: 'Vehicle 1: What was the purchase price?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 50000, message: 'Minimum value is 50,000' }
+        ],
+        section: 'Vehicles',
+        questionNumber: 46,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1CurrentValue',
+        title: 'Vehicle 1: What is the estimated current value?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 10000, message: 'Minimum value is 10,000' }
+        ],
+        section: 'Vehicles',
+        questionNumber: 47,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1HasLoan',
+        title: 'Vehicle 1: Do you have a loan on this vehicle?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Vehicles',
+        questionNumber: 48,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1OutstandingLoan',
+        title: 'Vehicle 1: What is the current outstanding loan amount?',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'vehicle1HasLoan',
+          values: ['Yes']
+        },
+        section: 'Vehicles',
+        questionNumber: 49,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1MonthlyPayment',
+        title: 'Vehicle 1: What is your monthly payment towards this loan?',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'vehicle1HasLoan',
+          values: ['Yes']
+        },
+        section: 'Vehicles',
+        questionNumber: 50,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1FuelCost',
+        title: 'Vehicle 1: What are estimated monthly fuel costs?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Vehicles',
+        questionNumber: 51,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1InsuranceCost',
+        title: 'Vehicle 1: What is the estimated annual insurance cost?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 5000, message: 'Minimum value is 5,000' }
+        ],
+        section: 'Vehicles',
+        questionNumber: 52,
+        groupId: 'vehicles'
+      },
+      {
+        id: 'vehicle1MaintenanceCost',
+        title: 'Vehicle 1: What are your other annual costs - maintenance, repairs?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Vehicles',
+        questionNumber: 53,
+        groupId: 'vehicles'
+      },
+      { id: 'skip54', title: 'Skip', type: 'skip', section: 'Vehicles', questionNumber: 54, groupId: 'vehicles' }
+    ]
   }
 ];
 
