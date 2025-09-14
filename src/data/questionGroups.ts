@@ -10,8 +10,12 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
       {
         id: 'testQ1',
         title: 'Test Question 1',
-        type: 'text',
+        type: 'radio',
         required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
         section: 'Test',
         questionNumber: 1,
         groupId: 'test'
