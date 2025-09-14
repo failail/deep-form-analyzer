@@ -7,10 +7,10 @@ const QUESTIONS_PER_PAGE = 10;
 export function getVisibleGroups(formData: FormData): QuestionGroup[] {
   return questionGroups.filter(group => {
     // If no conditional, group is always visible
-    if (!group.condition) return true;
+    if (!group.conditional) return true;
     
     // Check group-level conditional
-    const { dependsOn, values } = group.condition;
+    const { dependsOn, values } = group.conditional;
     const response = formData[dependsOn];
     return response && values.includes(response);
   });
@@ -21,10 +21,7 @@ export function getVisibleQuestions(formData: FormData): Question[] {
   const allQuestions: Question[] = [];
   
   visibleGroups.forEach(group => {
-    group.questions.forEach(questionId => {
-      const question = questions.find(q => q.id === questionId);
-      if (!question) return;
-      
+    group.questions.forEach(question => {
       // Check individual question conditionals
       if (!question.conditional) {
         allQuestions.push(question);
@@ -76,7 +73,7 @@ export function getProgressInfo(formData: FormData, currentPage: number) {
 
 export function getGroupWithQuestion(questionId: string): { group: QuestionGroup; index: number } | undefined {
   for (const group of questionGroups) {
-    const index = group.questions.findIndex((qId) => qId === questionId);
+    const index = group.questions.findIndex((q) => q.id === questionId);
     if (index !== -1) {
       return { group, index };
     }
@@ -92,14 +89,14 @@ export function getPreviousQuestionId(questionId: string): string | null {
 
   // If there's a previous question in the same group, return it
   if (index > 0) {
-    return group.questions[index - 1];
+    return group.questions[index - 1].id;
   }
 
   // Otherwise, find the last question of the previous group
   const groupIndex = questionGroups.findIndex((g) => g.id === group.id);
   if (groupIndex > 0) {
     const previousGroup = questionGroups[groupIndex - 1];
-    return previousGroup.questions[previousGroup.questions.length - 1];
+    return previousGroup.questions[previousGroup.questions.length - 1].id;
   }
 
   return null;
@@ -113,14 +110,14 @@ export function getNextQuestionId(questionId: string): string | null {
 
   // If there's a next question in the same group, return it
   if (index < group.questions.length - 1) {
-    return group.questions[index + 1];
+    return group.questions[index + 1].id;
   }
 
   // Otherwise, find the first question of the next group
   const groupIndex = questionGroups.findIndex((g) => g.id === group.id);
   if (groupIndex < questionGroups.length - 1) {
     const nextGroup = questionGroups[groupIndex + 1];
-    return nextGroup.questions[0];
+    return nextGroup.questions[0].id;
   }
 
   return null;

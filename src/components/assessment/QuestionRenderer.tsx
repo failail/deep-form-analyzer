@@ -34,9 +34,9 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             name={question.id}
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-lg font-medium leading-tight">
-                  {questionIndex}. {question.title}
-                </FormLabel>
+                 <FormLabel className="text-lg font-medium leading-tight">
+                   {questionIndex}. {question.text}
+                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Enter your answer"
@@ -58,9 +58,9 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             name={question.id}
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-lg font-medium leading-tight">
-                  {questionIndex}. {question.title}
-                </FormLabel>
+                 <FormLabel className="text-lg font-medium leading-tight">
+                   {questionIndex}. {question.text}
+                 </FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -84,9 +84,9 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             name={question.id}
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-lg font-medium leading-tight">
-                  {questionIndex}. {question.title}
-                </FormLabel>
+                 <FormLabel className="text-lg font-medium leading-tight">
+                   {questionIndex}. {question.text}
+                 </FormLabel>
                 <FormControl>
                   <div className="flex gap-3 w-full">
                     <Select 
@@ -148,29 +148,29 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             name={question.id}
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-lg font-medium leading-tight">
-                  {questionIndex}. {question.title}
-                </FormLabel>
+                 <FormLabel className="text-lg font-medium leading-tight">
+                   {questionIndex}. {question.text}
+                 </FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
                     value={field.value}
                     className="flex flex-col space-y-3"
                   >
-                    {question.options?.map((option) => (
-                      <div key={option.value} className="flex items-center space-x-3">
-                        <RadioGroupItem 
-                          value={option.value} 
-                          id={`${question.id}-${option.value}`}
-                        />
-                        <Label 
-                          htmlFor={`${question.id}-${option.value}`}
-                          className="font-normal cursor-pointer leading-tight"
-                        >
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
+                     {question.options?.map((option) => (
+                       <div key={option} className="flex items-center space-x-3">
+                         <RadioGroupItem 
+                           value={option} 
+                           id={`${question.id}-${option}`}
+                         />
+                         <Label 
+                           htmlFor={`${question.id}-${option}`}
+                           className="font-normal cursor-pointer leading-tight"
+                         >
+                           {option}
+                         </Label>
+                       </div>
+                     ))}
                   </RadioGroup>
                 </FormControl>
                 <FormMessage />
@@ -186,20 +186,20 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             name={question.id}
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-lg font-medium leading-tight">
-                  {questionIndex}. {question.title}
-                </FormLabel>
+                 <FormLabel className="text-lg font-medium leading-tight">
+                   {questionIndex}. {question.text}
+                 </FormLabel>
                 <FormControl>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="w-full bg-popover z-50">
                       <SelectValue placeholder="Please select an option" />
                     </SelectTrigger>
                     <SelectContent className="bg-popover border border-border max-h-60 overflow-y-auto z-50">
-                      {question.options?.map((option) => (
-                        <SelectItem key={option.value} value={option.value}>
-                          {option.label}
-                        </SelectItem>
-                      ))}
+                       {question.options?.map((option) => (
+                         <SelectItem key={option} value={option}>
+                           {option}
+                         </SelectItem>
+                       ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
@@ -216,9 +216,9 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             name={question.id}
             render={({ field }) => (
               <FormItem className="space-y-3">
-                <FormLabel className="text-lg font-medium leading-tight">
-                  {questionIndex}. {question.title}
-                </FormLabel>
+                 <FormLabel className="text-lg font-medium leading-tight">
+                   {questionIndex}. {question.text}
+                 </FormLabel>
                 <FormControl>
                   <div className="flex gap-3 w-full">
                     <Select 
