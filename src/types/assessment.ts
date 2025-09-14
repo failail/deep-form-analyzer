@@ -1,10 +1,9 @@
-// Wrong (causes the error)
-{question.options}
-
-// Right 
-{question.options?.map(option => (
-  <label key={option.value}>
-    <input type="radio" value={option.value} />
-    {option.label}
-  </label>
-))}
+{
+  id: 'testQ1',
+  title: 'What is your name?',
+  type: 'text',
+  required: true,
+  section: 'Test Section',
+  questionNumber: 1,
+  groupId: 'WHAT IS YOUR NAME'  // Try here
+}
