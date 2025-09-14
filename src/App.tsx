@@ -3,7 +3,7 @@
   title: 'What is your name?',
   type: 'text',
   required: true,
-  section: 'TESTING - What is your name?', // Try putting question here
+  section: 'TESTING - What is your name?',
   questionNumber: 1,
   groupId: 'test'
 }
