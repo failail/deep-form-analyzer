@@ -1,4 +1,392 @@
-import { QuestionGroup } from '@/types/assessment';
+},
+
+  // GROUP 6: CHILDREN
+  {
+    id: 'children',
+    name: 'Children',
+    description: 'Information about children and their expenses',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasChildren',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfChildren',
+        title: 'How many kids do you have?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 10, message: 'Maximum value is 10' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 55,
+        groupId: 'children'
+      },
+      {
+        id: 'child1AgeGroup',
+        title: 'Child 1: Please share the age band for this child',
+        type: 'select',
+        required: true,
+        options: [
+          { value: '0-2 years', label: '0-2 years' },
+          { value: '3-5 years', label: '3-5 years' },
+          { value: '6-12 years', label: '6-12 years' },
+          { value: '13-18 years', label: '13-18 years' },
+          { value: '19+ years dependent', label: '19+ years dependent' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Children & Dependents',
+        questionNumber: 56,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Diapers',
+        title: 'Child 1: Monthly expenses for diapers',
+        type: 'number',
+        validation: [{ type: 'min', value: 0, message: 'Minimum value is 0' }],
+        conditional: {
+          dependsOn: 'child1AgeGroup',
+          values: ['0-2 years']
+        },
+        section: 'Children & Dependents',
+        questionNumber: 57,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Clothing',
+        title: 'Child 1: Monthly expenses for clothing, shoes',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 500, message: 'Minimum value is 500' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 58,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Toys',
+        title: 'Child 1: Monthly expenses for toys and games',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 59,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Activities',
+        title: 'Child 1: Monthly expense for hobbies, sports, activities',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 60,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Education',
+        title: 'Child 1: Monthly expense for school/college fees',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 61,
+        groupId: 'children'
+      },
+      {
+        id: 'child1Medical',
+        title: 'Child 1: Monthly expenses for medical, treatments, medicines',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Children & Dependents',
+        questionNumber: 62,
+        groupId: 'children'
+      },
+      {
+        id: 'child1HealthInsurance',
+        title: 'Child 1: Do you have health insurance that covers this child?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Children & Dependents',
+        questionNumber: 63,
+        groupId: 'children'
+      },
+      { id: 'skip64', title: 'Skip', type: 'skip', section: 'Children & Dependents', questionNumber: 64, groupId: 'children' }
+    ]
+  },
+
+  // GROUP 7: FINANCIAL DEPENDENTS
+  {
+    id: 'financial-dependents',
+    name: 'Financial Dependents',
+    description: 'Information about other financial dependents',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasFinancialDependents',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfDependents',
+        title: 'How many financial dependents do you have?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 5, message: 'Maximum value is 5' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 65,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Health',
+        title: 'Dependent 1: Health related monthly expenses not covered by insurance',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 66,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Living',
+        title: 'Dependent 1: Rent, grocery, utilities expenses monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 2000, message: 'Minimum value is 2,000' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 67,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Travel',
+        title: 'Dependent 1: Travel and commute monthly expenses',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 68,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Entertainment',
+        title: 'Dependent 1: Entertainment, leisure, hobby monthly expenses',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 69,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1Miscellaneous',
+        title: 'Dependent 1: Other miscellaneous expenses monthly',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        section: 'Financial Dependents',
+        questionNumber: 70,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1HasInsurance',
+        title: 'Dependent 1: Do you have health insurance to cover this dependent?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Financial Dependents',
+        questionNumber: 71,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1InsuranceValue',
+        title: 'Dependent 1: What is the value of the insurance cover?',
+        type: 'number',
+        validation: [{ type: 'min', value: 100000, message: 'Minimum value is 100,000' }],
+        conditional: {
+          dependsOn: 'dependent1HasInsurance',
+          values: ['Yes']
+        },
+        section: 'Financial Dependents',
+        questionNumber: 72,
+        groupId: 'financial-dependents'
+      },
+      {
+        id: 'dependent1InsurancePremium',
+        title: 'Dependent 1: What is the annual premium?',
+        type: 'number',
+        validation: [{ type: 'min', value: 5000, message: 'Minimum value is 5,000' }],
+        conditional: {
+          dependsOn: 'dependent1HasInsurance',
+          values: ['Yes']
+        },
+        section: 'Financial Dependents',
+        questionNumber: 73,
+        groupId: 'financial-dependents'
+      },
+      { id: 'skip74', title: 'Skip', type: 'skip', section: 'Financial Dependents', questionNumber: 74, groupId: 'financial-dependents' }
+    ]
+  },
+
+  // GROUP 8: PERSONAL LOANS
+  {
+    id: 'personal-loans',
+    name: 'Personal Loans',
+    description: 'Information about personal loans',
+    questionsPerPage: 10,
+    conditional: {
+      dependsOn: 'hasPersonalLoans',
+      values: ['Yes']
+    },
+    questions: [
+      {
+        id: 'numberOfPersonalLoans',
+        title: 'How many personal loans do you have?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 5, message: 'Maximum value is 5' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 75,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1Reason',
+        title: 'Loan 1: What was the reason for the loan?',
+        type: 'select',
+        required: true,
+        options: [
+          { value: 'Personal', label: 'Personal' },
+          { value: 'Education', label: 'Education' },
+          { value: 'Wedding', label: 'Wedding' },
+          { value: 'Holiday', label: 'Holiday' },
+          { value: 'Medical expenses', label: 'Medical expenses' },
+          { value: 'Business', label: 'Business' },
+          { value: 'Emergency', label: 'Emergency' },
+          { value: 'Vehicle purchase', label: 'Vehicle purchase' },
+          { value: 'Other', label: 'Other' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Personal Loans',
+        questionNumber: 76,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1OriginalAmount',
+        title: 'Loan 1: What is the original loan amount?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 25000, message: 'Minimum value is 25,000' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 77,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1OutstandingBalance',
+        title: 'Loan 1: What is the current outstanding balance?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1000, message: 'Minimum value is 1,000' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 78,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1InterestRate',
+        title: 'Loan 1: What is the interest rate on this loan?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 10, message: 'Minimum value is 10' },
+          { type: 'max', value: 36, message: 'Maximum value is 36' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 79,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1PayoffMonths',
+        title: 'Loan 1: How many months would you need to pay it off at current EMI?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1, message: 'Minimum value is 1' },
+          { type: 'max', value: 600, message: 'Maximum value is 600' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 80,
+        groupId: 'personal-loans'
+      },
+      {
+        id: 'loan1MonthlyPayment',
+        title: 'Loan 1: What is the monthly payment towards this loan?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 1000, message: 'Minimum value is 1,000' }
+        ],
+        section: 'Personal Loans',
+        questionNumber: 81,
+        groupId: 'personal-loans'
+      },
+      { id: 'skip82', title: 'Skip', type: 'skip', section: 'Personal Loans', questionNumber: 82, groupId: 'personal-loans' },
+      { id: 'skip83', title: 'Skip', type: 'simport { QuestionGroup } from '@/types/assessment';
 
 export const QUESTION_GROUPS: QuestionGroup[] = [
   // GROUP 1: PERSONAL BASICS
