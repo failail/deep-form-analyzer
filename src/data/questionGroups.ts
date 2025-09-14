@@ -1303,6 +1303,8 @@ id: 'vehicle1MonthlyPayment',
 // Create a flattened array of all questions for backward compatibility
 export const QUESTIONS = QUESTION_GROUPS.flatMap(group => group.questions);import { QuestionGroup } from '@/types/assessment';
 
+import { QuestionGroup } from '@/types/assessment';
+
 export const QUESTION_GROUPS: QuestionGroup[] = [
   // GROUP 1: PERSONAL BASICS
   {
