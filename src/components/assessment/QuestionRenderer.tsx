@@ -35,7 +35,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             render={({ field }) => (
               <FormItem className="space-y-3">
                  <FormLabel className="text-lg font-medium leading-tight">
-                   {questionIndex}. {question.text}
+                   {questionIndex}. {question.title}
                  </FormLabel>
                 <FormControl>
                   <Input
@@ -59,7 +59,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             render={({ field }) => (
               <FormItem className="space-y-3">
                  <FormLabel className="text-lg font-medium leading-tight">
-                   {questionIndex}. {question.text}
+                   {questionIndex}. {question.title}
                  </FormLabel>
                 <FormControl>
                   <Input
@@ -85,7 +85,7 @@ export const QuestionRenderer = ({ question, form, questionIndex }: QuestionRend
             render={({ field }) => (
               <FormItem className="space-y-3">
                  <FormLabel className="text-lg font-medium leading-tight">
-                   {questionIndex}. {question.text}
+                   {questionIndex}. {question.title}
                  </FormLabel>
                 <FormControl>
                   <div className="flex gap-3 w-full">
