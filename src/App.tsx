@@ -1,9 +1,9 @@
 {
   id: 'testQ1',
-  title: 'TESTING - What is your name?',
+  title: 'What is your name?',
   type: 'text',
   required: true,
-  section: 'Test',
+  section: 'TESTING - What is your name?', // Try putting question here
   questionNumber: 1,
   groupId: 'test'
 }
