@@ -76,3 +76,6 @@ export function getQuestionById(id: string): Question | undefined {
 export function getQuestionsById(ids: string[]): Question[] {
   return ids.map(id => QUESTION_DEFINITIONS[id]).filter(Boolean);
 }
+
+// Export questions array for compatibility with existing code
+export const questions: Question[] = Object.values(QUESTION_DEFINITIONS);

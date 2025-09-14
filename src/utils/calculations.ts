@@ -483,6 +483,10 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   const debtToIncomeRatio = totalAnnualIncome > 0 ? totalDebt / totalAnnualIncome : 0;
 
   const metrics: FinancialMetrics = {
+    totalIncome: totalAnnualIncome,
+    totalExpenses: totalAnnualExpenses,
+    netIncome: totalAnnualIncome - totalAnnualExpenses,
+    emergencyFundMonths: emergencyMonths,
     coreExpenseRatio: calculateRatio(coreExpenseRatio, 'coreExpense'),
     totalExpenseRatio: calculateRatio(totalExpenseRatio, 'totalExpense'),
     debtServicingRatio: calculateRatio(debtServicingRatio, 'debtServicing'),
@@ -521,27 +525,29 @@ export const calculateFinancialHealth = (formData: FormData): CalculationResults
   else overallDescription = "Critical - We need to act fast, but you've got this with the right plan.";
 
   return {
-    totalAnnualIncome,
-    totalMonthlyExpenses,
-    totalAnnualExpenses,
-    totalAnnualLoanPayments,
-    totalAssets,
-    totalDebt,
-    netWorth,
-    liquidAssets,
-    totalAnnualInvestments,
     metrics,
+    score: overallScore,
+    recommendations: [],
+    riskLevel: overallScore >= 3.5 ? 'low' : overallScore >= 2.5 ? 'medium' : 'high' as const,
     overallScore,
     overallDescription,
-    // NEW METRICS FOR SUMMARY DISPLAY
     estimatedNetWorth,
     annualIncome,
+    totalAnnualIncome,
     annualExpenses,
+    totalAnnualExpenses,
     annualExpensesMinusSavingsInvestments,
+    totalDebt,
     totalSavingsInvestments,
     totalCashInHand,
     monthlyDebtPayments,
-    totalMonthlyInvestments
+    totalMonthlyInvestments,
+    totalAssets,
+    totalAnnualLoanPayments,
+    totalMonthlyExpenses,
+    liquidAssets,
+    totalAnnualInvestments,
+    netWorth
   };
 };
 
