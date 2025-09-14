@@ -344,6 +344,181 @@ export const QUESTION_GROUPS: QuestionGroup[] = [
       { id: 'skip23', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 23, groupId: 'screening' },
       { id: 'skip24', title: 'Skip', type: 'skip', section: 'Personal Information', questionNumber: 24, groupId: 'screening' }
     ]
+  },
+
+  // GROUP 3: HOUSING
+  {
+    id: 'housing',
+    name: 'Housing',
+    description: 'Housing and property information',
+    questionsPerPage: 10,
+    questions: [
+      {
+        id: 'housingType',
+        title: 'In your primary residence, do you rent it or own it?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Rent it', label: 'Rent it' },
+          { value: 'Own it', label: 'Own it' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Housing & Real Estate',
+        questionNumber: 25,
+        groupId: 'housing'
+      },
+      {
+        id: 'monthlyRent',
+        title: 'What is your monthly rent?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        conditional: {
+          dependsOn: 'housingType',
+          values: ['Rent it']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 26,
+        groupId: 'housing'
+      },
+      {
+        id: 'rentalDeposit',
+        title: 'What is your annual rental deposit?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        conditional: {
+          dependsOn: 'housingType',
+          values: ['Rent it']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 27,
+        groupId: 'housing'
+      },
+      {
+        id: 'homePurchasePrice',
+        title: 'What was the price you purchased this property at?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 100000, message: 'Minimum value is 100,000' }
+        ],
+        conditional: {
+          dependsOn: 'housingType',
+          values: ['Own it']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 28,
+        groupId: 'housing'
+      },
+      {
+        id: 'homeCurrentValue',
+        title: 'What is the estimated current value of the property?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 100000, message: 'Minimum value is 100,000' }
+        ],
+        conditional: {
+          dependsOn: 'housingType',
+          values: ['Own it']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 29,
+        groupId: 'housing'
+      },
+      {
+        id: 'hasHomeLoan',
+        title: 'Do you have a loan on the property?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        conditional: {
+          dependsOn: 'housingType',
+          values: ['Own it']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 30,
+        groupId: 'housing'
+      },
+      {
+        id: 'homeOutstandingLoan',
+        title: 'What is the outstanding loan amount?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        conditional: {
+          dependsOn: 'hasHomeLoan',
+          values: ['Yes']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 31,
+        groupId: 'housing'
+      },
+      {
+        id: 'homeMonthlyPayment',
+        title: 'What is your monthly payment towards this loan?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        conditional: {
+          dependsOn: 'hasHomeLoan',
+          values: ['Yes']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 32,
+        groupId: 'housing'
+      },
+      {
+        id: 'homeAnnualMaintenance',
+        title: 'What is total annual cost of building maintenance, taxes and ownership charges?',
+        type: 'number',
+        required: true,
+        validation: [
+          { type: 'required', message: 'This field is required' },
+          { type: 'min', value: 0, message: 'Minimum value is 0' }
+        ],
+        conditional: {
+          dependsOn: 'housingType',
+          values: ['Own it']
+        },
+        section: 'Housing & Real Estate',
+        questionNumber: 33,
+        groupId: 'housing'
+      },
+      {
+        id: 'hasAdditionalProperties',
+        title: 'Do you own any other properties?',
+        type: 'radio',
+        required: true,
+        options: [
+          { value: 'Yes', label: 'Yes' },
+          { value: 'No', label: 'No' }
+        ],
+        validation: [{ type: 'required', message: 'This field is required' }],
+        section: 'Housing & Real Estate',
+        questionNumber: 34,
+        groupId: 'housing'
+      }
+    ]
   }
 ];
 
